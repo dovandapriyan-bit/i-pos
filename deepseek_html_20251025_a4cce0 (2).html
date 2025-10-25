@@ -1,0 +1,3325 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart POS System - Restoran & Cafe</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f1f5f9;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-danger: #ef4444;
+            --accent-success: #10b981;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-light: #94a3b8;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --sidebar-width: 260px;
+            --header-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+            background-color: var(--bg-secondary);
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.5rem;
+            color: var(--accent-primary);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+            flex-grow: 1;
+        }
+
+        .sidebar-menu li {
+            position: relative;
+        }
+
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease-in-out;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu li a:hover, .sidebar-menu li a.active {
+            background-color: rgba(59, 130, 246, 0.05);
+            color: var(--accent-primary);
+            border-left-color: var(--accent-primary);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 0.75rem;
+            right: 1rem;
+            background-color: var(--accent-danger);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            height: var(--header-height);
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .topbar-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: var(--bg-tertiary);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .user-info:hover {
+            background-color: #e2e8f0;
+        }
+
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            min-width: 200px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            display: none;
+        }
+
+        .user-dropdown-menu.show {
+            display: block;
+        }
+
+        .user-dropdown-item {
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .user-dropdown-item:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .user-dropdown-item.active {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--accent-primary);
+        }
+
+        .content-area {
+            padding: 2rem;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .page { display: none; }
+        .page.active { display: block; }
+
+        .card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary { 
+            background-color: var(--accent-primary); 
+            color: white; 
+        }
+
+        .btn-primary:hover { 
+            background-color: #2563eb; 
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary { 
+            background-color: var(--bg-tertiary); 
+            color: var(--text-primary); 
+        }
+
+        .btn-secondary:hover { 
+            background-color: #e2e8f0; 
+            transform: translateY(-1px);
+        }
+
+        .btn-success { 
+            background-color: var(--accent-success); 
+            color: white; 
+        }
+
+        .btn-success:hover { 
+            background-color: #0d9668; 
+            transform: translateY(-1px);
+        }
+
+        .btn-danger { 
+            background-color: var(--accent-danger); 
+            color: white; 
+        }
+
+        .btn-danger:hover { 
+            background-color: #b91c1c; 
+            transform: translateY(-1px);
+        }
+
+        .btn-warning { 
+            background-color: var(--accent-warning); 
+            color: white; 
+        }
+
+        .btn-warning:hover { 
+            background-color: #d97706; 
+            transform: translateY(-1px);
+        }
+
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { 
+            display: block; 
+            margin-bottom: 0.5rem; 
+            font-size: 0.875rem; 
+            font-weight: 500; 
+            color: var(--text-primary);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.625rem;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
+        .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .kpi-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background-color: var(--accent-primary);
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .kpi-card p { 
+            font-size: 2rem; 
+            font-weight: 700; 
+            color: var(--accent-primary); 
+            margin-bottom: 0.5rem;
+        }
+
+        .kpi-card h3 { 
+            font-size: 0.875rem; 
+            color: var(--text-secondary); 
+        }
+
+        .pos-layout {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 1.5rem;
+            height: calc(100vh - var(--header-height) - 4rem);
+        }
+
+        .pos-menu-container {
+            overflow-y: auto;
+        }
+
+        .pos-categories {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .pos-category-btn {
+            padding: 0.5rem 1rem;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pos-category-btn.active, .pos-category-btn:hover {
+            background-color: var(--accent-primary);
+            color: white;
+            border-color: var(--accent-primary);
+        }
+
+        .pos-menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .pos-menu-item {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pos-menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .pos-menu-item:hover::before {
+            opacity: 1;
+        }
+
+        .pos-menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-primary);
+        }
+
+        .pos-menu-item h4 { 
+            font-size: 1rem; 
+            margin-bottom: 0.25rem; 
+        }
+
+        .pos-menu-item p { 
+            color: var(--accent-primary); 
+            font-weight: 600; 
+        }
+
+        .pos-menu-item .menu-description {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            height: 2.5rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .pos-cart-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pos-cart {
+            flex-grow: 1;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        .pos-cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .pos-cart-item-name { font-weight: 500; }
+        .pos-cart-item-price { color: var(--text-secondary); }
+        .pos-cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pos-cart-item-controls button {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 0.25rem;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pos-cart-item-controls button:hover {
+            color: var(--accent-primary);
+        }
+
+        .pos-summary {
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .pos-summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .pos-summary-row.total {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            border-top: 1px solid var(--border-color);
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .kds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .kds-order-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 5px solid var(--accent-success);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .kds-order-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .kds-order-card.status-cooking { border-left-color: var(--accent-warning); }
+        .kds-order-card.status-ready { border-left-color: var(--accent-primary); }
+        .kds-order-card.status-new {
+            border-left-color: var(--accent-success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .kds-order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .kds-order-id { font-weight: 700; }
+        .kds-order-time { font-size: 0.875rem; color: var(--text-secondary); }
+        .kds-order-items { margin-bottom: 1rem; }
+        .kds-order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.25rem 0;
+        }
+
+        .kds-order-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .kds-order-actions button { flex-grow: 1; }
+
+        .menu-item-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .menu-item-card:hover {
+            box-shadow: var(--shadow);
+        }
+
+        .menu-item-info h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .menu-item-info p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .menu-item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .history-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .history-table th, .history-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .history-table th {
+            background-color: var(--bg-tertiary);
+            font-weight: 600;
+        }
+
+        .history-table tr:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        .user-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+
+        .user-card:hover {
+            box-shadow: var(--shadow);
+        }
+
+        .user-info-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar-large {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .user-details h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .user-details p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .user-role-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .role-admin {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: var(--accent-danger);
+        }
+
+        .role-cashier {
+            background-color: rgba(59, 130, 246, 0.2);
+            color: var(--accent-primary);
+        }
+
+        .role-kitchen {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: var(--accent-success);
+        }
+
+        .role-owner {
+            background-color: rgba(139, 92, 246, 0.2);
+            color: #8b5cf6;
+        }
+
+        .table-management-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .table-management-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .table-management-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .table-management-card.available {
+            border-color: var(--accent-success);
+        }
+
+        .table-management-card.occupied {
+            border-color: var(--accent-danger);
+            opacity: 0.8;
+        }
+
+        .table-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .table-status {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .table-order-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .table-orders-section {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .order-status-timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .order-status-timeline::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: var(--border-color);
+            z-index: 1;
+        }
+
+        .order-status-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .order-status-step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .order-status-step.active .order-status-step-circle {
+            border-color: var(--accent-primary);
+            background-color: var(--accent-primary);
+            color: white;
+        }
+
+        .order-status-step.completed .order-status-step-circle {
+            border-color: var(--accent-success);
+            background-color: var(--accent-success);
+            color: white;
+        }
+
+        .order-status-step-label {
+            font-size: 0.75rem;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .order-status-step.active .order-status-step-label {
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .order-status-step.completed .order-status-step-label {
+            color: var(--accent-success);
+            font-weight: 600;
+        }
+
+        .subscription-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+
+        .status-active {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: var(--accent-success);
+        }
+
+        .status-expired {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: var(--accent-danger);
+        }
+
+        .status-trial {
+            background-color: rgba(59, 130, 246, 0.2);
+            color: var(--accent-primary);
+        }
+
+        .license-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .license-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: rgba(255,255,255,0.1);
+            transform: rotate(45deg);
+        }
+
+        .license-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .license-info-item {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .license-info-item h4 {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .license-info-item p {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .license-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .transaction-history {
+            margin-top: 2rem;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+            color: var(--accent-success);
+        }
+
+        .transaction-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-completed {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: var(--accent-success);
+        }
+
+        .status-pending {
+            background-color: rgba(245, 158, 11, 0.2);
+            color: var(--accent-warning);
+        }
+
+        .status-failed {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: var(--accent-danger);
+        }
+
+        .plan-card {
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .plan-card.selected {
+            border-color: var(--accent-primary);
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        .plan-card.recommended {
+            border-color: var(--accent-success);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-card.recommended::before {
+            content: 'REKOMENDASI';
+            position: absolute;
+            top: 10px;
+            right: -30px;
+            background-color: var(--accent-success);
+            color: white;
+            padding: 0.25rem 2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transform: rotate(45deg);
+        }
+
+        .plan-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin: 1rem 0;
+        }
+
+        .plan-period {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .plan-features {
+            list-style: none;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+
+        .plan-features li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .plan-features li i {
+            color: var(--accent-success);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: modalFadeIn 0.3s;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.2s;
+            background: none;
+            border: none;
+        }
+
+        .modal-close:hover { color: var(--text-primary); }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s, slideOut 0.3s 2.7s;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); }
+            to { transform: translateX(100%); }
+        }
+
+        .notification.success {
+            background-color: var(--accent-success);
+        }
+
+        .notification.error {
+            background-color: var(--accent-danger);
+        }
+
+        .notification.warning {
+            background-color: var(--accent-warning);
+        }
+
+        .notification.info {
+            background-color: var(--accent-primary);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 1024px) {
+            .grid-cols-4 { grid-template-columns: repeat(3, 1fr); }
+            .pos-layout { grid-template-columns: 1fr; }
+            .pos-cart-container { order: -1; }
+            .table-order-layout { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .grid-cols-3 { grid-template-columns: repeat(2, 1fr); }
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+            .license-actions { flex-direction: column; }
+        }
+
+        @media (max-width: 640px) {
+            .grid-cols-3, .grid-cols-2 { grid-template-columns: 1fr; }
+            .kpi-grid { grid-template-columns: 1fr; }
+            .content-area { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h1><i data-lucide="coffee"></i> Smart POS</h1>
+        </div>
+        <ul class="sidebar-menu" id="sidebarMenu">
+            <li><a href="#" class="nav-link active" data-page="dashboard"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+            <li><a href="#" class="nav-link" data-page="pos"><i data-lucide="shopping-cart"></i> Kasir</a></li>
+            <li>
+                <a href="#" class="nav-link" data-page="kds">
+                    <i data-lucide="chef-hat"></i> Dapur
+                    <span class="notification-badge" id="kds-notification" style="display: none;">0</span>
+                </a>
+            </li>
+            <li><a href="#" class="nav-link" data-page="order-status"><i data-lucide="clock"></i> Status Pesanan</a></li>
+            <li><a href="#" class="nav-link" data-page="table-selection"><i data-lucide="square-stack"></i> Pilih Meja</a></li>
+            <li><a href="#" class="nav-link" data-page="table-order"><i data-lucide="smartphone"></i> Pesan via Meja</a></li>
+            <li><a href="#" class="nav-link" data-page="ride-hailing"><i data-lucide="truck"></i> Ojek Online</a></li>
+            <li><a href="#" class="nav-link" data-page="menu-management"><i data-lucide="utensils"></i> Kelola Menu</a></li>
+            <li><a href="#" class="nav-link" data-page="table-management"><i data-lucide="table"></i> Manajemen Meja</a></li>
+            <li><a href="#" class="nav-link" data-page="order-history"><i data-lucide="file-text"></i> Riwayat Pesanan</a></li>
+            <li><a href="#" class="nav-link" data-page="user-management"><i data-lucide="users"></i> Kelola Pengguna</a></li>
+            <li><a href="#" class="nav-link" data-page="license"><i data-lucide="crown"></i> Lisensi</a></li>
+        </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div class="topbar-title" id="topbarTitle">Dashboard</div>
+            <div class="topbar-actions">
+                <div class="user-dropdown">
+                    <div class="user-info" onclick="toggleUserDropdown()">
+                        <div class="user-avatar" id="userAvatar">A</div>
+                        <span id="userName">Admin</span>
+                        <span class="subscription-status status-active" id="subscriptionStatus">Aktif</span>
+                        <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
+                    </div>
+                    <div class="user-dropdown-menu" id="userDropdownMenu">
+                        <div class="user-dropdown-item active" onclick="switchUser(1)">
+                            <i data-lucide="shield"></i>
+                            <span>Admin</span>
+                        </div>
+                        <div class="user-dropdown-item" onclick="switchUser(2)">
+                            <i data-lucide="crown"></i>
+                            <span>Owner</span>
+                        </div>
+                        <div class="user-dropdown-item" onclick="switchUser(3)">
+                            <i data-lucide="shopping-cart"></i>
+                            <span>Kasir</span>
+                        </div>
+                        <div class="user-dropdown-item" onclick="switchUser(4)">
+                            <i data-lucide="chef-hat"></i>
+                            <span>Dapur</span>
+                        </div>
+                        <div class="user-dropdown-item" onclick="switchUser(5)">
+                            <i data-lucide="user"></i>
+                            <span>Pelanggan</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="toggleSidebar()"><i data-lucide="menu"></i></button>
+            </div>
+        </header>
+
+        <!-- CONTENT AREA -->
+        <div class="content-area" id="contentArea">
+            <!-- DASHBOARD PAGE -->
+            <div class="page active" id="dashboard-page">
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <p id="kpi-revenue">Rp 0</p>
+                        <h3>Penjualan Hari Ini</h3>
+                    </div>
+                    <div class="kpi-card">
+                        <p id="kpi-orders">0</p>
+                        <h3>Total Pesanan</h3>
+                    </div>
+                    <div class="kpi-card">
+                        <p id="kpi-active">0</p>
+                        <h3>Pesanan Aktif</h3>
+                    </div>
+                    <div class="kpi-card">
+                        <p id="kpi-items">0</p>
+                        <h3>Item Terjual</h3>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Pesanan Terbaru</div>
+                    <div id="recent-orders-list"></div>
+                </div>
+            </div>
+
+            <!-- POS PAGE -->
+            <div class="page" id="pos-page">
+                <div class="pos-layout">
+                    <div class="pos-menu-container card">
+                        <div class="card-header">
+                            <span>Menu</span>
+                            <select id="pos-table-select" class="form-group" style="width: 150px; margin:0;">
+                                <option value="0">Take Away</option>
+                                <option value="1">Meja 1</option>
+                                <option value="2">Meja 2</option>
+                                <option value="3">Meja 3</option>
+                                <option value="4">Meja 4</option>
+                                <option value="5">Meja 5</option>
+                                <option value="6">Meja 6</option>
+                            </select>
+                        </div>
+                        <div class="pos-categories" id="pos-categories"></div>
+                        <div class="pos-menu-grid" id="pos-menu-grid"></div>
+                    </div>
+                    <div class="pos-cart-container card">
+                        <div class="card-header">
+                            <span>Keranjang</span>
+                            <button class="btn btn-danger" onclick="clearCurrentOrder()">Batal</button>
+                        </div>
+                        <div class="pos-cart" id="pos-cart"></div>
+                        <div class="pos-summary">
+                            <div class="pos-summary-row"><span>Subtotal</span><span id="pos-subtotal">Rp 0</span></div>
+                            <div class="pos-summary-row"><span>Pajak (10%)</span><span id="pos-tax">Rp 0</span></div>
+                            <div class="pos-summary-row total"><span>Total</span><span id="pos-total">Rp 0</span></div>
+                            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="openPaymentModal()">Bayar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KDS PAGE -->
+            <div class="page" id="kds-page">
+                <div class="card-header">Daftar Pesanan Dapur</div>
+                <div class="kds-grid" id="kds-orders-grid"></div>
+            </div>
+
+            <!-- ORDER STATUS PAGE -->
+            <div class="page" id="order-status-page">
+                <div class="order-status-container">
+                    <div class="card">
+                        <div class="card-header">Cek Status Pesanan</div>
+                        <div class="form-group">
+                            <label>Nomor Pesanan</label>
+                            <input type="text" id="order-id-input" placeholder="Masukkan nomor pesanan">
+                        </div>
+                        <button class="btn btn-primary" onclick="checkOrderStatus()">Cek Status</button>
+                    </div>
+                    <div id="order-status-result"></div>
+                </div>
+            </div>
+
+            <!-- TABLE SELECTION PAGE -->
+            <div class="page" id="table-selection-page">
+                <div class="card">
+                    <div class="card-header">Pilih Meja</div>
+                    <div class="table-grid" id="table-grid"></div>
+                </div>
+            </div>
+
+            <!-- TABLE ORDER PAGE -->
+            <div class="page" id="table-order-page">
+                <div class="table-order-layout">
+                    <div>
+                        <div class="card">
+                            <div class="card-header">
+                                <span>Pesan di Meja</span>
+                                <select id="table-order-select" class="form-group" style="width: 150px;" onchange="updateTableOrder()">
+                                    <option value="1">Meja 1</option>
+                                    <option value="2">Meja 2</option>
+                                    <option value="3">Meja 3</option>
+                                    <option value="4">Meja 4</option>
+                                    <option value="5">Meja 5</option>
+                                    <option value="6">Meja 6</option>
+                                </select>
+                            </div>
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem;">Pelanggan memindai QR Code di meja dan melihat menu ini.</p>
+                            <div class="pos-categories" id="table-categories"></div>
+                            <div class="pos-menu-grid" id="table-menu-grid"></div>
+                        </div>
+                        
+                        <!-- Daftar Pesanan untuk Meja Ini -->
+                        <div class="table-orders-section">
+                            <div class="card-header">Pesanan Aktif Meja <span id="current-table-number">1</span></div>
+                            <div id="table-active-orders"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="pos-cart-container card">
+                        <div class="card-header">
+                            <span>Keranjang Meja <span id="cart-table-number">1</span></span>
+                        </div>
+                        <div class="pos-cart" id="table-cart"></div>
+                        <div class="pos-summary">
+                            <div class="pos-summary-row total"><span>Total</span><span id="table-total">Rp 0</span></div>
+                            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="submitTableOrder()">Kirim Pesanan ke Dapur</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIDE HAILING PAGE -->
+            <div class="page" id="ride-hailing-page">
+                <div class="card">
+                    <div class="card-header">Input Pesanan Ojek Online</div>
+                    <form id="ride-hailing-form" onsubmit="createRideHailingOrder(event)">
+                        <div class="grid grid-cols-2">
+                            <div class="form-group">
+                                <label>Platform</label>
+                                <select name="platform" required>
+                                    <option value="Gojek">Gojek</option>
+                                    <option value="Grab">Grab</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>ID Driver / Nama</label>
+                                <input type="text" name="driverName" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Pesanan (pisahkan dengan koma)</label>
+                            <input type="text" name="orderItems" placeholder="contoh: 2x Nasi Goreng, 1x Es Teh" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Prioritas</label>
+                            <select name="priority">
+                                <option value="normal">Normal</option>
+                                <option value="high">Tinggi</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Buat Pesanan</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- MENU MANAGEMENT PAGE -->
+            <div class="page" id="menu-management-page">
+                <div class="card">
+                    <div class="card-header">
+                        <span>Kelola Menu</span>
+                        <button class="btn btn-primary" onclick="openMenuModal()">Tambah Menu</button>
+                    </div>
+                    <div id="menu-list"></div>
+                </div>
+            </div>
+
+            <!-- TABLE MANAGEMENT PAGE -->
+            <div class="page" id="table-management-page">
+                <div class="card">
+                    <div class="card-header">
+                        <span>Manajemen Meja</span>
+                        <button class="btn btn-primary" onclick="openTableModal()">Tambah Meja</button>
+                    </div>
+                    <div class="table-management-grid" id="table-management-grid"></div>
+                </div>
+            </div>
+
+            <!-- ORDER HISTORY PAGE -->
+            <div class="page" id="order-history-page">
+                <div class="card">
+                    <div class="card-header">
+                        <span>Riwayat Pesanan</span>
+                        <button class="btn btn-secondary" onclick="exportOrderHistory()">Export Data</button>
+                    </div>
+                    <div class="history-filters">
+                        <div class="form-group" style="width: 200px;">
+                            <label>Dari Tanggal</label>
+                            <input type="date" id="filter-date-from">
+                        </div>
+                        <div class="form-group" style="width: 200px;">
+                            <label>Sampai Tanggal</label>
+                            <input type="date" id="filter-date-to">
+                        </div>
+                        <div class="form-group" style="width: 150px;">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-primary" onclick="filterOrderHistory()">Filter</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>ID Pesanan</th>
+                                    <th>Tanggal</th>
+                                    <th>Meja</th>
+                                    <th>Tipe</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- USER MANAGEMENT PAGE -->
+            <div class="page" id="user-management-page">
+                <div class="card">
+                    <div class="card-header">
+                        <span>Kelola Pengguna</span>
+                        <button class="btn btn-primary" onclick="openUserModal()">Tambah Pengguna</button>
+                    </div>
+                    <div id="user-list"></div>
+                </div>
+            </div>
+
+            <!-- LICENSE PAGE -->
+            <div class="page" id="license-page">
+                <div class="license-card">
+                    <div class="card-header" style="border-bottom: 1px solid rgba(255,255,255,0.3); color: white;">
+                        <span>Status Lisensi</span>
+                        <span class="subscription-status status-active">AKTIF</span>
+                    </div>
+                    <div class="license-info-grid">
+                        <div class="license-info-item">
+                            <h4>Paket</h4>
+                            <p id="license-plan">Premium</p>
+                        </div>
+                        <div class="license-info-item">
+                            <h4>Berlaku Hingga</h4>
+                            <p id="license-expiry">31 Des 2025</p>
+                        </div>
+                        <div class="license-info-item">
+                            <h4>Sisa Hari</h4>
+                            <p id="license-days-left">45 Hari</p>
+                        </div>
+                        <div class="license-info-item">
+                            <h4>Maksimal Pengguna</h4>
+                            <p id="license-max-users">10 Users</p>
+                        </div>
+                    </div>
+                    <div class="license-actions">
+                        <button class="btn btn-primary" onclick="openUpgradeModal()">
+                            <i data-lucide="crown"></i> Upgrade Paket
+                        </button>
+                        <button class="btn btn-secondary" onclick="extendLicense()">
+                            <i data-lucide="calendar"></i> Perpanjang
+                        </button>
+                        <button class="btn btn-secondary" onclick="showLicenseKey()">
+                            <i data-lucide="key"></i> Lihat Kunci Lisensi
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Statistik Penggunaan</div>
+                    <div class="license-info-grid">
+                        <div class="license-info-item" style="background: var(--bg-tertiary);">
+                            <h4>Pengguna Aktif</h4>
+                            <p id="active-users-count">3/10</p>
+                        </div>
+                        <div class="license-info-item" style="background: var(--bg-tertiary);">
+                            <h4>Meja Terpakai</h4>
+                            <p id="used-tables-count">5/15</p>
+                        </div>
+                        <div class="license-info-item" style="background: var(--bg-tertiary);">
+                            <h4>Pesanan Bulan Ini</h4>
+                            <p id="monthly-orders">1,247</p>
+                        </div>
+                        <div class="license-info-item" style="background: var(--bg-tertiary);">
+                            <h4>Pendapatan Bulan Ini</h4>
+                            <p id="monthly-revenue">Rp 12.5 Jt</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Riwayat Transaksi</div>
+                    <div class="transaction-history" id="transaction-history">
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Paket Langganan</div>
+                    <div class="grid grid-cols-3" id="subscription-plans">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            © 2025 DNT Network - Smart POS System
+        </footer>
+    </main>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal" id="payment-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('payment-modal')">&times;</span>
+        <h2>Pembayaran</h2>
+        <div class="pos-summary">
+            <div class="pos-summary-row"><span>Subtotal</span><span id="modal-subtotal">Rp 0</span></div>
+            <div class="pos-summary-row"><span>Pajak (10%)</span><span id="modal-tax">Rp 0</span></div>
+            <div class="pos-summary-row total"><span>Total</span><span id="modal-total">Rp 0</span></div>
+        </div>
+        <div class="form-group">
+            <label>Metode Pembayaran</label>
+            <select id="payment-method">
+                <option value="Tunai">Tunai</option>
+                <option value="QRIS">QRIS</option>
+                <option value="Transfer">Transfer Bank</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Uang Dibayar (untuk Tunai)</label>
+            <input type="number" id="payment-amount" placeholder="0">
+        </div>
+        <div class="pos-summary-row total"><span>Kembalian</span><span id="payment-change">Rp 0</span></div>
+        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="processPayment()">Proses Pembayaran</button>
+    </div>
+</div>
+
+<!-- MENU MODAL -->
+<div class="modal" id="menu-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('menu-modal')">&times;</span>
+        <h2 id="menu-modal-title">Tambah Menu</h2>
+        <form id="menu-form" onsubmit="saveMenuItem(event)">
+            <input type="hidden" id="menu-id">
+            <div class="form-group">
+                <label>Nama Menu</label>
+                <input type="text" id="menu-name" required>
+            </div>
+            <div class="form-group">
+                <label>Kategori</label>
+                <select id="menu-category" required>
+                    <option value="Makanan">Makanan</option>
+                    <option value="Minuman">Minuman</option>
+                    <option value="Paket">Paket</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Harga</label>
+                <input type="number" id="menu-price" required>
+            </div>
+            <div class="form-group">
+                <label>Deskripsi</label>
+                <textarea id="menu-description" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Simpan</button>
+        </form>
+    </div>
+</div>
+
+<!-- TABLE MODAL -->
+<div class="modal" id="table-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('table-modal')">&times;</span>
+        <h2 id="table-modal-title">Tambah Meja</h2>
+        <form id="table-form" onsubmit="saveTable(event)">
+            <input type="hidden" id="table-id">
+            <div class="form-group">
+                <label>Nomor Meja</label>
+                <input type="number" id="table-number" required>
+            </div>
+            <div class="form-group">
+                <label>Kapasitas</label>
+                <input type="number" id="table-capacity" required>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select id="table-status" required>
+                    <option value="available">Tersedia</option>
+                    <option value="occupied">Terisi</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Simpan</button>
+        </form>
+    </div>
+</div>
+
+<!-- USER MODAL -->
+<div class="modal" id="user-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('user-modal')">&times;</span>
+        <h2 id="user-modal-title">Tambah Pengguna</h2>
+        <form id="user-form" onsubmit="saveUser(event)">
+            <input type="hidden" id="user-id">
+            <div class="form-group">
+                <label>Nama</label>
+                <input type="text" id="user-name-input" required>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="user-email" required>
+            </div>
+            <div class="form-group">
+                <label>Peran</label>
+                <select id="user-role" required>
+                    <option value="admin">Admin</option>
+                    <option value="owner">Owner</option>
+                    <option value="cashier">Kasir</option>
+                    <option value="kitchen">Dapur</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="user-password" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Simpan</button>
+        </form>
+    </div>
+</div>
+
+<!-- LICENSE MODALS -->
+<div class="modal" id="upgrade-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('upgrade-modal')">&times;</span>
+        <h2>Upgrade Paket</h2>
+        <div id="upgrade-plans-container"></div>
+    </div>
+</div>
+
+<div class="modal" id="license-key-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('license-key-modal')">&times;</span>
+        <h2>Kunci Lisensi</h2>
+        <div class="form-group">
+            <label>Kunci Lisensi Anda</label>
+            <input type="text" id="license-key-display" readonly style="background-color: var(--bg-tertiary);">
+        </div>
+        <div class="form-group">
+            <label>Tanggal Expiry</label>
+            <input type="text" id="license-expiry-display" readonly style="background-color: var(--bg-tertiary);">
+        </div>
+        <button class="btn btn-secondary" onclick="copyLicenseKey()">
+            <i data-lucide="copy"></i> Salin Kunci
+        </button>
+    </div>
+</div>
+
+<script>
+    // --- GLOBAL STATE & INITIALIZATION ---
+    const DB_KEY = 'smartPosState';
+    let state = {
+        menu: [
+            { id: 1, name: 'Nasi Goreng Spesial', category: 'Makanan', price: 25000, description: 'Nasi goreng dengan telur mata sapi, ayam suwir, dan kerupuk' },
+            { id: 2, name: 'Mie Ayam Bakso', category: 'Makanan', price: 22000, description: 'Mie ayam dengan bakso sapi dan pangsit goreng' },
+            { id: 3, name: 'Ayam Bakar Madu', category: 'Makanan', price: 35000, description: 'Ayam bakar dengan saus madu, nasi, dan lalapan' },
+            { id: 4, name: 'Es Teh Manis', category: 'Minuman', price: 5000, description: 'Teh manis dingin dengan es batu' },
+            { id: 5, name: 'Jus Alpukat', category: 'Minuman', price: 18000, description: 'Jus alpukat segar dengan susu dan madu' },
+            { id: 6, name: 'Es Kopi Susu', category: 'Minuman', price: 15000, description: 'Kopi espresso dengan susu dan gula aren' }
+        ],
+        orders: [],
+        users: [
+            { id: 1, name: 'Admin', email: 'admin@restaurant.com', role: 'admin', password: 'admin123' },
+            { id: 2, name: 'Owner', email: 'owner@restaurant.com', role: 'owner', password: 'owner123' },
+            { id: 3, name: 'Kasir', email: 'kasir@restaurant.com', role: 'cashier', password: 'kasir123' },
+            { id: 4, name: 'Dapur', email: 'dapur@restaurant.com', role: 'kitchen', password: 'dapur123' }
+        ],
+        tables: [
+            { id: 1, number: 1, capacity: 4, status: 'available' },
+            { id: 2, number: 2, capacity: 4, status: 'available' },
+            { id: 3, number: 3, capacity: 2, status: 'available' },
+            { id: 4, number: 4, capacity: 6, status: 'available' },
+            { id: 5, number: 5, capacity: 6, status: 'available' },
+            { id: 6, number: 6, capacity: 8, status: 'available' }
+        ],
+        currentOrder: { items: [], tableId: 0 },
+        tableOrder: { items: [], tableId: 1 },
+        currentUser: { id: 1, name: 'Admin', role: 'admin' },
+        license: {
+            key: 'SMARTPOS-' + Math.random().toString(36).substr(2, 9).toUpperCase() + '-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+            plan: 'premium',
+            status: 'active',
+            expiryDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
+            maxUsers: 10,
+            maxTables: 15,
+            transactions: [
+                {
+                    id: 1,
+                    type: 'purchase',
+                    plan: 'premium',
+                    amount: 599000,
+                    date: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString(),
+                    status: 'completed',
+                    paymentMethod: 'Transfer Bank'
+                }
+            ]
+        }
+    };
+
+    // Load state from localStorage
+    function loadState() {
+        const savedState = localStorage.getItem(DB_KEY);
+        if (savedState) {
+            try {
+                const parsed = JSON.parse(savedState);
+                state = { ...state, ...parsed };
+            } catch (e) {
+                console.error('Error loading state:', e);
+            }
+        }
+        updateKDSNotification();
+        checkLicenseStatus();
+        renderCurrentPage();
+    }
+
+    function saveState() {
+        localStorage.setItem(DB_KEY, JSON.stringify(state));
+        updateKDSNotification();
+    }
+
+    // --- USER MANAGEMENT ---
+    function switchUser(userId) {
+        const user = state.users.find(u => u.id === userId);
+        if (user) {
+            state.currentUser = user;
+            renderUserInterface();
+            showNotification(`Anda masuk sebagai ${user.name} (${getRoleLabel(user.role)})`, 'info');
+        }
+        toggleUserDropdown();
+    }
+
+    function renderUserInterface() {
+        const user = state.currentUser;
+        document.getElementById('userName').textContent = user.name;
+        document.getElementById('userAvatar').textContent = user.name.charAt(0);
+        renderSidebar();
+        
+        const defaultPages = {
+            admin: 'dashboard',
+            owner: 'dashboard',
+            cashier: 'pos',
+            kitchen: 'kds',
+            customer: 'table-order'
+        };
+        
+        showPage(defaultPages[user.role]);
+        lucide.createIcons();
+    }
+
+    function renderSidebar() {
+        const sidebarMenu = document.getElementById('sidebarMenu');
+        const roleMenus = {
+            admin: [
+                { page: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard' },
+                { page: 'pos', label: 'Kasir', icon: 'shopping-cart' },
+                { page: 'kds', label: 'Dapur', icon: 'chef-hat', notification: true },
+                { page: 'order-status', label: 'Status Pesanan', icon: 'clock' },
+                { page: 'table-selection', label: 'Pilih Meja', icon: 'square-stack' },
+                { page: 'table-order', label: 'Pesan via Meja', icon: 'smartphone' },
+                { page: 'ride-hailing', label: 'Ojek Online', icon: 'truck' },
+                { page: 'menu-management', label: 'Kelola Menu', icon: 'utensils' },
+                { page: 'table-management', label: 'Manajemen Meja', icon: 'table' },
+                { page: 'order-history', label: 'Riwayat Pesanan', icon: 'file-text' },
+                { page: 'user-management', label: 'Kelola Pengguna', icon: 'users' },
+                { page: 'license', label: 'Lisensi', icon: 'crown' }
+            ],
+            owner: [
+                { page: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard' },
+                { page: 'order-status', label: 'Status Pesanan', icon: 'clock' },
+                { page: 'order-history', label: 'Riwayat Pesanan', icon: 'file-text' },
+                { page: 'user-management', label: 'Kelola Pengguna', icon: 'users' },
+                { page: 'license', label: 'Lisensi', icon: 'crown' }
+            ],
+            cashier: [
+                { page: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard' },
+                { page: 'pos', label: 'Kasir', icon: 'shopping-cart' },
+                { page: 'order-status', label: 'Status Pesanan', icon: 'clock' },
+                { page: 'order-history', label: 'Riwayat Pesanan', icon: 'file-text' }
+            ],
+            kitchen: [
+                { page: 'kds', label: 'Dapur', icon: 'chef-hat', notification: true }
+            ],
+            customer: [
+                { page: 'table-order', label: 'Pesan di Meja', icon: 'smartphone' },
+                { page: 'order-status', label: 'Status Pesanan', icon: 'clock' }
+            ]
+        };
+        
+        const menuItems = roleMenus[state.currentUser.role] || [];
+        sidebarMenu.innerHTML = menuItems.map(item => `
+            <li>
+                <a href="#" class="nav-link ${item.page === 'dashboard' ? 'active' : ''}" data-page="${item.page}">
+                    <i data-lucide="${item.icon}"></i> ${item.label}
+                    ${item.notification ? `<span class="notification-badge" id="kds-notification" style="display: none;">0</span>` : ''}
+                </a>
+            </li>
+        `).join('');
+        
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                showPage(link.dataset.page);
+            });
+        });
+    }
+
+    function getRoleLabel(role) {
+        const roleMap = {
+            'admin': 'Admin',
+            'owner': 'Pemilik',
+            'cashier': 'Kasir',
+            'kitchen': 'Dapur',
+            'customer': 'Pelanggan'
+        };
+        return roleMap[role] || role;
+    }
+
+    function toggleUserDropdown() {
+        document.getElementById('userDropdownMenu').classList.toggle('show');
+    }
+
+    // --- NOTIFICATION SYSTEM ---
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+            <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'x-circle' : type === 'warning' ? 'alert-triangle' : 'info'}"></i>
+            <span>${message}</span>
+        `;
+        document.body.appendChild(notification);
+        lucide.createIcons();
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+
+    function updateKDSNotification() {
+        const newOrdersCount = state.orders.filter(o => o.status === 'baru').length;
+        const notificationBadge = document.getElementById('kds-notification');
+        if (notificationBadge) {
+            if (newOrdersCount > 0) {
+                notificationBadge.textContent = newOrdersCount;
+                notificationBadge.style.display = 'flex';
+            } else {
+                notificationBadge.style.display = 'none';
+            }
+        }
+    }
+
+    // --- ROUTING & NAVIGATION ---
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        
+        document.getElementById(`${pageId}-page`).classList.add('active');
+        const navLink = document.querySelector(`[data-page="${pageId}"]`);
+        if (navLink) {
+            navLink.classList.add('active');
+            document.getElementById('topbarTitle').textContent = navLink.textContent.trim();
+        }
+
+        switch(pageId) {
+            case 'dashboard': renderDashboard(); break;
+            case 'pos': renderPOS(); break;
+            case 'kds': renderKDS(); break;
+            case 'order-status': renderOrderStatusPage(); break;
+            case 'table-selection': renderTableSelection(); break;
+            case 'table-order': renderTableOrder(); break;
+            case 'menu-management': renderMenuManagement(); break;
+            case 'table-management': renderTableManagement(); break;
+            case 'order-history': renderOrderHistory(); break;
+            case 'user-management': renderUserManagement(); break;
+            case 'license': renderLicensePage(); break;
+        }
+    }
+
+    // --- DASHBOARD ---
+    function renderDashboard() {
+        const today = new Date().toDateString();
+        const todayOrders = state.orders.filter(o => new Date(o.timestamp).toDateString() === today);
+        const activeOrders = state.orders.filter(o => o.status !== 'selesai');
+        
+        const totalRevenue = todayOrders.reduce((sum, o) => sum + o.total, 0);
+        const totalItemsSold = todayOrders.reduce((sum, o) => sum + o.items.reduce((s, i) => s + i.quantity, 0), 0);
+
+        document.getElementById('kpi-revenue').textContent = `Rp ${totalRevenue.toLocaleString('id-ID')}`;
+        document.getElementById('kpi-orders').textContent = todayOrders.length;
+        document.getElementById('kpi-active').textContent = activeOrders.length;
+        document.getElementById('kpi-items').textContent = totalItemsSold;
+
+        const recentOrdersList = document.getElementById('recent-orders-list');
+        if (state.orders.length === 0) {
+            recentOrdersList.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada pesanan.</p>';
+        } else {
+            recentOrdersList.innerHTML = state.orders.slice(-5).reverse().map(order => `
+                <div class="pos-cart-item">
+                    <div>
+                        <div class="pos-cart-item-name">Order #${order.id} - ${order.tableId === 0 ? 'Take Away' : `Meja ${order.tableId}`} (${order.type})</div>
+                        <div class="pos-cart-item-price">${order.items.map(i=>`${i.name} (x${i.quantity})`).join(', ')}</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="color: var(--accent-primary);">Rp ${order.total.toLocaleString('id-ID')}</div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary);">${new Date(order.timestamp).toLocaleTimeString('id-ID')}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+    }
+
+    // --- POS SYSTEM ---
+    function renderPOS() {
+        renderCategories('pos-categories');
+        renderMenuGrid('pos-menu-grid', handleAddToOrder);
+        updatePOSCart();
+    }
+
+    function renderCategories(containerId) {
+        const categories = [...new Set(state.menu.map(item => item.category))];
+        const container = document.getElementById(containerId);
+        container.innerHTML = `<button class="pos-category-btn active" onclick="filterMenu('all', this)">Semua</button>` +
+            categories.map(cat => `<button class="pos-category-btn" onclick="filterMenu('${cat}', this)">${cat}</button>`).join('');
+    }
+
+    function renderMenuGrid(containerId, clickHandler) {
+        const grid = document.getElementById(containerId);
+        grid.innerHTML = state.menu.map(item => `
+            <div class="pos-menu-item" onclick="${clickHandler.name}(${item.id})">
+                <h4>${item.name}</h4>
+                <p>Rp ${item.price.toLocaleString('id-ID')}</p>
+                ${item.description ? `<div class="menu-description">${item.description}</div>` : ''}
+            </div>
+        `).join('');
+    }
+
+    function filterMenu(category, button) {
+        document.querySelectorAll(`#${button.parentElement.id} .pos-category-btn`).forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        
+        const grid = button.parentElement.nextElementSibling;
+        const itemsToRender = category === 'all' ? state.menu : state.menu.filter(item => item.category === category);
+        
+        const clickHandlerMap = {
+            'pos-categories': 'handleAddToOrder',
+            'table-categories': 'handleAddToTableOrder'
+        };
+        const clickHandler = clickHandlerMap[button.parentElement.id] || 'handleAddToOrder';
+        
+        grid.innerHTML = itemsToRender.map(item => `
+            <div class="pos-menu-item" onclick="${clickHandler}(${item.id})">
+                <h4>${item.name}</h4>
+                <p>Rp ${item.price.toLocaleString('id-ID')}</p>
+                ${item.description ? `<div class="menu-description">${item.description}</div>` : ''}
+            </div>
+        `).join('');
+    }
+
+    function handleAddToOrder(itemId) {
+        const menuItem = state.menu.find(i => i.id === itemId);
+        if (!menuItem) return;
+        
+        const existingItem = state.currentOrder.items.find(i => i.id === itemId);
+        if (existingItem) {
+            existingItem.quantity++;
+        } else {
+            state.currentOrder.items.push({ 
+                id: menuItem.id,
+                name: menuItem.name, 
+                price: menuItem.price, 
+                quantity: 1 
+            });
+        }
+        updatePOSCart();
+    }
+
+    function updatePOSCart() {
+        const cartContainer = document.getElementById('pos-cart');
+        if (state.currentOrder.items.length === 0) {
+            cartContainer.innerHTML = '<p style="text-align:center; color: var(--text-secondary); padding: 2rem 0;">Keranjang kosong.</p>';
+        } else {
+            cartContainer.innerHTML = state.currentOrder.items.map(item => `
+                <div class="pos-cart-item">
+                    <div>
+                        <div class="pos-cart-item-name">${item.name}</div>
+                        <div class="pos-cart-item-price">Rp ${item.price.toLocaleString('id-ID')}</div>
+                    </div>
+                    <div class="pos-cart-item-controls">
+                        <button onclick="updateOrderQuantity(${item.id}, -1)"><i data-lucide="minus-circle"></i></button>
+                        <span>${item.quantity}</span>
+                        <button onclick="updateOrderQuantity(${item.id}, 1)"><i data-lucide="plus-circle"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        calculatePOSTotal();
+        lucide.createIcons();
+    }
+
+    function updateOrderQuantity(itemId, change) {
+        const item = state.currentOrder.items.find(i => i.id === itemId);
+        if (item) {
+            item.quantity += change;
+            if (item.quantity <= 0) {
+                state.currentOrder.items = state.currentOrder.items.filter(i => i.id !== itemId);
+            }
+            updatePOSCart();
+        }
+    }
+
+    function calculatePOSTotal() {
+        const subtotal = state.currentOrder.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const tax = subtotal * 0.1;
+        const total = subtotal + tax;
+
+        document.getElementById('pos-subtotal').textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
+        document.getElementById('pos-tax').textContent = `Rp ${tax.toLocaleString('id-ID')}`;
+        document.getElementById('pos-total').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+    }
+
+    function clearCurrentOrder() {
+        if (confirm('Apakah Anda yakin ingin membatalkan pesanan ini?')) {
+            state.currentOrder = { items: [], tableId: parseInt(document.getElementById('pos-table-select').value) };
+            updatePOSCart();
+        }
+    }
+
+    function openPaymentModal() {
+        if (state.currentOrder.items.length === 0) {
+            showNotification('Keranjang masih kosong!', 'warning');
+            return;
+        }
+        document.getElementById('modal-subtotal').textContent = document.getElementById('pos-subtotal').textContent;
+        document.getElementById('modal-tax').textContent = document.getElementById('pos-tax').textContent;
+        document.getElementById('modal-total').textContent = document.getElementById('pos-total').textContent;
+        document.getElementById('payment-modal').style.display = 'flex';
+    }
+
+    function processPayment() {
+        const total = parseInt(document.getElementById('modal-total').textContent.replace(/\D/g,''));
+        const method = document.getElementById('payment-method').value;
+        const paidAmount = parseInt(document.getElementById('payment-amount').value) || 0;
+        
+        if (method === 'Tunai' && paidAmount < total) {
+            showNotification('Uang yang dibayar kurang!', 'error');
+            return;
+        }
+
+        const newOrder = {
+            id: Date.now(),
+            tableId: parseInt(document.getElementById('pos-table-select').value),
+            items: [...state.currentOrder.items],
+            status: 'baru',
+            total: total,
+            type: state.currentOrder.tableId === 0 ? 'takeaway' : 'dine-in',
+            paymentMethod: method,
+            timestamp: new Date().toISOString(),
+            statusHistory: [
+                { status: 'baru', timestamp: new Date().toISOString() }
+            ]
+        };
+
+        state.orders.push(newOrder);
+        state.currentOrder = { items: [], tableId: 0 };
+        saveState();
+        
+        closeModal('payment-modal');
+        showNotification(`Pembayaran ${method} sebesar Rp ${total.toLocaleString('id-ID')} berhasil!`, 'success');
+        renderPOS();
+        renderDashboard();
+        renderKDS();
+    }
+
+    // --- KDS SYSTEM ---
+    function renderKDS() {
+        const kdsGrid = document.getElementById('kds-orders-grid');
+        const activeOrders = state.orders.filter(o => o.status !== 'selesai');
+        
+        if (activeOrders.length === 0) {
+            kdsGrid.innerHTML = '<p style="text-align:center; color: var(--text-secondary); grid-column: 1/-1;">Tidak ada pesanan aktif.</p>';
+        } else {
+            kdsGrid.innerHTML = activeOrders.map(order => {
+                let statusClass = '';
+                if (order.status === 'baru') statusClass = 'status-new';
+                else if (order.status === 'dimasak') statusClass = 'status-cooking';
+                else if (order.status === 'siap') statusClass = 'status-ready';
+                
+                return `
+                    <div class="kds-order-card ${statusClass}">
+                        <div class="kds-order-header">
+                            <span class="kds-order-id">Order #${order.id} - ${order.tableId === 0 ? 'Take Away' : `Meja ${order.tableId}`}</span>
+                            <span class="kds-order-time">${new Date(order.timestamp).toLocaleTimeString('id-ID')}</span>
+                        </div>
+                        <div class="kds-order-items">
+                            ${order.items.map(item => `
+                                <div class="kds-order-item">
+                                    <span>${item.name}</span>
+                                    <span>x${item.quantity}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="kds-order-actions">
+                            ${order.status === 'baru' ? `<button class="btn btn-primary" onclick="updateOrderStatus(${order.id}, 'dimasak')">Mulai Masak</button>` : ''}
+                            ${order.status === 'dimasak' ? `<button class="btn btn-warning" onclick="updateOrderStatus(${order.id}, 'siap')">Selesai</button>` : ''}
+                            ${order.status === 'siap' ? `<button class="btn btn-success" onclick="updateOrderStatus(${order.id}, 'selesai')">Diantar</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    }
+
+    function updateOrderStatus(orderId, newStatus) {
+        const order = state.orders.find(o => o.id === orderId);
+        if (order) {
+            order.status = newStatus;
+            if (!order.statusHistory) order.statusHistory = [];
+            order.statusHistory.push({
+                status: newStatus,
+                timestamp: new Date().toISOString()
+            });
+            
+            saveState();
+            renderKDS();
+            renderDashboard();
+            renderTableOrder();
+            
+            const statusMessage = newStatus === 'dimasak' ? 'Pesanan sedang diproses' :
+                                 newStatus === 'siap' ? 'Pesanan siap diantar' :
+                                 newStatus === 'selesai' ? 'Pesanan telah selesai' : '';
+            
+            if (statusMessage) {
+                showNotification(`Order #${orderId}: ${statusMessage}`, 'info');
+            }
+        }
+    }
+
+    // --- TABLE ORDER SYSTEM ---
+    function renderTableOrder() {
+        const tableSelect = document.getElementById('table-order-select');
+        const selectedTableId = parseInt(tableSelect.value);
+        state.tableOrder.tableId = selectedTableId;
+        
+        document.getElementById('cart-table-number').textContent = selectedTableId;
+        document.getElementById('current-table-number').textContent = selectedTableId;
+        
+        renderCategories('table-categories');
+        renderMenuGrid('table-menu-grid', handleAddToTableOrder);
+        updateTableCart();
+        renderTableActiveOrders();
+    }
+
+    function renderTableActiveOrders() {
+        const container = document.getElementById('table-active-orders');
+        const tableId = state.tableOrder.tableId;
+        const activeOrders = state.orders.filter(order => 
+            order.tableId === tableId && order.status !== 'selesai'
+        );
+        
+        if (activeOrders.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color: var(--text-secondary); padding: 2rem 0;">Tidak ada pesanan aktif untuk meja ini.</p>';
+        } else {
+            container.innerHTML = activeOrders.map(order => `
+                <div class="card" style="margin-bottom: 1rem;">
+                    <div class="card-header" style="padding: 1rem; margin-bottom: 0;">
+                        <span>Order #${order.id}</span>
+                        <span class="subscription-status status-${order.status === 'baru' ? 'active' : order.status === 'dimasak' ? 'warning' : 'success'}">
+                            ${getStatusLabel(order.status)}
+                        </span>
+                    </div>
+                    <div style="padding: 1rem;">
+                        <div class="order-status-timeline">
+                            <div class="order-status-step ${order.status === 'baru' || order.status === 'dimasak' || order.status === 'siap' || order.status === 'selesai' ? 'completed' : ''}">
+                                <div class="order-status-step-circle">
+                                    ${order.status === 'baru' || order.status === 'dimasak' || order.status === 'siap' || order.status === 'selesai' ? '<i data-lucide="check"></i>' : '1'}
+                                </div>
+                                <div class="order-status-step-label">Diterima</div>
+                            </div>
+                            <div class="order-status-step ${order.status === 'dimasak' || order.status === 'siap' || order.status === 'selesai' ? 'completed' : order.status === 'baru' ? 'active' : ''}">
+                                <div class="order-status-step-circle">
+                                    ${order.status === 'dimasak' || order.status === 'siap' || order.status === 'selesai' ? '<i data-lucide="check"></i>' : '2'}
+                                </div>
+                                <div class="order-status-step-label">Diproses</div>
+                            </div>
+                            <div class="order-status-step ${order.status === 'siap' || order.status === 'selesai' ? 'completed' : order.status === 'dimasak' ? 'active' : ''}">
+                                <div class="order-status-step-circle">
+                                    ${order.status === 'siap' || order.status === 'selesai' ? '<i data-lucide="check"></i>' : '3'}
+                                </div>
+                                <div class="order-status-step-label">Siap</div>
+                            </div>
+                            <div class="order-status-step ${order.status === 'selesai' ? 'completed' : order.status === 'siap' ? 'active' : ''}">
+                                <div class="order-status-step-circle">
+                                    ${order.status === 'selesai' ? '<i data-lucide="check"></i>' : '4'}
+                                </div>
+                                <div class="order-status-step-label">Selesai</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <h4>Items:</h4>
+                            ${order.items.map(item => `
+                                <div style="display: flex; justify-content: space-between; padding: 0.25rem 0;">
+                                    <span>${item.name}</span>
+                                    <span>x${item.quantity}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        lucide.createIcons();
+    }
+
+    function handleAddToTableOrder(itemId) {
+        const menuItem = state.menu.find(i => i.id === itemId);
+        if (!menuItem) return;
+        
+        const existingItem = state.tableOrder.items.find(i => i.id === itemId);
+        if (existingItem) {
+            existingItem.quantity++;
+        } else {
+            state.tableOrder.items.push({ 
+                id: menuItem.id,
+                name: menuItem.name, 
+                price: menuItem.price, 
+                quantity: 1 
+            });
+        }
+        updateTableCart();
+    }
+
+    function updateTableCart() {
+        const cartContainer = document.getElementById('table-cart');
+        if (state.tableOrder.items.length === 0) {
+            cartContainer.innerHTML = '<p style="text-align:center; color: var(--text-secondary); padding: 2rem 0;">Keranjang kosong.</p>';
+        } else {
+            cartContainer.innerHTML = state.tableOrder.items.map(item => `
+                <div class="pos-cart-item">
+                    <div>
+                        <div class="pos-cart-item-name">${item.name}</div>
+                        <div class="pos-cart-item-price">Rp ${item.price.toLocaleString('id-ID')}</div>
+                    </div>
+                    <div class="pos-cart-item-controls">
+                        <button onclick="updateTableQuantity(${item.id}, -1)"><i data-lucide="minus-circle"></i></button>
+                        <span>${item.quantity}</span>
+                        <button onclick="updateTableQuantity(${item.id}, 1)"><i data-lucide="plus-circle"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        calculateTableTotal();
+        lucide.createIcons();
+    }
+
+    function updateTableQuantity(itemId, change) {
+        const item = state.tableOrder.items.find(i => i.id === itemId);
+        if (item) {
+            item.quantity += change;
+            if (item.quantity <= 0) {
+                state.tableOrder.items = state.tableOrder.items.filter(i => i.id !== itemId);
+            }
+            updateTableCart();
+        }
+    }
+
+    function calculateTableTotal() {
+        const total = state.tableOrder.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        document.getElementById('table-total').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+    }
+
+    function submitTableOrder() {
+        if (state.tableOrder.items.length === 0) {
+            showNotification('Keranjang masih kosong!', 'warning');
+            return;
+        }
+        const total = state.tableOrder.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const newOrder = {
+            id: Date.now(),
+            tableId: state.tableOrder.tableId,
+            items: [...state.tableOrder.items],
+            status: 'baru',
+            total: total,
+            type: 'dine-in',
+            timestamp: new Date().toISOString(),
+            statusHistory: [
+                { status: 'baru', timestamp: new Date().toISOString() }
+            ]
+        };
+        
+        const table = state.tables.find(t => t.id === state.tableOrder.tableId);
+        if (table) table.status = 'occupied';
+        
+        state.orders.push(newOrder);
+        state.tableOrder = { items: [], tableId: 1 };
+        saveState();
+        
+        showNotification('Pesanan telah dikirim ke dapur!', 'success');
+        renderTableOrder();
+        renderDashboard();
+        renderKDS();
+    }
+
+    // --- RIDE HAILING ---
+    function createRideHailingOrder(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const items = formData.get('orderItems').split(',').map(i => i.trim());
+        const orderItems = items.map(itemText => {
+            const [quantity, ...nameParts] = itemText.split(' ');
+            const name = nameParts.join(' ');
+            return { name, quantity: parseInt(quantity), price: 25000 };
+        });
+
+        const total = orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const priority = formData.get('priority');
+        
+        const newOrder = {
+            id: Date.now(),
+            tableId: 0,
+            items: orderItems,
+            status: priority === 'high' ? 'dimasak' : 'baru',
+            total: total,
+            type: 'ride-hailing',
+            platform: formData.get('platform'),
+            driverName: formData.get('driverName'),
+            timestamp: new Date().toISOString(),
+            statusHistory: [
+                { status: priority === 'high' ? 'dimasak' : 'baru', timestamp: new Date().toISOString() }
+            ]
+        };
+        
+        state.orders.push(newOrder);
+        saveState();
+        
+        showNotification(`Pesanan dari ${formData.get('platform')} oleh ${formData.get('driverName')} telah dibuat!`, 'success');
+        event.target.reset();
+        renderDashboard();
+        renderKDS();
+    }
+
+    // --- ORDER STATUS ---
+    function renderOrderStatusPage() {
+        // Implementation for order status page
+    }
+
+    function checkOrderStatus() {
+        const orderId = document.getElementById('order-id-input').value;
+        const order = state.orders.find(o => o.id == orderId);
+        
+        const resultContainer = document.getElementById('order-status-result');
+        
+        if (!order) {
+            resultContainer.innerHTML = `
+                <div class="card">
+                    <div class="card-header">Hasil Pencarian</div>
+                    <p style="color: var(--text-secondary);">Pesanan dengan nomor ${orderId} tidak ditemukan.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        const statusSteps = [
+            { key: 'baru', label: 'Diterima' },
+            { key: 'dimasak', label: 'Diproses' },
+            { key: 'siap', label: 'Siap Diambil' },
+            { key: 'selesai', label: 'Selesai' }
+        ];
+        
+        const currentStepIndex = statusSteps.findIndex(step => step.key === order.status);
+        
+        resultContainer.innerHTML = `
+            <div class="order-status-card">
+                <div class="order-status-header">
+                    <div class="order-status-id">Order #${order.id}</div>
+                    <div class="order-status-badge status-${order.status}">${getStatusLabel(order.status)}</div>
+                </div>
+                <div class="order-status-timeline">
+                    ${statusSteps.map((step, index) => `
+                        <div class="order-status-step ${index < currentStepIndex ? 'completed' : index === currentStepIndex ? 'active' : ''}">
+                            <div class="order-status-step-circle">
+                                ${index < currentStepIndex ? '<i data-lucide="check" style="width: 16px; height: 16px;"></i>' : ''}
+                            </div>
+                            <div class="order-status-step-label">${step.label}</div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div style="margin-top: 1.5rem;">
+                    <h4>Detail Pesanan:</h4>
+                    <div style="margin-top: 0.5rem;">
+                        ${order.items.map(item => `
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+                                <span>${item.name} x${item.quantity}</span>
+                                <span>Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-top: 1px solid var(--border-color); margin-top: 0.5rem; font-weight: 600;">
+                        <span>Total</span>
+                        <span style="color: var(--accent-primary);">Rp ${order.total.toLocaleString('id-ID')}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        lucide.createIcons();
+    }
+
+    function getStatusLabel(status) {
+        const statusMap = {
+            'baru': 'Baru',
+            'dimasak': 'Diproses',
+            'siap': 'Siap',
+            'selesai': 'Selesai'
+        };
+        return statusMap[status] || status;
+    }
+
+    // --- TABLE SELECTION ---
+    function renderTableSelection() {
+        const tableGrid = document.getElementById('table-grid');
+        tableGrid.innerHTML = state.tables.map(table => `
+            <div class="table-card ${table.status}" onclick="selectTable(${table.id})">
+                <div class="table-number">Meja ${table.number}</div>
+                <div class="table-status">${table.status === 'available' ? 'Tersedia' : 'Terisi'}</div>
+            </div>
+        `).join('');
+    }
+
+    function selectTable(tableId) {
+        const table = state.tables.find(t => t.id === tableId);
+        if (table.status === 'available') {
+            state.tableOrder.tableId = tableId;
+            showPage('table-order');
+        } else {
+            showNotification('Meja sudah terisi!', 'warning');
+        }
+    }
+
+    // --- MENU MANAGEMENT ---
+    function renderMenuManagement() {
+        const menuList = document.getElementById('menu-list');
+        if (state.menu.length === 0) {
+            menuList.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada menu.</p>';
+        } else {
+            menuList.innerHTML = state.menu.map(item => `
+                <div class="menu-item-card">
+                    <div class="menu-item-info">
+                        <h4>${item.name}</h4>
+                        <p>${item.category} - Rp ${item.price.toLocaleString('id-ID')}</p>
+                        <p style="font-size: 0.8rem; margin-top: 0.5rem;">${item.description || 'Tidak ada deskripsi'}</p>
+                    </div>
+                    <div class="menu-item-actions">
+                        <button class="btn btn-secondary" onclick="editMenuItem(${item.id})"><i data-lucide="edit"></i></button>
+                        <button class="btn btn-danger" onclick="deleteMenuItem(${item.id})"><i data-lucide="trash-2"></i></button>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+    }
+
+    function openMenuModal(itemId = null) {
+        const modal = document.getElementById('menu-modal');
+        const title = document.getElementById('menu-modal-title');
+        
+        if (itemId) {
+            const menuItem = state.menu.find(item => item.id === itemId);
+            if (menuItem) {
+                title.innerText = 'Edit Menu';
+                document.getElementById('menu-id').value = menuItem.id;
+                document.getElementById('menu-name').value = menuItem.name;
+                document.getElementById('menu-category').value = menuItem.category;
+                document.getElementById('menu-price').value = menuItem.price;
+                document.getElementById('menu-description').value = menuItem.description || '';
+            }
+        } else {
+            title.innerText = 'Tambah Menu';
+            document.getElementById('menu-form').reset();
+            document.getElementById('menu-id').value = '';
+        }
+        
+        modal.style.display = 'flex';
+    }
+
+    function saveMenuItem(event) {
+        event.preventDefault();
+        
+        const menuItem = {
+            name: document.getElementById('menu-name').value,
+            category: document.getElementById('menu-category').value,
+            price: parseInt(document.getElementById('menu-price').value),
+            description: document.getElementById('menu-description').value
+        };
+        
+        const menuId = document.getElementById('menu-id').value;
+        
+        if (menuId) {
+            const index = state.menu.findIndex(item => item.id == menuId);
+            if (index !== -1) {
+                state.menu[index] = { ...state.menu[index], ...menuItem };
+                showNotification('Menu berhasil diperbarui!', 'success');
+            }
+        } else {
+            state.menu.push({
+                id: Date.now(),
+                ...menuItem
+            });
+            showNotification('Menu berhasil ditambahkan!', 'success');
+        }
+        
+        saveState();
+        closeModal('menu-modal');
+        renderMenuManagement();
+        renderPOS();
+        renderTableOrder();
+    }
+
+    function editMenuItem(itemId) {
+        openMenuModal(itemId);
+    }
+
+    function deleteMenuItem(itemId) {
+        if (confirm('Apakah Anda yakin ingin menghapus menu ini?')) {
+            state.menu = state.menu.filter(item => item.id !== itemId);
+            saveState();
+            showNotification('Menu berhasil dihapus!', 'success');
+            renderMenuManagement();
+            renderPOS();
+            renderTableOrder();
+        }
+    }
+
+    // --- TABLE MANAGEMENT ---
+    function renderTableManagement() {
+        const tableGrid = document.getElementById('table-management-grid');
+        if (state.tables.length === 0) {
+            tableGrid.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada meja.</p>';
+        } else {
+            tableGrid.innerHTML = state.tables.map(table => `
+                <div class="table-management-card ${table.status}">
+                    <div class="table-number">Meja ${table.number}</div>
+                    <div class="table-status">Kapasitas: ${table.capacity} orang</div>
+                    <div class="table-status">${table.status === 'available' ? 'Tersedia' : 'Terisi'}</div>
+                    <div class="table-actions">
+                        <button class="btn btn-secondary" onclick="editTable(${table.id})"><i data-lucide="edit"></i></button>
+                        ${table.status === 'occupied' ? 
+                            `<button class="btn btn-success" onclick="freeTable(${table.id})">Bebaskan</button>` : 
+                            `<button class="btn btn-danger" onclick="deleteTable(${table.id})"><i data-lucide="trash-2"></i></button>`
+                        }
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+    }
+
+    function openTableModal(tableId = null) {
+        const modal = document.getElementById('table-modal');
+        const title = document.getElementById('table-modal-title');
+        
+        if (tableId) {
+            const table = state.tables.find(t => t.id === tableId);
+            if (table) {
+                title.innerText = 'Edit Meja';
+                document.getElementById('table-id').value = table.id;
+                document.getElementById('table-number').value = table.number;
+                document.getElementById('table-capacity').value = table.capacity;
+                document.getElementById('table-status').value = table.status;
+            }
+        } else {
+            title.innerText = 'Tambah Meja';
+            document.getElementById('table-form').reset();
+            document.getElementById('table-id').value = '';
+        }
+        
+        modal.style.display = 'flex';
+    }
+
+    function saveTable(event) {
+        event.preventDefault();
+        
+        if (!checkLicenseLimits()) return;
+        
+        const tableData = {
+            number: parseInt(document.getElementById('table-number').value),
+            capacity: parseInt(document.getElementById('table-capacity').value),
+            status: document.getElementById('table-status').value
+        };
+        
+        const tableId = document.getElementById('table-id').value;
+        
+        if (tableId) {
+            const index = state.tables.findIndex(t => t.id == tableId);
+            if (index !== -1) {
+                state.tables[index] = { ...state.tables[index], ...tableData };
+                showNotification('Meja berhasil diperbarui!', 'success');
+            }
+        } else {
+            if (state.tables.some(t => t.number === tableData.number)) {
+                showNotification('Nomor meja sudah ada!', 'error');
+                return;
+            }
+            
+            state.tables.push({
+                id: Date.now(),
+                ...tableData
+            });
+            showNotification('Meja berhasil ditambahkan!', 'success');
+        }
+        
+        saveState();
+        closeModal('table-modal');
+        renderTableManagement();
+        renderTableSelection();
+        updateTableOrderSelects();
+    }
+
+    function editTable(tableId) {
+        openTableModal(tableId);
+    }
+
+    function deleteTable(tableId) {
+        if (confirm('Apakah Anda yakin ingin menghapus meja ini?')) {
+            state.tables = state.tables.filter(t => t.id !== tableId);
+            saveState();
+            showNotification('Meja berhasil dihapus!', 'success');
+            renderTableManagement();
+            renderTableSelection();
+            updateTableOrderSelects();
+        }
+    }
+
+    function freeTable(tableId) {
+        const table = state.tables.find(t => t.id === tableId);
+        if (table) {
+            table.status = 'available';
+            saveState();
+            showNotification(`Meja ${table.number} telah dibebaskan!`, 'success');
+            renderTableManagement();
+            renderTableSelection();
+        }
+    }
+
+    function updateTableOrderSelects() {
+        const posSelect = document.getElementById('pos-table-select');
+        const tableSelect = document.getElementById('table-order-select');
+        
+        if (posSelect) {
+            const currentValue = posSelect.value;
+            posSelect.innerHTML = '<option value="0">Take Away</option>' +
+                state.tables.map(table => `<option value="${table.id}">Meja ${table.number}</option>`).join('');
+            posSelect.value = currentValue;
+        }
+        
+        if (tableSelect) {
+            const currentValue = tableSelect.value;
+            tableSelect.innerHTML = state.tables.map(table => `<option value="${table.id}">Meja ${table.number}</option>`).join('');
+            tableSelect.value = currentValue;
+        }
+    }
+
+    // --- USER MANAGEMENT ---
+    function renderUserManagement() {
+        const container = document.getElementById('user-list');
+        if (state.users.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada pengguna.</p>';
+        } else {
+            container.innerHTML = state.users.map(user => `
+                <div class="user-card">
+                    <div class="user-info-card">
+                        <div class="user-avatar-large">${user.name.charAt(0)}</div>
+                        <div class="user-details">
+                            <h4>${user.name}</h4>
+                            <p>${user.email}</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <span class="user-role-badge role-${user.role}">${getRoleLabel(user.role)}</span>
+                        <div class="menu-item-actions">
+                            <button class="btn btn-secondary" onclick="editUser(${user.id})">
+                                <i data-lucide="edit"></i>
+                            </button>
+                            ${user.id !== 1 ? `
+                                <button class="btn btn-danger" onclick="deleteUser(${user.id})">
+                                    <i data-lucide="trash-2"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        lucide.createIcons();
+    }
+
+    function openUserModal(userId = null) {
+        const modal = document.getElementById('user-modal');
+        const title = document.getElementById('user-modal-title');
+        
+        if (userId) {
+            const user = state.users.find(u => u.id === userId);
+            if (user) {
+                title.innerText = 'Edit Pengguna';
+                document.getElementById('user-id').value = user.id;
+                document.getElementById('user-name-input').value = user.name;
+                document.getElementById('user-email').value = user.email;
+                document.getElementById('user-role').value = user.role;
+                document.getElementById('user-password').value = user.password;
+            }
+        } else {
+            title.innerText = 'Tambah Pengguna';
+            document.getElementById('user-form').reset();
+            document.getElementById('user-id').value = '';
+        }
+        
+        modal.style.display = 'flex';
+    }
+
+    function saveUser(event) {
+        event.preventDefault();
+        
+        if (!checkLicenseLimits()) return;
+        
+        const userData = {
+            name: document.getElementById('user-name-input').value,
+            email: document.getElementById('user-email').value,
+            role: document.getElementById('user-role').value,
+            password: document.getElementById('user-password').value
+        };
+        
+        const userId = document.getElementById('user-id').value;
+        
+        if (userId) {
+            const index = state.users.findIndex(u => u.id == userId);
+            if (index !== -1) {
+                state.users[index] = { ...state.users[index], ...userData };
+                showNotification('Pengguna berhasil diperbarui!', 'success');
+            }
+        } else {
+            if (state.users.some(u => u.email === userData.email)) {
+                showNotification('Email sudah terdaftar!', 'error');
+                return;
+            }
+            
+            state.users.push({
+                id: Date.now(),
+                ...userData
+            });
+            showNotification('Pengguna berhasil ditambahkan!', 'success');
+        }
+        
+        saveState();
+        closeModal('user-modal');
+        renderUserManagement();
+    }
+
+    function editUser(userId) {
+        openUserModal(userId);
+    }
+
+    function deleteUser(userId) {
+        if (confirm('Apakah Anda yakin ingin menghapus pengguna ini?')) {
+            state.users = state.users.filter(u => u.id !== userId);
+            saveState();
+            showNotification('Pengguna berhasil dihapus!', 'success');
+            renderUserManagement();
+        }
+    }
+
+    // --- ORDER HISTORY ---
+    function renderOrderHistory() {
+        const historyTableBody = document.getElementById('history-table-body');
+        const orders = state.orders.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        
+        if (orders.length === 0) {
+            historyTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: var(--text-secondary);">Belum ada riwayat pesanan.</td></tr>';
+        } else {
+            historyTableBody.innerHTML = orders.map(order => `
+                <tr>
+                    <td>#${order.id}</td>
+                    <td>${new Date(order.timestamp).toLocaleDateString('id-ID')}</td>
+                    <td>${order.tableId === 0 ? 'Take Away' : `Meja ${order.tableId}`}</td>
+                    <td>${order.type}</td>
+                    <td>Rp ${order.total.toLocaleString('id-ID')}</td>
+                    <td>${getStatusLabel(order.status)}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteOrder(${order.id})"><i data-lucide="trash-2"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    function filterOrderHistory() {
+        const fromDate = document.getElementById('filter-date-from').value;
+        const toDate = document.getElementById('filter-date-to').value;
+        
+        let filteredOrders = state.orders;
+        
+        if (fromDate) {
+            filteredOrders = filteredOrders.filter(order => 
+                new Date(order.timestamp) >= new Date(fromDate)
+            );
+        }
+        
+        if (toDate) {
+            filteredOrders = filteredOrders.filter(order => 
+                new Date(order.timestamp) <= new Date(toDate + 'T23:59:59')
+            );
+        }
+        
+        const historyTableBody = document.getElementById('history-table-body');
+        
+        if (filteredOrders.length === 0) {
+            historyTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: var(--text-secondary);">Tidak ada pesanan dalam rentang tanggal yang dipilih.</td></tr>';
+        } else {
+            historyTableBody.innerHTML = filteredOrders.map(order => `
+                <tr>
+                    <td>#${order.id}</td>
+                    <td>${new Date(order.timestamp).toLocaleDateString('id-ID')}</td>
+                    <td>${order.tableId === 0 ? 'Take Away' : `Meja ${order.tableId}`}</td>
+                    <td>${order.type}</td>
+                    <td>Rp ${order.total.toLocaleString('id-ID')}</td>
+                    <td>${getStatusLabel(order.status)}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteOrder(${order.id})"><i data-lucide="trash-2"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    function exportOrderHistory() {
+        const fromDate = document.getElementById('filter-date-from').value;
+        const toDate = document.getElementById('filter-date-to').value;
+        
+        let filteredOrders = state.orders;
+        
+        if (fromDate) {
+            filteredOrders = filteredOrders.filter(order => 
+                new Date(order.timestamp) >= new Date(fromDate)
+            );
+        }
+        
+        if (toDate) {
+            filteredOrders = filteredOrders.filter(order => 
+                new Date(order.timestamp) <= new Date(toDate + 'T23:59:59')
+            );
+        }
+        
+        let csvContent = "ID Pesanan,Tanggal,Meja,Tipe,Total,Status\n";
+        
+        filteredOrders.forEach(order => {
+            const row = [
+                `#${order.id}`,
+                new Date(order.timestamp).toLocaleDateString('id-ID'),
+                order.tableId === 0 ? 'Take Away' : `Meja ${order.tableId}`,
+                order.type,
+                `Rp ${order.total.toLocaleString('id-ID')}`,
+                getStatusLabel(order.status)
+            ].join(',');
+            
+            csvContent += row + '\n';
+        });
+        
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', `order_history_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        showNotification('Data riwayat pesanan berhasil diexport!', 'success');
+    }
+
+    function deleteOrder(orderId) {
+        if (confirm('Apakah Anda yakin ingin menghapus pesanan ini?')) {
+            state.orders = state.orders.filter(o => o.id !== orderId);
+            saveState();
+            showNotification('Pesanan berhasil dihapus!', 'success');
+            renderOrderHistory();
+            renderDashboard();
+        }
+    }
+
+    // --- LICENSE MANAGEMENT ---
+    function checkLicenseStatus() {
+        const now = new Date();
+        const expiryDate = new Date(state.license.expiryDate);
+        
+        if (now > expiryDate) {
+            state.license.status = 'expired';
+            showNotification('Lisensi Anda telah kedaluwarsa! Silakan perpanjang.', 'warning');
+        }
+        
+        updateLicenseUI();
+        saveState();
+    }
+
+    function updateLicenseUI() {
+        const statusElement = document.getElementById('subscriptionStatus');
+        if (statusElement) {
+            statusElement.textContent = state.license.status === 'active' ? 'Aktif' : 'Kedaluwarsa';
+            statusElement.className = `subscription-status status-${state.license.status}`;
+        }
+    }
+
+    function renderLicensePage() {
+        updateLicenseInfo();
+        renderUsageStatistics();
+        renderTransactionHistory();
+        renderSubscriptionPlans();
+    }
+
+    function updateLicenseInfo() {
+        const expiryDate = new Date(state.license.expiryDate);
+        const daysLeft = Math.ceil((expiryDate - new Date()) / (1000 * 60 * 60 * 24));
+        
+        document.getElementById('license-plan').textContent = getPlanLabel(state.license.plan);
+        document.getElementById('license-expiry').textContent = expiryDate.toLocaleDateString('id-ID');
+        document.getElementById('license-days-left').textContent = `${Math.max(0, daysLeft)} Hari`;
+        document.getElementById('license-max-users').textContent = `${state.license.maxUsers} Users`;
+    }
+
+    function renderUsageStatistics() {
+        const activeUsers = state.users.length;
+        const usedTables = state.tables.length;
+        
+        const now = new Date();
+        const thisMonth = now.getMonth();
+        const thisYear = now.getFullYear();
+        
+        const monthlyOrders = state.orders.filter(order => {
+            const orderDate = new Date(order.timestamp);
+            return orderDate.getMonth() === thisMonth && orderDate.getFullYear() === thisYear;
+        });
+        
+        const monthlyRevenue = monthlyOrders.reduce((sum, order) => sum + (order.total || 0), 0);
+        
+        document.getElementById('active-users-count').textContent = `${activeUsers}/${state.license.maxUsers}`;
+        document.getElementById('used-tables-count').textContent = `${usedTables}/${state.license.maxTables}`;
+        document.getElementById('monthly-orders').textContent = monthlyOrders.length.toLocaleString('id-ID');
+        document.getElementById('monthly-revenue').textContent = `Rp ${monthlyRevenue.toLocaleString('id-ID')}`;
+    }
+
+    function renderTransactionHistory() {
+        const container = document.getElementById('transaction-history');
+        const transactions = state.license.transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        if (transactions.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color: var(--text-secondary); padding: 2rem 0;">Belum ada transaksi.</p>';
+        } else {
+            container.innerHTML = transactions.map(transaction => `
+                <div class="transaction-item">
+                    <div>
+                        <div style="font-weight: 600;">${getPlanLabel(transaction.plan)} - ${transaction.type === 'purchase' ? 'Pembelian' : 'Perpanjangan'}</div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                            ${new Date(transaction.date).toLocaleDateString('id-ID')} • ${transaction.paymentMethod}
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="transaction-amount">Rp ${transaction.amount.toLocaleString('id-ID')}</div>
+                        <div class="transaction-status status-${transaction.status}">
+                            ${transaction.status === 'completed' ? 'Selesai' : transaction.status === 'pending' ? 'Menunggu' : 'Gagal'}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+    }
+
+    function renderSubscriptionPlans() {
+        const container = document.getElementById('subscription-plans');
+        const subscriptionPlans = [
+            {
+                id: 'basic',
+                name: 'Dasar',
+                price: 299000,
+                period: 'per bulan',
+                features: [
+                    'Maksimal 5 pengguna',
+                    'Maksimal 10 meja',
+                    'Support standar',
+                    'Semua fitur POS',
+                    'Laporan penjualan'
+                ],
+                recommended: false
+            },
+            {
+                id: 'premium',
+                name: 'Premium',
+                price: 599000,
+                period: 'per bulan',
+                features: [
+                    'Maksimal 10 pengguna',
+                    'Maksimal 15 meja',
+                    'Support prioritas',
+                    'Semua fitur POS',
+                    'Laporan lengkap',
+                    'Analitik lanjutan'
+                ],
+                recommended: true
+            },
+            {
+                id: 'enterprise',
+                name: 'Enterprise',
+                price: 999000,
+                period: 'per bulan',
+                features: [
+                    'Pengguna tidak terbatas',
+                    'Meja tidak terbatas',
+                    'Support 24/7',
+                    'Semua fitur POS',
+                    'Laporan lengkap',
+                    'Analitik lanjutan',
+                    'Integrasi eksternal',
+                    'Custom development'
+                ],
+                recommended: false
+            }
+        ];
+        
+        container.innerHTML = subscriptionPlans.map(plan => `
+            <div class="plan-card ${plan.recommended ? 'recommended' : ''} ${state.license.plan === plan.id ? 'selected' : ''}" 
+                 onclick="selectPlan('${plan.id}')">
+                <h3>${plan.name}</h3>
+                <div class="plan-price">Rp ${plan.price.toLocaleString('id-ID')}</div>
+                <div class="plan-period">${plan.period}</div>
+                <ul class="plan-features">
+                    ${plan.features.map(feature => `<li><i data-lucide="check"></i> ${feature}</li>`).join('')}
+                </ul>
+                <button class="btn ${state.license.plan === plan.id ? 'btn-secondary' : 'btn-primary'}">
+                    ${state.license.plan === plan.id ? 'Paket Aktif' : 'Pilih Paket'}
+                </button>
+            </div>
+        `).join('');
+        
+        lucide.createIcons();
+    }
+
+    function openUpgradeModal() {
+        const modal = document.getElementById('upgrade-modal');
+        const container = document.getElementById('upgrade-plans-container');
+        
+        const upgradePlans = [
+            {
+                id: 'basic',
+                name: 'Dasar',
+                price: 299000,
+                features: ['Maksimal 5 pengguna', 'Support standar']
+            },
+            {
+                id: 'premium', 
+                name: 'Premium',
+                price: 599000,
+                features: ['Maksimal 10 pengguna', 'Support prioritas']
+            },
+            {
+                id: 'enterprise',
+                name: 'Enterprise', 
+                price: 999000,
+                features: ['Pengguna tidak terbatas', 'Support 24/7']
+            }
+        ];
+        
+        container.innerHTML = upgradePlans.map(plan => `
+            <div class="plan-card ${state.license.plan === plan.id ? 'selected' : ''}" 
+                 onclick="processUpgrade('${plan.id}')">
+                <h3>${plan.name}</h3>
+                <div class="plan-price">Rp ${plan.price.toLocaleString('id-ID')}</div>
+                <ul class="plan-features">
+                    ${plan.features.map(feature => `<li><i data-lucide="check"></i> ${feature}</li>`).join('')}
+                </ul>
+                <button class="btn ${state.license.plan === plan.id ? 'btn-secondary' : 'btn-primary'}">
+                    ${state.license.plan === plan.id ? 'Paket Saat Ini' : 'Upgrade Sekarang'}
+                </button>
+            </div>
+        `).join('');
+        
+        modal.style.display = 'flex';
+        lucide.createIcons();
+    }
+
+    function processUpgrade(planId) {
+        if (state.license.plan === planId) {
+            showNotification('Anda sudah menggunakan paket ini.', 'info');
+            return;
+        }
+        
+        const plans = {
+            'basic': { maxUsers: 5, price: 299000 },
+            'premium': { maxUsers: 10, price: 599000 },
+            'enterprise': { maxUsers: 999, price: 999000 }
+        };
+        
+        const selectedPlan = plans[planId];
+        if (!selectedPlan) return;
+
+        const newTransaction = {
+            id: Date.now(),
+            type: 'upgrade',
+            plan: planId,
+            amount: selectedPlan.price,
+            date: new Date().toISOString(),
+            status: 'completed',
+            paymentMethod: 'Transfer Bank'
+        };
+        
+        state.license.transactions.push(newTransaction);
+        state.license.plan = planId;
+        state.license.maxUsers = selectedPlan.maxUsers;
+        state.license.status = 'active';
+
+        if (state.users.length > selectedPlan.maxUsers) {
+            state.users = state.users.slice(0, selectedPlan.maxUsers);
+            showNotification(`Jumlah pengguna disesuaikan dengan paket baru.`, 'warning');
+        }
+
+        saveState();
+        closeModal('upgrade-modal');
+        renderLicensePage();
+        showNotification(`Berhasil upgrade ke paket ${getPlanLabel(planId)}!`, 'success');
+    }
+
+    function extendLicense() {
+        const plans = {
+            'basic': { price: 299000 },
+            'premium': { price: 599000 },
+            'enterprise': { price: 999000 }
+        };
+        
+        const currentPlan = plans[state.license.plan];
+        if (!currentPlan) return;
+        
+        if (confirm(`Perpanjang lisensi ${getPlanLabel(state.license.plan)} dengan biaya Rp ${currentPlan.price.toLocaleString('id-ID')}?`)) {
+            const newTransaction = {
+                id: Date.now(),
+                type: 'renewal',
+                plan: state.license.plan,
+                amount: currentPlan.price,
+                date: new Date().toISOString(),
+                status: 'completed',
+                paymentMethod: 'QRIS'
+            };
+            
+            state.license.transactions.push(newTransaction);
+            
+            const currentExpiry = new Date(state.license.expiryDate);
+            currentExpiry.setDate(currentExpiry.getDate() + 30);
+            state.license.expiryDate = currentExpiry.toISOString();
+            state.license.status = 'active';
+            
+            saveState();
+            renderLicensePage();
+            showNotification('Lisensi berhasil diperpanjang 30 hari!', 'success');
+        }
+    }
+
+    function showLicenseKey() {
+        document.getElementById('license-key-display').value = state.license.key;
+        document.getElementById('license-expiry-display').value = new Date(state.license.expiryDate).toLocaleDateString('id-ID');
+        document.getElementById('license-key-modal').style.display = 'flex';
+    }
+
+    function copyLicenseKey() {
+        const licenseKey = document.getElementById('license-key-display');
+        licenseKey.select();
+        navigator.clipboard.writeText(licenseKey.value);
+        showNotification('Kunci lisensi berhasil disalin!', 'success');
+    }
+
+    function selectPlan(planId) {
+        processUpgrade(planId);
+    }
+
+    function getPlanLabel(planId) {
+        const planMap = {
+            'basic': 'Dasar',
+            'premium': 'Premium', 
+            'enterprise': 'Enterprise'
+        };
+        return planMap[planId] || planId;
+    }
+
+    function checkLicenseLimits() {
+        if (state.users.length >= state.license.maxUsers) {
+            showNotification(`Batas maksimal pengguna (${state.license.maxUsers}) telah tercapai! Upgrade paket untuk menambah lebih banyak pengguna.`, 'error');
+            return false;
+        }
+        
+        if (state.tables.length >= state.license.maxTables) {
+            showNotification(`Batas maksimal meja (${state.license.maxTables}) telah tercapai! Upgrade paket untuk menambah lebih banyak meja.`, 'error');
+            return false;
+        }
+        
+        if (state.license.status === 'expired') {
+            showNotification('Lisensi Anda telah kedaluwarsa! Silakan perpanjang untuk melanjutkan menggunakan aplikasi.', 'error');
+            return false;
+        }
+        
+        return true;
+    }
+
+    // --- UI HELPERS ---
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    function updateTableOrder() {
+        renderTableOrder();
+    }
+
+    function renderCurrentPage() {
+        const activePage = document.querySelector('.page.active');
+        if (activePage) {
+            const pageId = activePage.id.replace('-page', '');
+            showPage(pageId);
+        }
+    }
+
+    // --- INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', function() {
+        loadState();
+        lucide.createIcons();
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage(this.dataset.page);
+            });
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.user-dropdown')) {
+                document.getElementById('userDropdownMenu').classList.remove('show');
+            }
+        });
+
+        document.getElementById('payment-amount').addEventListener('input', function() {
+            const total = parseInt(document.getElementById('modal-total').textContent.replace(/\D/g,''));
+            const paidAmount = parseInt(this.value) || 0;
+            const change = paidAmount - total;
+            document.getElementById('payment-change').textContent = `Rp ${Math.max(0, change).toLocaleString('id-ID')}`;
+        });
+
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('filter-date-from').value = today;
+        document.getElementById('filter-date-to').value = today;
+
+        renderUserInterface();
+    });
+</script>
+
+</body>
+</html>
