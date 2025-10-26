@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart POS System - Restoran & Cafe</title>
+    <title>E-Pos - Restoran & Cafe Management System</title>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -74,6 +74,12 @@
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
+        }
+
+        .sidebar-header .company-name {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
         }
 
         .sidebar-menu {
@@ -444,6 +450,42 @@
             overflow: hidden;
         }
 
+        .pos-menu-item.best-seller {
+            border: 2px solid var(--accent-warning);
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(245, 158, 11, 0.1) 100%);
+        }
+
+        .pos-menu-item.best-seller::after {
+            content: '⭐ Terlaris';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: var(--accent-warning);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: 600;
+        }
+
+        .pos-menu-item.out-of-stock {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pos-menu-item.out-of-stock::before {
+            content: 'Habis';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            background-color: var(--accent-danger);
+            color: white;
+            padding: 5px 20px;
+            font-weight: 600;
+            z-index: 1;
+        }
+
         .pos-menu-item::before {
             content: '';
             position: absolute;
@@ -460,7 +502,7 @@
             opacity: 1;
         }
 
-        .pos-menu-item:hover {
+        .pos-menu-item:hover:not(.out-of-stock) {
             transform: translateY(-5px);
             box-shadow: var(--shadow-lg);
             border-color: var(--accent-primary);
@@ -599,11 +641,43 @@
             display: flex;
             justify-content: space-between;
             padding: 0.25rem 0;
+            align-items: center;
+        }
+
+        .kds-order-item-status {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.25rem;
+        }
+
+        .kds-order-item-status button {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .kds-order-item-status button.btn-ok {
+            background-color: var(--accent-success);
+            color: white;
+        }
+
+        .kds-order-item-status button.btn-cancel {
+            background-color: var(--accent-danger);
+            color: white;
+        }
+
+        .kds-order-item-status button.btn-out {
+            background-color: var(--accent-warning);
+            color: white;
         }
 
         .kds-order-actions {
             display: flex;
             gap: 0.5rem;
+            margin-top: 1rem;
         }
 
         .kds-order-actions button { flex-grow: 1; }
@@ -1144,6 +1218,619 @@
             border-top: 1px solid var(--border-color);
         }
 
+        /* Table Selection Styles */
+        .table-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .table-card {
+            background-color: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .table-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .table-card:hover::before {
+            opacity: 1;
+        }
+
+        .table-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-primary);
+        }
+
+        .table-card.available {
+            border-color: var(--accent-success);
+        }
+
+        .table-card.occupied {
+            border-color: var(--accent-danger);
+            opacity: 0.8;
+        }
+
+        .table-icon {
+            font-size: 3rem;
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+        }
+
+        .table-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .table-status {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .table-capacity {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        /* Menu Image Upload Styles */
+        .menu-image-container {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+
+        .menu-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .menu-image-placeholder {
+            color: var(--text-light);
+            font-size: 2rem;
+        }
+
+        .menu-item-with-image {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu-item-info {
+            flex-grow: 1;
+        }
+
+        /* Inventory Management Styles */
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .inventory-item-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .inventory-item-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .inventory-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .inventory-item-name {
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        .inventory-item-quantity {
+            background-color: var(--bg-tertiary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .inventory-item-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .status-good {
+            background-color: var(--accent-success);
+        }
+
+        .status-low {
+            background-color: var(--accent-warning);
+        }
+
+        .status-out {
+            background-color: var(--accent-danger);
+        }
+
+        .inventory-item-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* Asset Management Styles */
+        .asset-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .asset-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .asset-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .asset-image {
+            width: 100%;
+            height: 150px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-bottom: 1rem;
+        }
+
+        .asset-name {
+            font-weight: 600;
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .asset-category {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: var(--bg-tertiary);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .asset-details {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .asset-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Financial Management Styles */
+        .financial-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .financial-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .financial-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .financial-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .financial-card-title {
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .financial-card-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .financial-card-change {
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .financial-card-change.positive {
+            color: var(--accent-success);
+        }
+
+        .financial-card-change.negative {
+            color: var(--accent-danger);
+        }
+
+        /* Payroll Management Styles */
+        .payroll-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .payroll-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .payroll-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .payroll-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .payroll-name {
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        .payroll-role {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .payroll-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .payroll-detail {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .payroll-detail strong {
+            color: var(--text-primary);
+        }
+
+        .payroll-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Shift Management Styles */
+        .shift-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .shift-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .shift-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .shift-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .shift-name {
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        .shift-time {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .shift-employees {
+            margin-bottom: 1rem;
+        }
+
+        .shift-employee {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0;
+        }
+
+        .shift-employee-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .shift-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Branch Management Styles */
+        .branch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .branch-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .branch-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .branch-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .branch-name {
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        .branch-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .branch-status.active {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: var(--accent-success);
+        }
+
+        .branch-status.inactive {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: var(--accent-danger);
+        }
+
+        .branch-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .branch-detail {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .branch-detail strong {
+            color: var(--text-primary);
+        }
+
+        .branch-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Low Stock Alert Styles */
+        .low-stock-alert {
+            background-color: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--accent-warning);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .low-stock-alert-icon {
+            color: var(--accent-warning);
+            font-size: 1.5rem;
+        }
+
+        .low-stock-alert-content {
+            flex-grow: 1;
+        }
+
+        .low-stock-alert-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .low-stock-alert-text {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* Notification Toast Styles */
+        .notification-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: var(--shadow-lg);
+            z-index: 4000;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 300px;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .notification-toast-icon {
+            font-size: 1.5rem;
+        }
+
+        .notification-toast-content {
+            flex-grow: 1;
+        }
+
+        .notification-toast-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .notification-toast-message {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .notification-toast-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+
+        .notification-toast-close:hover {
+            color: var(--text-primary);
+        }
+
+        /* Chart Container Styles */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 1rem;
+        }
+
+        /* Category Tabs Styles */
+        .category-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .category-tab {
+            padding: 0.75rem 1rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .category-tab:hover {
+            color: var(--accent-primary);
+        }
+
+        .category-tab.active {
+            color: var(--accent-primary);
+            border-bottom-color: var(--accent-primary);
+        }
+
+        /* Responsive Design */
         @media (max-width: 1024px) {
             .grid-cols-4 { grid-template-columns: repeat(3, 1fr); }
             .pos-layout { grid-template-columns: 1fr; }
@@ -1179,7 +1866,8 @@
     <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h1><i data-lucide="coffee"></i> Smart POS</h1>
+            <h1><i data-lucide="coffee"></i> E-Pos</h1>
+            <div class="company-name">DNT Network Cafe</div>
         </div>
         <ul class="sidebar-menu" id="sidebarMenu">
             <li><a href="#" class="nav-link active" data-page="dashboard"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
@@ -1198,6 +1886,12 @@
             <li><a href="#" class="nav-link" data-page="table-management"><i data-lucide="table"></i> Manajemen Meja</a></li>
             <li><a href="#" class="nav-link" data-page="order-history"><i data-lucide="file-text"></i> Riwayat Pesanan</a></li>
             <li><a href="#" class="nav-link" data-page="user-management"><i data-lucide="users"></i> Kelola Pengguna</a></li>
+            <li><a href="#" class="nav-link" data-page="inventory"><i data-lucide="package"></i> Manajemen Barang</a></li>
+            <li><a href="#" class="nav-link" data-page="asset"><i data-lucide="briefcase"></i> Manajemen Aset</a></li>
+            <li><a href="#" class="nav-link" data-page="financial"><i data-lucide="dollar-sign"></i> Keuangan</a></li>
+            <li><a href="#" class="nav-link" data-page="payroll"><i data-lucide="credit-card"></i> Penggajian</a></li>
+            <li><a href="#" class="nav-link" data-page="shift"><i data-lucide="calendar"></i> Shift</a></li>
+            <li><a href="#" class="nav-link" data-page="branch"><i data-lucide="map-pin"></i> Multi Cabang</a></li>
             <li><a href="#" class="nav-link" data-page="license"><i data-lucide="crown"></i> Lisensi</a></li>
         </ul>
     </aside>
@@ -1212,7 +1906,7 @@
                     <div class="user-info" onclick="toggleUserDropdown()">
                         <div class="user-avatar" id="userAvatar">A</div>
                         <span id="userName">Admin</span>
-                        <span class="subscription-status status-active" id="subscriptionStatus">Aktif</span>
+                        <span class="subscription-status status-trial" id="subscriptionStatus">Trial</span>
                         <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
                     </div>
                     <div class="user-dropdown-menu" id="userDropdownMenu">
@@ -1246,6 +1940,21 @@
         <div class="content-area" id="contentArea">
             <!-- DASHBOARD PAGE -->
             <div class="page active" id="dashboard-page">
+                <div class="license-activation">
+                    <div class="license-activation-header">
+                        <div class="license-activation-title">Status Lisensi</div>
+                        <div class="license-activation-status status-trial">Trial</div>
+                    </div>
+                    <div class="trial-info">
+                        <div class="trial-days" id="trial-days-left">7</div>
+                        <div class="trial-text">hari tersisa dalam masa trial</div>
+                    </div>
+                    <div class="license-input-group">
+                        <input type="text" class="form-group license-input" id="license-key-input" placeholder="Masukkan kode lisensi">
+                        <button class="btn btn-primary" onclick="activateLicense()">Aktivasi</button>
+                    </div>
+                </div>
+
                 <div class="kpi-grid">
                     <div class="kpi-card">
                         <p id="kpi-revenue">Rp 0</p>
@@ -1308,6 +2017,11 @@
             <!-- KDS PAGE -->
             <div class="page" id="kds-page">
                 <div class="card-header">Daftar Pesanan Dapur</div>
+                <div style="margin-bottom: 1rem;">
+                    <button class="btn btn-warning" onclick="openStockUpdateModal()">
+                        <i data-lucide="alert-triangle"></i> Update Stok Menu Habis
+                    </button>
+                </div>
                 <div class="kds-grid" id="kds-orders-grid"></div>
             </div>
 
@@ -1452,6 +2166,21 @@
                             <button class="btn btn-primary" onclick="filterOrderHistory()">Filter</button>
                         </div>
                     </div>
+                    
+                    <!-- Sales Chart -->
+                    <div class="card" style="margin-top: 1.5rem;">
+                        <div class="card-header">Grafik Penjualan</div>
+                        <div class="chart-container">
+                            <canvas id="sales-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Best Selling Items -->
+                    <div class="card" style="margin-top: 1.5rem;">
+                        <div class="card-header">Menu Terlaris</div>
+                        <div id="best-selling-items"></div>
+                    </div>
+                    
                     <div class="table-container">
                         <table class="history-table">
                             <thead>
@@ -1483,37 +2212,186 @@
                 </div>
             </div>
 
+            <!-- INVENTORY PAGE -->
+            <div class="page" id="inventory-page">
+                <div class="card">
+                    <div class="card-header">
+                        <span>Manajemen Barang/Bahan</span>
+                        <button class="btn btn-primary" onclick="openInventoryModal()">Tambah Barang</button>
+                    </div>
+                    
+                    <!-- Low Stock Alert -->
+                    <div id="low-stock-alerts"></div>
+                    
+                    <!-- Category Tabs -->
+                    <div class="category-tabs" id="inventory-category-tabs">
+                        <button class="category-tab active" onclick="filterInventoryByCategory('all', this)">Semua</button>
+                        <button class="category-tab" onclick="filterInventoryByCategory('Makanan', this)">Makanan</button>
+                        <button class="category-tab" onclick="filterInventoryByCategory('Minuman', this)">Minuman</button>
+                        <button class="category-tab" onclick="filterInventoryByCategory('Bahan Baku', this)">Bahan Baku</button>
+                        <button class="category-tab" onclick="filterInventoryByCategory('Peralatan', this)">Peralatan</button>
+                    </div>
+                    
+                    <div class="inventory-grid" id="inventory-grid"></div>
+                </div>
+            </div>
+
+            <!-- ASSET PAGE -->
+            <div class="page" id="asset-page">
+                <div class="card">
+                    <div class="card-header">
+                        <span>Manajemen Aset Perusahaan</span>
+                        <button class="btn btn-primary" onclick="openAssetModal()">Tambah Aset</button>
+                    </div>
+                    
+                    <!-- Category Tabs -->
+                    <div class="category-tabs" id="asset-category-tabs">
+                        <button class="category-tab active" onclick="filterAssetsByCategory('all', this)">Semua</button>
+                        <button class="category-tab" onclick="filterAssetsByCategory('Peralatan Dapur', this)">Peralatan Dapur</button>
+                        <button class="category-tab" onclick="filterAssetsByCategory('Furniture', this)">Furniture</button>
+                        <button class="category-tab" onclick="filterAssetsByCategory('Elektronik', this)">Elektronik</button>
+                        <button class="category-tab" onclick="filterAssetsByCategory('Kendaraan', this)">Kendaraan</button>
+                        <button class="category-tab" onclick="filterAssetsByCategory('Lainnya', this)">Lainnya</button>
+                    </div>
+                    
+                    <div class="asset-grid" id="asset-grid"></div>
+                </div>
+            </div>
+
+            <!-- FINANCIAL PAGE -->
+            <div class="page" id="financial-page">
+                <div class="financial-summary">
+                    <div class="financial-card">
+                        <div class="financial-card-header">
+                            <div class="financial-card-title">Pendapatan Bulan Ini</div>
+                            <i data-lucide="trending-up" style="color: var(--accent-success);"></i>
+                        </div>
+                        <div class="financial-card-value" id="monthly-revenue">Rp 0</div>
+                        <div class="financial-card-change positive">
+                            <i data-lucide="arrow-up"></i>
+                            <span>0% dari bulan lalu</span>
+                        </div>
+                    </div>
+                    <div class="financial-card">
+                        <div class="financial-card-header">
+                            <div class="financial-card-title">Pengeluaran Bulan Ini</div>
+                            <i data-lucide="trending-down" style="color: var(--accent-danger);"></i>
+                        </div>
+                        <div class="financial-card-value" id="monthly-expenses">Rp 0</div>
+                        <div class="financial-card-change negative">
+                            <i data-lucide="arrow-up"></i>
+                            <span>0% dari bulan lalu</span>
+                        </div>
+                    </div>
+                    <div class="financial-card">
+                        <div class="financial-card-header">
+                            <div class="financial-card-title">Laba Bersih</div>
+                            <i data-lucide="dollar-sign" style="color: var(--accent-primary);"></i>
+                        </div>
+                        <div class="financial-card-value" id="net-profit">Rp 0</div>
+                        <div class="financial-card-change positive">
+                            <i data-lucide="arrow-up"></i>
+                            <span>0% dari bulan lalu</span>
+                        </div>
+                    </div>
+                    <div class="financial-card">
+                        <div class="financial-card-header">
+                            <div class="financial-card-title">Total Transaksi</div>
+                            <i data-lucide="receipt" style="color: var(--accent-secondary);"></i>
+                        </div>
+                        <div class="financial-card-value" id="total-transactions">0</div>
+                        <div class="financial-card-change positive">
+                            <i data-lucide="arrow-up"></i>
+                            <span>0% dari bulan lalu</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2">
+                    <div class="card">
+                        <div class="card-header">Laporan Keuangan</div>
+                        <div class="chart-container">
+                            <canvas id="financial-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">Kategori Pengeluaran</div>
+                        <div class="chart-container">
+                            <canvas id="expense-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span>Transaksi Terbaru</span>
+                        <button class="btn btn-primary" onclick="openTransactionModal()">Tambah Transaksi</button>
+                    </div>
+                    <div id="transaction-list"></div>
+                </div>
+            </div>
+
+            <!-- PAYROLL PAGE -->
+            <div class="page" id="payroll-page">
+                <div class="card">
+                    <div class="card-header">
+                        <span>Manajemen Penggajian</span>
+                        <button class="btn btn-primary" onclick="openPayrollModal()">Tambah Gaji</button>
+                    </div>
+                    <div class="payroll-grid" id="payroll-grid"></div>
+                </div>
+            </div>
+
+            <!-- SHIFT PAGE -->
+            <div class="page" id="shift-page">
+                <div class="card">
+                    <div class="card-header">
+                        <span>Manajemen Shift</span>
+                        <button class="btn btn-primary" onclick="openShiftModal()">Tambah Shift</button>
+                    </div>
+                    <div class="shift-grid" id="shift-grid"></div>
+                </div>
+            </div>
+
+            <!-- BRANCH PAGE -->
+            <div class="page" id="branch-page">
+                <div class="card">
+                    <div class="card-header">
+                        <span>Manajemen Multi Cabang</span>
+                        <button class="btn btn-primary" onclick="openBranchModal()">Tambah Cabang</button>
+                    </div>
+                    <div class="branch-grid" id="branch-grid"></div>
+                </div>
+            </div>
+
             <!-- LICENSE PAGE -->
             <div class="page" id="license-page">
                 <div class="license-card">
                     <div class="card-header" style="border-bottom: 1px solid rgba(255,255,255,0.3); color: white;">
                         <span>Status Lisensi</span>
-                        <span class="subscription-status status-active">AKTIF</span>
+                        <span class="subscription-status status-trial">TRIAL</span>
                     </div>
                     <div class="license-info-grid">
                         <div class="license-info-item">
                             <h4>Paket</h4>
-                            <p id="license-plan">Premium</p>
+                            <p id="license-plan">Trial</p>
                         </div>
                         <div class="license-info-item">
                             <h4>Berlaku Hingga</h4>
-                            <p id="license-expiry">31 Des 2025</p>
+                            <p id="license-expiry">-</p>
                         </div>
                         <div class="license-info-item">
                             <h4>Sisa Hari</h4>
-                            <p id="license-days-left">45 Hari</p>
+                            <p id="license-days-left">7 Hari</p>
                         </div>
                         <div class="license-info-item">
                             <h4>Maksimal Pengguna</h4>
-                            <p id="license-max-users">10 Users</p>
+                            <p id="license-max-users">3 Users</p>
                         </div>
                     </div>
                     <div class="license-actions">
                         <button class="btn btn-primary" onclick="openUpgradeModal()">
                             <i data-lucide="crown"></i> Upgrade Paket
-                        </button>
-                        <button class="btn btn-secondary" onclick="extendLicense()">
-                            <i data-lucide="calendar"></i> Perpanjang
                         </button>
                         <button class="btn btn-secondary" onclick="showLicenseKey()">
                             <i data-lucide="key"></i> Lihat Kunci Lisensi
@@ -1522,23 +2400,32 @@
                 </div>
 
                 <div class="card">
+                    <div class="card-header">Aktivasi Lisensi</div>
+                    <div class="form-group">
+                        <label>Masukkan Kode Lisensi</label>
+                        <input type="text" id="license-activation-input" placeholder="Masukkan kode lisensi Anda">
+                    </div>
+                    <button class="btn btn-primary" onclick="activateLicense()">Aktivasi</button>
+                </div>
+
+                <div class="card">
                     <div class="card-header">Statistik Penggunaan</div>
                     <div class="license-info-grid">
                         <div class="license-info-item" style="background: var(--bg-tertiary);">
                             <h4>Pengguna Aktif</h4>
-                            <p id="active-users-count">3/10</p>
+                            <p id="active-users-count">1/3</p>
                         </div>
                         <div class="license-info-item" style="background: var(--bg-tertiary);">
                             <h4>Meja Terpakai</h4>
-                            <p id="used-tables-count">5/15</p>
+                            <p id="used-tables-count">3/6</p>
                         </div>
                         <div class="license-info-item" style="background: var(--bg-tertiary);">
                             <h4>Pesanan Bulan Ini</h4>
-                            <p id="monthly-orders">1,247</p>
+                            <p id="monthly-orders">0</p>
                         </div>
                         <div class="license-info-item" style="background: var(--bg-tertiary);">
                             <h4>Pendapatan Bulan Ini</h4>
-                            <p id="monthly-revenue">Rp 12.5 Jt</p>
+                            <p id="monthly-revenue">Rp 0</p>
                         </div>
                     </div>
                 </div>
@@ -1559,7 +2446,7 @@
 
         <!-- FOOTER -->
         <footer class="footer">
-            © 2025 DNT Network - Smart POS System
+            © 2025 DNT Network - E-Pos System
         </footer>
     </main>
 </div>
@@ -1617,6 +2504,11 @@
             <div class="form-group">
                 <label>Deskripsi</label>
                 <textarea id="menu-description" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Foto Menu</label>
+                <input type="file" id="menu-image" accept="image/*">
+                <div id="menu-image-preview" style="margin-top: 0.5rem;"></div>
             </div>
             <button type="submit" class="btn btn-primary" style="width: 100%;">Simpan</button>
         </form>
@@ -1683,6 +2575,269 @@
     </div>
 </div>
 
+<!-- INVENTORY MODAL -->
+<div class="modal" id="inventory-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('inventory-modal')">&times;</span>
+        <h2 id="inventory-modal-title">Tambah Barang</h2>
+        <form id="inventory-form" onsubmit="saveInventoryItem(event)">
+            <input type="hidden" id="inventory-id">
+            <div class="form-group">
+                <label>Nama Barang</label>
+                <input type="text" id="inventory-name" required>
+            </div>
+            <div class="form-group">
+                <label>Kategori</label>
+                <select id="inventory-category" required>
+                    <option value="Makanan">Makanan</option>
+                    <option value="Minuman">Minuman</option>
+                    <option value="Bahan Baku">Bahan Baku</option>
+                    <option value="Peralatan">Peralatan</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Jumlah</label>
+                <input type="number" id="inventory-quantity" required>
+            </div>
+            <div class="form-group">
+                <label>Satuan</label>
+                <input type="text" id="inventory-unit" placeholder="kg, liter, pcs, dll">
+            </div>
+            <div class="form-group">
+                <label>Stok Minimum</label>
+                <input type="number" id="inventory-min-stock" required>
+            </div>
+            <div class="form-group">
+                <label>Harga Beli</label>
+                <input type="number" id="inventory-price" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Simpan</button>
+        </form>
+    </div>
+</div>
+
+<!-- ASSET MODAL -->
+<div class="modal" id="asset-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('asset-modal')">&times;</span>
+        <h2 id="asset-modal-title">Tambah Aset</h2>
+        <form id="asset-form" onsubmit="saveAsset(event)">
+            <input type="hidden" id="asset-id">
+            <div class="form-group">
+                <label>Nama Aset</label>
+                <input type="text" id="asset-name" required>
+            </div>
+            <div class="form-group">
+                <label>Kategori</label>
+                <select id="asset-category" required>
+                    <option value="Peralatan Dapur">Peralatan Dapur</option>
+                    <option value="Furniture">Furniture</option>
+                    <option value="Elektronik">Elektronik</option>
+                    <option value="Kendaraan">Kendaraan</option>
+                    <option value="Lainnya">Lainnya</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Jumlah</label>
+                <input type="number" id="asset-quantity" required>
+            </div>
+            <div class="form-group">
+                <label>Tanggal Pembelian</label>
+                <input type="date" id="asset-purchase-date" required>
+            </div>
+            <div class="form-group">
+                <label>Harga Pembelian</label>
+                <input type="number" id="asset-price" required>
+            </div>
+            <div class="form-group">
+                <label>Nilai Saat Ini</label>
+                <input type="number" id="asset-current-value" required>
+            </div>
+            <div class="form-group">
+                <label>Lokasi</label>
+                <input type="text" id="asset-location" required>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select id="asset-status" required>
+                    <option value="Baik">Baik</option>
+                    <option value="Rusak Ringan">Rusak Ringan</option>
+                    <option value="Rusak Berat">Rusak Berat</option>
+                    <option value="Dalam Perbaikan">Dalam Perbaikan</option>
+                    <option value="Hilang">Hilang</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Jumlah Hilang</label>
+                <input type="number" id="asset-lost-quantity" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label>Foto Aset</label>
+                <input type="file" id="asset-image" accept="image/*">
+                <div id="asset-image-preview" style="margin-top: 0.5rem;"></div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Simpan</button>
+        </form>
+    </div>
+</div>
+
+<!-- STOCK UPDATE MODAL -->
+<div class="modal" id="stock-update-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('stock-update-modal')">&times;</span>
+        <h2>Update Stok Menu Habis</h2>
+        <div id="stock-update-list"></div>
+        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="saveStockUpdates()">Simpan Perubahan</button>
+    </div>
+</div>
+
+<!-- TRANSACTION MODAL -->
+<div class="modal" id="transaction-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('transaction-modal')">&times;</span>
+        <h2>Tambah Transaksi</h2>
+        <form id="transaction-form" onsubmit="saveTransaction(event)">
+            <div class="form-group">
+                <label>Tipe Transaksi</label>
+                <select id="transaction-type" required>
+                    <option value="income">Pemasukan</option>
+                    <option value="expense">Pengeluaran</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Kategori</label>
+                <select id="transaction-category" required>
+                    <option value="Penjualan">Penjualan</option>
+                    <option value="Gaji">Gaji</option>
+                    <option value="Operasional">Operasional</option>
+                    <option value="Bahan Baku">Bahan Baku</option>
+                    <option value="Lainnya">Lainnya</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Jumlah</label>
+                <input type="number" id="transaction-amount" required>
+            </div>
+            <div class="form-group">
+                <label>Deskripsi</label>
+                <textarea id="transaction-description" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Tanggal</label>
+                <input type="date" id="transaction-date" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Simpan</button>
+        </form>
+    </div>
+</div>
+
+<!-- PAYROLL MODAL -->
+<div class="modal" id="payroll-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('payroll-modal')">&times;</span>
+        <h2 id="payroll-modal-title">Tambah Gaji</h2>
+        <form id="payroll-form" onsubmit="savePayroll(event)">
+            <input type="hidden" id="payroll-id">
+            <div class="form-group">
+                <label>Karyawan</label>
+                <select id="payroll-employee" required>
+                    <option value="">Pilih Karyawan</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Periode</label>
+                <input type="month" id="payroll-period" required>
+            </div>
+            <div class="form-group">
+                <label>Gaji Pokok</label>
+                <input type="number" id="payroll-base" required>
+            </div>
+            <div class="form-group">
+                <label>Tunjangan</label>
+                <input type="number" id="payroll-allowance" value="0">
+            </div>
+            <div class="form-group">
+                <label>Potongan</label>
+                <input type="number" id="payroll-deduction" value="0">
+            </div>
+            <div class="form-group">
+                <label>Total Gaji</label>
+                <input type="number" id="payroll-total" readonly>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Simpan</button>
+        </form>
+    </div>
+</div>
+
+<!-- SHIFT MODAL -->
+<div class="modal" id="shift-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('shift-modal')">&times;</span>
+        <h2 id="shift-modal-title">Tambah Shift</h2>
+        <form id="shift-form" onsubmit="saveShift(event)">
+            <input type="hidden" id="shift-id">
+            <div class="form-group">
+                <label>Nama Shift</label>
+                <input type="text" id="shift-name" required>
+            </div>
+            <div class="form-group">
+                <label>Jam Mulai</label>
+                <input type="time" id="shift-start" required>
+            </div>
+            <div class="form-group">
+                <label>Jam Selesai</label>
+                <input type="time" id="shift-end" required>
+            </div>
+            <div class="form-group">
+                <label>Karyawan</label>
+                <div id="shift-employees-list"></div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Simpan</button>
+        </form>
+    </div>
+</div>
+
+<!-- BRANCH MODAL -->
+<div class="modal" id="branch-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('branch-modal')">&times;</span>
+        <h2 id="branch-modal-title">Tambah Cabang</h2>
+        <form id="branch-form" onsubmit="saveBranch(event)">
+            <input type="hidden" id="branch-id">
+            <div class="form-group">
+                <label>Nama Cabang</label>
+                <input type="text" id="branch-name" required>
+            </div>
+            <div class="form-group">
+                <label>Alamat</label>
+                <textarea id="branch-address" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Telepon</label>
+                <input type="tel" id="branch-phone" required>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="branch-email">
+            </div>
+            <div class="form-group">
+                <label>Manager</label>
+                <select id="branch-manager" required>
+                    <option value="">Pilih Manager</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select id="branch-status" required>
+                    <option value="active">Aktif</option>
+                    <option value="inactive">Tidak Aktif</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Simpan</button>
+        </form>
+    </div>
+</div>
+
 <!-- LICENSE MODALS -->
 <div class="modal" id="upgrade-modal">
     <div class="modal-content">
@@ -1710,17 +2865,30 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // --- GLOBAL STATE & INITIALIZATION ---
-    const DB_KEY = 'smartPosState';
+    const DB_KEY = 'ePosState';
     let state = {
+        // License information
+        license: {
+            key: null,
+            plan: 'trial',
+            status: 'trial',
+            expiryDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
+            maxUsers: 3,
+            maxTables: 6,
+            trialActivated: true,
+            trialStartDate: new Date().toISOString()
+        },
+        
         menu: [
-            { id: 1, name: 'Nasi Goreng Spesial', category: 'Makanan', price: 25000, description: 'Nasi goreng dengan telur mata sapi, ayam suwir, dan kerupuk' },
-            { id: 2, name: 'Mie Ayam Bakso', category: 'Makanan', price: 22000, description: 'Mie ayam dengan bakso sapi dan pangsit goreng' },
-            { id: 3, name: 'Ayam Bakar Madu', category: 'Makanan', price: 35000, description: 'Ayam bakar dengan saus madu, nasi, dan lalapan' },
-            { id: 4, name: 'Es Teh Manis', category: 'Minuman', price: 5000, description: 'Teh manis dingin dengan es batu' },
-            { id: 5, name: 'Jus Alpukat', category: 'Minuman', price: 18000, description: 'Jus alpukat segar dengan susu dan madu' },
-            { id: 6, name: 'Es Kopi Susu', category: 'Minuman', price: 15000, description: 'Kopi espresso dengan susu dan gula aren' }
+            { id: 1, name: 'Nasi Goreng Spesial', category: 'Makanan', price: 25000, description: 'Nasi goreng dengan telur mata sapi, ayam suwir, dan kerupuk', image: null, isBestSeller: true, outOfStock: false },
+            { id: 2, name: 'Mie Ayam Bakso', category: 'Makanan', price: 22000, description: 'Mie ayam dengan bakso sapi dan pangsit goreng', image: null, isBestSeller: false, outOfStock: false },
+            { id: 3, name: 'Ayam Bakar Madu', category: 'Makanan', price: 35000, description: 'Ayam bakar dengan saus madu, nasi, dan lalapan', image: null, isBestSeller: true, outOfStock: false },
+            { id: 4, name: 'Es Teh Manis', category: 'Minuman', price: 5000, description: 'Teh manis dingin dengan es batu', image: null, isBestSeller: false, outOfStock: false },
+            { id: 5, name: 'Jus Alpukat', category: 'Minuman', price: 18000, description: 'Jus alpukat segar dengan susu dan madu', image: null, isBestSeller: false, outOfStock: false },
+            { id: 6, name: 'Es Kopi Susu', category: 'Minuman', price: 15000, description: 'Kopi espresso dengan susu dan gula aren', image: null, isBestSeller: true, outOfStock: false }
         ],
         orders: [],
         users: [
@@ -1740,25 +2908,45 @@
         currentOrder: { items: [], tableId: 0 },
         tableOrder: { items: [], tableId: 1 },
         currentUser: { id: 1, name: 'Admin', role: 'admin' },
-        license: {
-            key: 'SMARTPOS-' + Math.random().toString(36).substr(2, 9).toUpperCase() + '-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
-            plan: 'premium',
-            status: 'active',
-            expiryDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
-            maxUsers: 10,
-            maxTables: 15,
-            transactions: [
-                {
-                    id: 1,
-                    type: 'purchase',
-                    plan: 'premium',
-                    amount: 599000,
-                    date: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString(),
-                    status: 'completed',
-                    paymentMethod: 'Transfer Bank'
-                }
-            ]
-        }
+        
+        // Inventory management
+        inventory: [
+            { id: 1, name: 'Beras', category: 'Bahan Baku', quantity: 50, unit: 'kg', minStock: 10, price: 12000 },
+            { id: 2, name: 'Telur', category: 'Bahan Baku', quantity: 100, unit: 'pcs', minStock: 20, price: 2000 },
+            { id: 3, name: 'Ayam', category: 'Bahan Baku', quantity: 30, unit: 'kg', minStock: 5, price: 35000 },
+            { id: 4, name: 'Teh', category: 'Bahan Baku', quantity: 5, unit: 'kg', minStock: 2, price: 80000 },
+            { id: 5, name: 'Gula', category: 'Bahan Baku', quantity: 20, unit: 'kg', minStock: 5, price: 15000 }
+        ],
+        
+        // Asset management
+        assets: [
+            { id: 1, name: 'Kompor Gas', category: 'Peralatan Dapur', quantity: 2, purchaseDate: '2023-01-15', price: 2500000, currentValue: 2000000, location: 'Dapur', status: 'Baik', lostQuantity: 0, image: null },
+            { id: 2, name: 'Kulkas', category: 'Elektronik', quantity: 1, purchaseDate: '2023-02-20', price: 5000000, currentValue: 4000000, location: 'Dapur', status: 'Baik', lostQuantity: 0, image: null },
+            { id: 3, name: 'Meja Makan', category: 'Furniture', quantity: 10, purchaseDate: '2023-01-10', price: 1500000, currentValue: 1200000, location: 'Ruang Makan', status: 'Baik', lostQuantity: 0, image: null }
+        ],
+        
+        // Financial management
+        transactions: [],
+        
+        // Payroll management
+        payroll: [],
+        
+        // Shift management
+        shifts: [
+            { id: 1, name: 'Pagi', startTime: '08:00', endTime: '16:00', employees: [1, 2] },
+            { id: 2, name: 'Sore', startTime: '16:00', endTime: '00:00', employees: [3, 4] }
+        ],
+        
+        // Branch management
+        branches: [
+            { id: 1, name: 'Cabang Utama', address: 'Jl. Sudirman No. 123', phone: '021-123456', email: 'utama@restaurant.com', manager: 2, status: 'active' }
+        ],
+        
+        // Notifications
+        notifications: [],
+        
+        // License transactions
+        licenseTransactions: []
     };
 
     // Load state from localStorage
@@ -1772,14 +2960,133 @@
                 console.error('Error loading state:', e);
             }
         }
+        
+        // Check trial status
+        checkTrialStatus();
         updateKDSNotification();
-        checkLicenseStatus();
         renderCurrentPage();
     }
 
     function saveState() {
         localStorage.setItem(DB_KEY, JSON.stringify(state));
         updateKDSNotification();
+    }
+
+    // --- LICENSE MANAGEMENT ---
+    function checkTrialStatus() {
+        if (state.license.status === 'trial' && state.license.trialActivated) {
+            const now = new Date();
+            const trialEndDate = new Date(state.license.expiryDate);
+            const daysLeft = Math.ceil((trialEndDate - now) / (1000 * 60 * 60 * 24));
+            
+            // Update trial days left
+            document.getElementById('trial-days-left').textContent = daysLeft;
+            document.getElementById('license-days-left').textContent = `${daysLeft} Hari`;
+            
+            // Check if trial has expired
+            if (daysLeft <= 0) {
+                state.license.status = 'expired';
+                showNotification('Masa trial Anda telah berakhir! Silakan aktivasi lisensi untuk melanjutkan.', 'error');
+                updateLicenseUI();
+            }
+            
+            // Show warning when 3 days left
+            if (daysLeft <= 3 && daysLeft > 0) {
+                showNotification(`Masa trial Anda tersisa ${daysLeft} hari lagi!`, 'warning');
+            }
+        }
+        
+        updateLicenseUI();
+        saveState();
+    }
+
+    function updateLicenseUI() {
+        const statusElement = document.getElementById('subscriptionStatus');
+        if (statusElement) {
+            statusElement.textContent = state.license.status === 'trial' ? 'Trial' : 
+                                      state.license.status === 'active' ? 'Aktif' : 'Kedaluwarsa';
+            statusElement.className = `subscription-status status-${state.license.status}`;
+        }
+    }
+
+    function activateLicense() {
+        const licenseKey = document.getElementById('license-key-input').value || 
+                           document.getElementById('license-activation-input').value;
+        
+        if (!licenseKey) {
+            showNotification('Silakan masukkan kode lisensi!', 'warning');
+            return;
+        }
+        
+        // Simulate API call to validate license
+        showNotification('Memvalidasi lisensi...', 'info');
+        
+        setTimeout(() => {
+            // Simulate successful activation
+            const planType = getPlanTypeFromKey(licenseKey);
+            
+            if (planType) {
+                state.license.key = licenseKey;
+                state.license.plan = planType;
+                state.license.status = 'active';
+                state.license.trialActivated = false;
+                
+                // Set expiry date based on plan type
+                const now = new Date();
+                if (planType === 'basic') {
+                    state.license.expiryDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString(); // 30 days
+                    state.license.maxUsers = 5;
+                    state.license.maxTables = 10;
+                } else if (planType === 'premium') {
+                    state.license.expiryDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString(); // 30 days
+                    state.license.maxUsers = 10;
+                    state.license.maxTables = 15;
+                } else if (planType === 'enterprise') {
+                    state.license.expiryDate = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString(); // 30 days
+                    state.license.maxUsers = 999;
+                    state.license.maxTables = 999;
+                }
+                
+                // Add transaction record
+                state.licenseTransactions.push({
+                    id: Date.now(),
+                    type: 'activation',
+                    plan: planType,
+                    amount: getPlanPrice(planType),
+                    date: new Date().toISOString(),
+                    status: 'completed',
+                    paymentMethod: 'License Key'
+                });
+                
+                saveState();
+                updateLicenseUI();
+                renderLicensePage();
+                
+                showNotification(`Lisensi ${planType} berhasil diaktifkan!`, 'success');
+                
+                // Clear input fields
+                document.getElementById('license-key-input').value = '';
+                document.getElementById('license-activation-input').value = '';
+            } else {
+                showNotification('Kode lisensi tidak valid!', 'error');
+            }
+        }, 1500);
+    }
+
+    function getPlanTypeFromKey(key) {
+        // In a real implementation, you would validate the key with your database
+        // For simulation, we'll check if the key contains specific patterns
+        if (key.includes('BASIC')) return 'basic';
+        if (key.includes('PREMIUM')) return 'premium';
+        if (key.includes('ENTERPRISE')) return 'enterprise';
+        return null;
+    }
+
+    function getPlanPrice(plan) {
+        if (plan === 'basic') return 299000;
+        if (plan === 'premium') return 599000;
+        if (plan === 'enterprise') return 999000;
+        return 0;
     }
 
     // --- USER MANAGEMENT ---
@@ -1801,7 +3108,7 @@
         
         const defaultPages = {
             admin: 'dashboard',
-            owner: 'dashboard',
+            owner: 'financial',
             cashier: 'pos',
             kitchen: 'kds',
             customer: 'table-order'
@@ -1824,15 +3131,23 @@
                 { page: 'ride-hailing', label: 'Ojek Online', icon: 'truck' },
                 { page: 'menu-management', label: 'Kelola Menu', icon: 'utensils' },
                 { page: 'table-management', label: 'Manajemen Meja', icon: 'table' },
+                { page: 'inventory', label: 'Manajemen Barang', icon: 'package' },
+                { page: 'asset', label: 'Manajemen Aset', icon: 'briefcase' },
                 { page: 'order-history', label: 'Riwayat Pesanan', icon: 'file-text' },
                 { page: 'user-management', label: 'Kelola Pengguna', icon: 'users' },
+                { page: 'financial', label: 'Keuangan', icon: 'dollar-sign' },
+                { page: 'payroll', label: 'Penggajian', icon: 'credit-card' },
+                { page: 'shift', label: 'Shift', icon: 'calendar' },
+                { page: 'branch', label: 'Multi Cabang', icon: 'map-pin' },
                 { page: 'license', label: 'Lisensi', icon: 'crown' }
             ],
             owner: [
-                { page: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard' },
+                { page: 'financial', label: 'Keuangan', icon: 'dollar-sign' },
                 { page: 'order-status', label: 'Status Pesanan', icon: 'clock' },
                 { page: 'order-history', label: 'Riwayat Pesanan', icon: 'file-text' },
                 { page: 'user-management', label: 'Kelola Pengguna', icon: 'users' },
+                { page: 'payroll', label: 'Penggajian', icon: 'credit-card' },
+                { page: 'branch', label: 'Multi Cabang', icon: 'map-pin' },
                 { page: 'license', label: 'Lisensi', icon: 'crown' }
             ],
             cashier: [
@@ -1884,7 +3199,7 @@
     }
 
     // --- NOTIFICATION SYSTEM ---
-    function showNotification(message, type = 'info') {
+    function showNotification(message, type = 'info', persistent = false) {
         const notification = document.createElement('div');
         notification.className = `notification ${type}`;
         notification.innerHTML = `
@@ -1894,9 +3209,44 @@
         document.body.appendChild(notification);
         lucide.createIcons();
         
+        if (!persistent) {
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Add to notifications list for persistence
+        state.notifications.push({
+            id: Date.now(),
+            message,
+            type,
+            timestamp: new Date().toISOString(),
+            read: false
+        });
+        saveState();
+    }
+
+    function showNotificationToast(title, message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = 'notification-toast';
+        toast.innerHTML = `
+            <div class="notification-toast-icon" style="color: ${type === 'success' ? 'var(--accent-success)' : type === 'error' ? 'var(--accent-danger)' : type === 'warning' ? 'var(--accent-warning)' : 'var(--accent-primary)'}">
+                <i data-lucide="${type === 'success' ? 'check-circle' : type === 'error' ? 'x-circle' : type === 'warning' ? 'alert-triangle' : 'info'}"></i>
+            </div>
+            <div class="notification-toast-content">
+                <div class="notification-toast-title">${title}</div>
+                <div class="notification-toast-message">${message}</div>
+            </div>
+            <button class="notification-toast-close" onclick="this.parentElement.remove()">
+                <i data-lucide="x"></i>
+            </button>
+        `;
+        document.body.appendChild(toast);
+        lucide.createIcons();
+        
         setTimeout(() => {
-            notification.remove();
-        }, 3000);
+            toast.remove();
+        }, 5000);
     }
 
     function updateKDSNotification() {
@@ -1936,6 +3286,12 @@
             case 'order-history': renderOrderHistory(); break;
             case 'user-management': renderUserManagement(); break;
             case 'license': renderLicensePage(); break;
+            case 'inventory': renderInventoryManagement(); break;
+            case 'asset': renderAssetManagement(); break;
+            case 'financial': renderFinancialManagement(); break;
+            case 'payroll': renderPayrollManagement(); break;
+            case 'shift': renderShiftManagement(); break;
+            case 'branch': renderBranchManagement(); break;
         }
     }
 
@@ -1988,13 +3344,20 @@
 
     function renderMenuGrid(containerId, clickHandler) {
         const grid = document.getElementById(containerId);
-        grid.innerHTML = state.menu.map(item => `
-            <div class="pos-menu-item" onclick="${clickHandler.name}(${item.id})">
-                <h4>${item.name}</h4>
-                <p>Rp ${item.price.toLocaleString('id-ID')}</p>
-                ${item.description ? `<div class="menu-description">${item.description}</div>` : ''}
-            </div>
-        `).join('');
+        grid.innerHTML = state.menu.map(item => {
+            const isBestSeller = item.isBestSeller;
+            const isOutOfStock = item.outOfStock;
+            
+            return `
+                <div class="pos-menu-item ${isBestSeller ? 'best-seller' : ''} ${isOutOfStock ? 'out-of-stock' : ''}" 
+                     onclick="${!isOutOfStock ? clickHandler.name + '(' + item.id + ')' : ''}">
+                    ${item.image ? `<img src="${item.image}" alt="${item.name}" style="width: 100%; height: 80px; object-fit: cover; border-radius: 8px; margin-bottom: 0.5rem;">` : ''}
+                    <h4>${item.name}</h4>
+                    <p>Rp ${item.price.toLocaleString('id-ID')}</p>
+                    ${item.description ? `<div class="menu-description">${item.description}</div>` : ''}
+                </div>
+            `;
+        }).join('');
     }
 
     function filterMenu(category, button) {
@@ -2010,18 +3373,25 @@
         };
         const clickHandler = clickHandlerMap[button.parentElement.id] || 'handleAddToOrder';
         
-        grid.innerHTML = itemsToRender.map(item => `
-            <div class="pos-menu-item" onclick="${clickHandler}(${item.id})">
-                <h4>${item.name}</h4>
-                <p>Rp ${item.price.toLocaleString('id-ID')}</p>
-                ${item.description ? `<div class="menu-description">${item.description}</div>` : ''}
-            </div>
-        `).join('');
+        grid.innerHTML = itemsToRender.map(item => {
+            const isBestSeller = item.isBestSeller;
+            const isOutOfStock = item.outOfStock;
+            
+            return `
+                <div class="pos-menu-item ${isBestSeller ? 'best-seller' : ''} ${isOutOfStock ? 'out-of-stock' : ''}" 
+                     onclick="${!isOutOfStock ? clickHandler + '(' + item.id + ')' : ''}">
+                    ${item.image ? `<img src="${item.image}" alt="${item.name}" style="width: 100%; height: 80px; object-fit: cover; border-radius: 8px; margin-bottom: 0.5rem;">` : ''}
+                    <h4>${item.name}</h4>
+                    <p>Rp ${item.price.toLocaleString('id-ID')}</p>
+                    ${item.description ? `<div class="menu-description">${item.description}</div>` : ''}
+                </div>
+            `;
+        }).join('');
     }
 
     function handleAddToOrder(itemId) {
         const menuItem = state.menu.find(i => i.id === itemId);
-        if (!menuItem) return;
+        if (!menuItem || menuItem.outOfStock) return;
         
         const existingItem = state.currentOrder.items.find(i => i.id === itemId);
         if (existingItem) {
@@ -2118,6 +3488,7 @@
             type: state.currentOrder.tableId === 0 ? 'takeaway' : 'dine-in',
             paymentMethod: method,
             timestamp: new Date().toISOString(),
+            cashier: state.currentUser.name,
             statusHistory: [
                 { status: 'baru', timestamp: new Date().toISOString() }
             ]
@@ -2142,35 +3513,78 @@
         if (activeOrders.length === 0) {
             kdsGrid.innerHTML = '<p style="text-align:center; color: var(--text-secondary); grid-column: 1/-1;">Tidak ada pesanan aktif.</p>';
         } else {
-            kdsGrid.innerHTML = activeOrders.map(order => {
-                let statusClass = '';
-                if (order.status === 'baru') statusClass = 'status-new';
-                else if (order.status === 'dimasak') statusClass = 'status-cooking';
-                else if (order.status === 'siap') statusClass = 'status-ready';
-                
-                return `
-                    <div class="kds-order-card ${statusClass}">
-                        <div class="kds-order-header">
-                            <span class="kds-order-id">Order #${order.id} - ${order.tableId === 0 ? 'Take Away' : `Meja ${order.tableId}`}</span>
-                            <span class="kds-order-time">${new Date(order.timestamp).toLocaleTimeString('id-ID')}</span>
-                        </div>
-                        <div class="kds-order-items">
+            // Group orders by table
+            const ordersByTable = {};
+            activeOrders.forEach(order => {
+                const tableKey = order.tableId === 0 ? 'Take Away' : `Meja ${order.tableId}`;
+                if (!ordersByTable[tableKey]) {
+                    ordersByTable[tableKey] = [];
+                }
+                ordersByTable[tableKey].push(order);
+            });
+            
+            kdsGrid.innerHTML = Object.entries(ordersByTable).map(([tableKey, orders]) => `
+                <div class="kds-order-card">
+                    <div class="kds-order-header">
+                        <span class="kds-order-id">${tableKey}</span>
+                        <span class="kds-order-time">${orders.length} pesanan</span>
+                    </div>
+                    ${orders.map(order => `
+                        <div style="margin-bottom: 1rem; padding: 0.5rem; background: var(--bg-tertiary); border-radius: 8px;">
+                            <div style="font-weight: 600; margin-bottom: 0.5rem;">Order #${order.id}</div>
                             ${order.items.map(item => `
                                 <div class="kds-order-item">
-                                    <span>${item.name}</span>
-                                    <span>x${item.quantity}</span>
+                                    <span>${item.name} x${item.quantity}</span>
+                                    <div class="kds-order-item-status">
+                                        <button class="btn-ok" onclick="updateItemStatus(${order.id}, ${item.id}, 'ok')">OK</button>
+                                        <button class="btn-cancel" onclick="updateItemStatus(${order.id}, ${item.id}, 'cancel')">Cancel</button>
+                                        <button class="btn-out" onclick="updateItemStatus(${order.id}, ${item.id}, 'out')">Habis</button>
+                                    </div>
                                 </div>
                             `).join('')}
+                            <div class="kds-order-actions">
+                                ${order.status === 'baru' ? `<button class="btn btn-primary" onclick="updateOrderStatus(${order.id}, 'dimasak')">Mulai Masak</button>` : ''}
+                                ${order.status === 'dimasak' ? `<button class="btn btn-warning" onclick="updateOrderStatus(${order.id}, 'siap')">Selesai</button>` : ''}
+                                ${order.status === 'siap' ? `<button class="btn btn-success" onclick="updateOrderStatus(${order.id}, 'selesai')">Diantar</button>` : ''}
+                            </div>
                         </div>
-                        <div class="kds-order-actions">
-                            ${order.status === 'baru' ? `<button class="btn btn-primary" onclick="updateOrderStatus(${order.id}, 'dimasak')">Mulai Masak</button>` : ''}
-                            ${order.status === 'dimasak' ? `<button class="btn btn-warning" onclick="updateOrderStatus(${order.id}, 'siap')">Selesai</button>` : ''}
-                            ${order.status === 'siap' ? `<button class="btn btn-success" onclick="updateOrderStatus(${order.id}, 'selesai')">Diantar</button>` : ''}
-                        </div>
-                    </div>
-                `;
-            }).join('');
+                    `).join('')}
+                </div>
+            `).join('');
         }
+    }
+
+    function updateItemStatus(orderId, itemId, status) {
+        const order = state.orders.find(o => o.id === orderId);
+        if (!order) return;
+        
+        const item = order.items.find(i => i.id === itemId);
+        if (!item) return;
+        
+        item.status = status;
+        
+        if (status === 'cancel' || status === 'out') {
+            // Create notification for customer
+            const notificationTitle = status === 'cancel' ? 'Menu Dibatalkan' : 'Menu Habis';
+            const notificationMessage = `${item.name} pada pesanan #${orderId} ${status === 'cancel' ? 'dibatalkan' : 'habis'}. Silakan pilih menu lain.`;
+            
+            showNotificationToast(notificationTitle, notificationMessage, 'warning');
+            
+            // Add to notification list
+            state.notifications.push({
+                id: Date.now(),
+                orderId: orderId,
+                itemId: itemId,
+                title: notificationTitle,
+                message: notificationMessage,
+                type: 'warning',
+                timestamp: new Date().toISOString(),
+                read: false
+            });
+        }
+        
+        saveState();
+        renderKDS();
     }
 
     function updateOrderStatus(orderId, newStatus) {
@@ -2196,6 +3610,41 @@
                 showNotification(`Order #${orderId}: ${statusMessage}`, 'info');
             }
         }
+    }
+
+    function openStockUpdateModal() {
+        const modal = document.getElementById('stock-update-modal');
+        const listContainer = document.getElementById('stock-update-list');
+        
+        listContainer.innerHTML = state.menu.map(item => `
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; padding: 0.5rem; background: var(--bg-tertiary); border-radius: 8px;">
+                <input type="checkbox" id="stock-${item.id}" ${item.outOfStock ? 'checked' : ''} onchange="toggleMenuStock(${item.id})">
+                <label for="stock-${item.id}" style="flex-grow: 1; cursor: pointer;">
+                    ${item.name} - Rp ${item.price.toLocaleString('id-ID')}
+                </label>
+                <span style="color: ${item.outOfStock ? 'var(--accent-danger)' : 'var(--accent-success)'}; font-weight: 600;">
+                    ${item.outOfStock ? 'Habis' : 'Tersedia'}
+                </span>
+            </div>
+        `).join('');
+        
+        modal.style.display = 'flex';
+    }
+
+    function toggleMenuStock(itemId) {
+        const item = state.menu.find(m => m.id === itemId);
+        if (item) {
+            item.outOfStock = !item.outOfStock;
+        }
+    }
+
+    function saveStockUpdates() {
+        saveState();
+        closeModal('stock-update-modal');
+        showNotification('Stok menu berhasil diperbarui!', 'success');
+        renderPOS();
+        renderTableOrder();
+        renderKDS();
     }
 
     // --- TABLE ORDER SYSTEM ---
@@ -2262,11 +3711,18 @@
                             <h4>Items:</h4>
                             ${order.items.map(item => `
                                 <div style="display: flex; justify-content: space-between; padding: 0.25rem 0;">
-                                    <span>${item.name}</span>
-                                    <span>x${item.quantity}</span>
+                                    <span>${item.name} x${item.quantity} ${item.status === 'cancel' ? '(Dibatalkan)' : item.status === 'out' ? '(Habis)' : ''}</span>
+                                    <span>Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</span>
                                 </div>
                             `).join('')}
                         </div>
+                        ${order.items.some(item => item.status === 'cancel' || item.status === 'out') ? `
+                            <div style="margin-top: 1rem;">
+                                <button class="btn btn-primary" onclick="replaceCancelledItems(${order.id})">
+                                    <i data-lucide="refresh-cw"></i> Ganti Menu
+                                </button>
+                            </div>
+                        ` : ''}
                     </div>
                 </div>
             `).join('');
@@ -2276,7 +3732,7 @@
 
     function handleAddToTableOrder(itemId) {
         const menuItem = state.menu.find(i => i.id === itemId);
-        if (!menuItem) return;
+        if (!menuItem || menuItem.outOfStock) return;
         
         const existingItem = state.tableOrder.items.find(i => i.id === itemId);
         if (existingItem) {
@@ -2361,6 +3817,36 @@
         renderTableOrder();
         renderDashboard();
         renderKDS();
+    }
+
+    function replaceCancelledItems(orderId) {
+        const order = state.orders.find(o => o.id === orderId);
+        if (!order) return;
+        
+        const cancelledItems = order.items.filter(item => item.status === 'cancel' || item.status === 'out');
+        
+        // Add cancelled items back to table cart for replacement
+        cancelledItems.forEach(item => {
+            const existingItem = state.tableOrder.items.find(i => i.id === item.id);
+            if (existingItem) {
+                existingItem.quantity += item.quantity;
+            } else {
+                state.tableOrder.items.push({
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity
+                });
+            }
+        });
+        
+        // Remove cancelled items from order
+        order.items = order.items.filter(item => item.status !== 'cancel' && item.status !== 'out');
+        
+        saveState();
+        showNotification('Item yang dibatalkan/habis telah ditambahkan ke keranjang untuk penggantian', 'info');
+        renderTableOrder();
+        updateTableCart();
     }
 
     // --- RIDE HAILING ---
@@ -2452,7 +3938,7 @@
                     <div style="margin-top: 0.5rem;">
                         ${order.items.map(item => `
                             <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
-                                <span>${item.name} x${item.quantity}</span>
+                                <span>${item.name} x${item.quantity} ${item.status === 'cancel' ? '(Dibatalkan)' : item.status === 'out' ? '(Habis)' : ''}</span>
                                 <span>Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</span>
                             </div>
                         `).join('')}
@@ -2483,10 +3969,18 @@
         const tableGrid = document.getElementById('table-grid');
         tableGrid.innerHTML = state.tables.map(table => `
             <div class="table-card ${table.status}" onclick="selectTable(${table.id})">
+                <div class="table-icon">
+                    <i data-lucide="${table.status === 'available' ? 'square-stack' : 'users'}"></i>
+                </div>
                 <div class="table-number">Meja ${table.number}</div>
                 <div class="table-status">${table.status === 'available' ? 'Tersedia' : 'Terisi'}</div>
+                <div class="table-capacity">
+                    <i data-lucide="users"></i>
+                    <span>${table.capacity} orang</span>
+                </div>
             </div>
         `).join('');
+        lucide.createIcons();
     }
 
     function selectTable(tableId) {
@@ -2507,10 +4001,18 @@
         } else {
             menuList.innerHTML = state.menu.map(item => `
                 <div class="menu-item-card">
-                    <div class="menu-item-info">
-                        <h4>${item.name}</h4>
-                        <p>${item.category} - Rp ${item.price.toLocaleString('id-ID')}</p>
-                        <p style="font-size: 0.8rem; margin-top: 0.5rem;">${item.description || 'Tidak ada deskripsi'}</p>
+                    <div class="menu-item-with-image">
+                        <div class="menu-image-container">
+                            ${item.image ? 
+                                `<img src="${item.image}" alt="${item.name}" class="menu-image">` : 
+                                `<div class="menu-image-placeholder"><i data-lucide="image"></i></div>`
+                            }
+                        </div>
+                        <div class="menu-item-info">
+                            <h4>${item.name} ${item.isBestSeller ? '⭐' : ''} ${item.outOfStock ? '(Habis)' : ''}</h4>
+                            <p>${item.category} - Rp ${item.price.toLocaleString('id-ID')}</p>
+                            <p style="font-size: 0.8rem; margin-top: 0.5rem;">${item.description || 'Tidak ada deskripsi'}</p>
+                        </div>
                     </div>
                     <div class="menu-item-actions">
                         <button class="btn btn-secondary" onclick="editMenuItem(${item.id})"><i data-lucide="edit"></i></button>
@@ -2518,8 +4020,8 @@
                     </div>
                 </div>
             `).join('');
-            lucide.createIcons();
         }
+        lucide.createIcons();
     }
 
     function openMenuModal(itemId = null) {
@@ -2535,11 +4037,18 @@
                 document.getElementById('menu-category').value = menuItem.category;
                 document.getElementById('menu-price').value = menuItem.price;
                 document.getElementById('menu-description').value = menuItem.description || '';
+                
+                // Show image preview if exists
+                if (menuItem.image) {
+                    document.getElementById('menu-image-preview').innerHTML = 
+                        `<img src="${menuItem.image}" alt="Preview" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px;">`;
+                }
             }
         } else {
             title.innerText = 'Tambah Menu';
             document.getElementById('menu-form').reset();
             document.getElementById('menu-id').value = '';
+            document.getElementById('menu-image-preview').innerHTML = '';
         }
         
         modal.style.display = 'flex';
@@ -2557,6 +4066,28 @@
         
         const menuId = document.getElementById('menu-id').value;
         
+        // Handle image upload
+        const imageInput = document.getElementById('menu-image');
+        if (imageInput.files && imageInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                menuItem.image = e.target.result;
+                saveMenuItemData(menuId, menuItem);
+            };
+            reader.readAsDataURL(imageInput.files[0]);
+        } else {
+            // Keep existing image if editing
+            if (menuId) {
+                const existingItem = state.menu.find(item => item.id == menuId);
+                if (existingItem && existingItem.image) {
+                    menuItem.image = existingItem.image;
+                }
+            }
+            saveMenuItemData(menuId, menuItem);
+        }
+    }
+
+    function saveMenuItemData(menuId, menuItem) {
         if (menuId) {
             const index = state.menu.findIndex(item => item.id == menuId);
             if (index !== -1) {
@@ -2566,7 +4097,9 @@
         } else {
             state.menu.push({
                 id: Date.now(),
-                ...menuItem
+                ...menuItem,
+                isBestSeller: false,
+                outOfStock: false
             });
             showNotification('Menu berhasil ditambahkan!', 'success');
         }
@@ -2613,8 +4146,8 @@
                     </div>
                 </div>
             `).join('');
-            lucide.createIcons();
         }
+        lucide.createIcons();
     }
 
     function openTableModal(tableId = null) {
@@ -2832,6 +4365,9 @@
 
     // --- ORDER HISTORY ---
     function renderOrderHistory() {
+        renderSalesChart();
+        renderBestSellingItems();
+        
         const historyTableBody = document.getElementById('history-table-body');
         const orders = state.orders.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         
@@ -2850,6 +4386,111 @@
                         <button class="btn btn-danger" onclick="deleteOrder(${order.id})"><i data-lucide="trash-2"></i></button>
                     </td>
                 </tr>
+            `).join('');
+        }
+    }
+
+    function renderSalesChart() {
+        const ctx = document.getElementById('sales-chart');
+        if (!ctx) return;
+        
+        // Generate data for the last 7 days
+        const labels = [];
+        const data = [];
+        
+        for (let i = 6; i >= 0; i--) {
+            const date = new Date();
+            date.setDate(date.getDate() - i);
+            const dateStr = date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+            labels.push(dateStr);
+            
+            const dayOrders = state.orders.filter(order => {
+                const orderDate = new Date(order.timestamp);
+                return orderDate.toDateString() === date.toDateString();
+            });
+            
+            const dayRevenue = dayOrders.reduce((sum, order) => sum + (order.total || 0), 0);
+            data.push(dayRevenue);
+        }
+        
+        // Destroy existing chart if it exists
+        if (window.salesChart) {
+            window.salesChart.destroy();
+        }
+        
+        // Create new chart
+        window.salesChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Penjualan Harian',
+                    data: data,
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return 'Rp ' + value.toLocaleString('id-ID');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function renderBestSellingItems() {
+        const container = document.getElementById('best-selling-items');
+        
+        // Calculate best selling items
+        const itemSales = {};
+        state.orders.forEach(order => {
+            order.items.forEach(item => {
+                if (!itemSales[item.name]) {
+                    itemSales[item.name] = 0;
+                }
+                itemSales[item.name] += item.quantity;
+            });
+        });
+        
+        const bestSelling = Object.entries(itemSales)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5);
+        
+        if (bestSelling.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada data penjualan.</p>';
+        } else {
+            container.innerHTML = bestSelling.map((item, index) => `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; margin-bottom: 0.5rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <span style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);">${index + 1}</span>
+                        <div>
+                            <div style="font-weight: 600;">${item[0]}</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Terjual: ${item[1]} pcs</div>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: 600; color: var(--accent-primary);">
+                            Rp ${(item[1] * (state.menu.find(m => m.name === item[0])?.price || 0)).toLocaleString('id-ID')}
+                        </div>
+                    </div>
+                </div>
             `).join('');
         }
     }
@@ -2949,28 +4590,936 @@
         }
     }
 
-    // --- LICENSE MANAGEMENT ---
-    function checkLicenseStatus() {
-        const now = new Date();
-        const expiryDate = new Date(state.license.expiryDate);
+    // --- INVENTORY MANAGEMENT ---
+    function renderInventoryManagement() {
+        renderLowStockAlerts();
+        renderInventoryGrid();
+    }
+
+    function renderLowStockAlerts() {
+        const container = document.getElementById('low-stock-alerts');
+        const lowStockItems = state.inventory.filter(item => item.quantity <= item.minStock);
         
-        if (now > expiryDate) {
-            state.license.status = 'expired';
-            showNotification('Lisensi Anda telah kedaluwarsa! Silakan perpanjang.', 'warning');
+        if (lowStockItems.length === 0) {
+            container.innerHTML = '';
+        } else {
+            container.innerHTML = `
+                <div class="low-stock-alert">
+                    <div class="low-stock-alert-icon">
+                        <i data-lucide="alert-triangle"></i>
+                    </div>
+                    <div class="low-stock-alert-content">
+                        <div class="low-stock-alert-title">Peringatan Stok Menipis</div>
+                        <div class="low-stock-alert-text">
+                            ${lowStockItems.length} item dengan stok rendah: ${lowStockItems.map(item => item.name).join(', ')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+    }
+
+    function renderInventoryGrid() {
+        const inventoryGrid = document.getElementById('inventory-grid');
+        if (state.inventory.length === 0) {
+            inventoryGrid.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada barang.</p>';
+        } else {
+            inventoryGrid.innerHTML = state.inventory.map(item => {
+                let statusClass = 'status-good';
+                let statusText = 'Stok Aman';
+                
+                if (item.quantity <= 0) {
+                    statusClass = 'status-out';
+                    statusText = 'Habis';
+                } else if (item.quantity <= item.minStock) {
+                    statusClass = 'status-low';
+                    statusText = 'Stok Rendah';
+                }
+                
+                return `
+                    <div class="inventory-item-card">
+                        <div class="inventory-item-header">
+                            <div class="inventory-item-name">${item.name}</div>
+                            <div class="inventory-item-quantity">${item.quantity} ${item.unit}</div>
+                        </div>
+                        <div class="inventory-item-status">
+                            <div class="status-indicator ${statusClass}"></div>
+                            <div>${statusText}</div>
+                        </div>
+                        <div class="inventory-item-details">
+                            <div>Kategori: ${item.category}</div>
+                            <div>Min. Stok: ${item.minStock} ${item.unit}</div>
+                        </div>
+                        <div class="inventory-item-details">
+                            <div>Harga: Rp ${item.price.toLocaleString('id-ID')}</div>
+                            <div>Total: Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</div>
+                        </div>
+                        <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                            <button class="btn btn-secondary" onclick="editInventoryItem(${item.id})" style="flex-grow: 1;">
+                                <i data-lucide="edit"></i> Edit
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteInventoryItem(${item.id})" style="flex-grow: 1;">
+                                <i data-lucide="trash-2"></i> Hapus
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        lucide.createIcons();
+    }
+
+    function filterInventoryByCategory(category, button) {
+        document.querySelectorAll('#inventory-category-tabs .category-tab').forEach(tab => tab.classList.remove('active'));
+        button.classList.add('active');
+        
+        const inventoryGrid = document.getElementById('inventory-grid');
+        const itemsToRender = category === 'all' ? state.inventory : state.inventory.filter(item => item.category === category);
+        
+        if (itemsToRender.length === 0) {
+            inventoryGrid.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Tidak ada barang dalam kategori ini.</p>';
+        } else {
+            inventoryGrid.innerHTML = itemsToRender.map(item => {
+                let statusClass = 'status-good';
+                let statusText = 'Stok Aman';
+                
+                if (item.quantity <= 0) {
+                    statusClass = 'status-out';
+                    statusText = 'Habis';
+                } else if (item.quantity <= item.minStock) {
+                    statusClass = 'status-low';
+                    statusText = 'Stok Rendah';
+                }
+                
+                return `
+                    <div class="inventory-item-card">
+                        <div class="inventory-item-header">
+                            <div class="inventory-item-name">${item.name}</div>
+                            <div class="inventory-item-quantity">${item.quantity} ${item.unit}</div>
+                        </div>
+                        <div class="inventory-item-status">
+                            <div class="status-indicator ${statusClass}"></div>
+                            <div>${statusText}</div>
+                        </div>
+                        <div class="inventory-item-details">
+                            <div>Kategori: ${item.category}</div>
+                            <div>Min. Stok: ${item.minStock} ${item.unit}</div>
+                        </div>
+                        <div class="inventory-item-details">
+                            <div>Harga: Rp ${item.price.toLocaleString('id-ID')}</div>
+                            <div>Total: Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</div>
+                        </div>
+                        <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                            <button class="btn btn-secondary" onclick="editInventoryItem(${item.id})" style="flex-grow: 1;">
+                                <i data-lucide="edit"></i> Edit
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteInventoryItem(${item.id})" style="flex-grow: 1;">
+                                <i data-lucide="trash-2"></i> Hapus
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        lucide.createIcons();
+    }
+
+    function openInventoryModal(itemId = null) {
+        const modal = document.getElementById('inventory-modal');
+        const title = document.getElementById('inventory-modal-title');
+        
+        if (itemId) {
+            const item = state.inventory.find(i => i.id === itemId);
+            if (item) {
+                title.innerText = 'Edit Barang';
+                document.getElementById('inventory-id').value = item.id;
+                document.getElementById('inventory-name').value = item.name;
+                document.getElementById('inventory-category').value = item.category;
+                document.getElementById('inventory-quantity').value = item.quantity;
+                document.getElementById('inventory-unit').value = item.unit;
+                document.getElementById('inventory-min-stock').value = item.minStock;
+                document.getElementById('inventory-price').value = item.price;
+            }
+        } else {
+            title.innerText = 'Tambah Barang';
+            document.getElementById('inventory-form').reset();
+            document.getElementById('inventory-id').value = '';
         }
         
-        updateLicenseUI();
+        modal.style.display = 'flex';
+    }
+
+    function saveInventoryItem(event) {
+        event.preventDefault();
+        
+        const itemData = {
+            name: document.getElementById('inventory-name').value,
+            category: document.getElementById('inventory-category').value,
+            quantity: parseInt(document.getElementById('inventory-quantity').value),
+            unit: document.getElementById('inventory-unit').value,
+            minStock: parseInt(document.getElementById('inventory-min-stock').value),
+            price: parseInt(document.getElementById('inventory-price').value)
+        };
+        
+        const itemId = document.getElementById('inventory-id').value;
+        
+        if (itemId) {
+            const index = state.inventory.findIndex(item => item.id == itemId);
+            if (index !== -1) {
+                state.inventory[index] = { ...state.inventory[index], ...itemData };
+                showNotification('Barang berhasil diperbarui!', 'success');
+            }
+        } else {
+            state.inventory.push({
+                id: Date.now(),
+                ...itemData
+            });
+            showNotification('Barang berhasil ditambahkan!', 'success');
+        }
+        
         saveState();
+        closeModal('inventory-modal');
+        renderInventoryManagement();
     }
 
-    function updateLicenseUI() {
-        const statusElement = document.getElementById('subscriptionStatus');
-        if (statusElement) {
-            statusElement.textContent = state.license.status === 'active' ? 'Aktif' : 'Kedaluwarsa';
-            statusElement.className = `subscription-status status-${state.license.status}`;
+    function editInventoryItem(itemId) {
+        openInventoryModal(itemId);
+    }
+
+    function deleteInventoryItem(itemId) {
+        if (confirm('Apakah Anda yakin ingin menghapus barang ini?')) {
+            state.inventory = state.inventory.filter(item => item.id !== itemId);
+            saveState();
+            showNotification('Barang berhasil dihapus!', 'success');
+            renderInventoryManagement();
         }
     }
 
+    // --- ASSET MANAGEMENT ---
+    function renderAssetManagement() {
+        renderAssetGrid();
+    }
+
+    function renderAssetGrid() {
+        const assetGrid = document.getElementById('asset-grid');
+        if (state.assets.length === 0) {
+            assetGrid.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada aset.</p>';
+        } else {
+            assetGrid.innerHTML = state.assets.map(asset => `
+                <div class="asset-card">
+                    ${asset.image ? `<img src="${asset.image}" alt="${asset.name}" class="asset-image">` : ''}
+                    <div class="asset-name">${asset.name}</div>
+                    <div class="asset-category">${asset.category}</div>
+                    <div class="asset-details">
+                        <div>Jumlah: ${asset.quantity} ${asset.lostQuantity > 0 ? `(${asset.lostQuantity} hilang)` : ''}</div>
+                        <div>Tanggal Beli: ${new Date(asset.purchaseDate).toLocaleDateString('id-ID')}</div>
+                    </div>
+                    <div class="asset-details">
+                        <div>Harga: Rp ${asset.price.toLocaleString('id-ID')}</div>
+                        <div>Nilai Saat Ini: Rp ${asset.currentValue.toLocaleString('id-ID')}</div>
+                    </div>
+                    <div class="asset-details">
+                        <div>Lokasi: ${asset.location}</div>
+                        <div>Status: ${asset.status}</div>
+                    </div>
+                    <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                        <button class="btn btn-secondary" onclick="editAsset(${asset.id})" style="flex-grow: 1;">
+                            <i data-lucide="edit"></i> Edit
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteAsset(${asset.id})" style="flex-grow: 1;">
+                            <i data-lucide="trash-2"></i> Hapus
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        lucide.createIcons();
+    }
+
+    function filterAssetsByCategory(category, button) {
+        document.querySelectorAll('#asset-category-tabs .category-tab').forEach(tab => tab.classList.remove('active'));
+        button.classList.add('active');
+        
+        const assetGrid = document.getElementById('asset-grid');
+        const assetsToRender = category === 'all' ? state.assets : state.assets.filter(asset => asset.category === category);
+        
+        if (assetsToRender.length === 0) {
+            assetGrid.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Tidak ada aset dalam kategori ini.</p>';
+        } else {
+            assetGrid.innerHTML = assetsToRender.map(asset => `
+                <div class="asset-card">
+                    ${asset.image ? `<img src="${asset.image}" alt="${asset.name}" class="asset-image">` : ''}
+                    <div class="asset-name">${asset.name}</div>
+                    <div class="asset-category">${asset.category}</div>
+                    <div class="asset-details">
+                        <div>Jumlah: ${asset.quantity} ${asset.lostQuantity > 0 ? `(${asset.lostQuantity} hilang)` : ''}</div>
+                        <div>Tanggal Beli: ${new Date(asset.purchaseDate).toLocaleDateString('id-ID')}</div>
+                    </div>
+                    <div class="asset-details">
+                        <div>Harga: Rp ${asset.price.toLocaleString('id-ID')}</div>
+                        <div>Nilai Saat Ini: Rp ${asset.currentValue.toLocaleString('id-ID')}</div>
+                    </div>
+                    <div class="asset-details">
+                        <div>Lokasi: ${asset.location}</div>
+                        <div>Status: ${asset.status}</div>
+                    </div>
+                    <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                        <button class="btn btn-secondary" onclick="editAsset(${asset.id})" style="flex-grow: 1;">
+                            <i data-lucide="edit"></i> Edit
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteAsset(${asset.id})" style="flex-grow: 1;">
+                            <i data-lucide="trash-2"></i> Hapus
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        lucide.createIcons();
+    }
+
+    function openAssetModal(assetId = null) {
+        const modal = document.getElementById('asset-modal');
+        const title = document.getElementById('asset-modal-title');
+        
+        if (assetId) {
+            const asset = state.assets.find(a => a.id === assetId);
+            if (asset) {
+                title.innerText = 'Edit Aset';
+                document.getElementById('asset-id').value = asset.id;
+                document.getElementById('asset-name').value = asset.name;
+                document.getElementById('asset-category').value = asset.category;
+                document.getElementById('asset-quantity').value = asset.quantity;
+                document.getElementById('asset-purchase-date').value = asset.purchaseDate;
+                document.getElementById('asset-price').value = asset.price;
+                document.getElementById('asset-current-value').value = asset.currentValue;
+                document.getElementById('asset-location').value = asset.location;
+                document.getElementById('asset-status').value = asset.status;
+                document.getElementById('asset-lost-quantity').value = asset.lostQuantity || 0;
+                
+                // Show image preview if exists
+                if (asset.image) {
+                    document.getElementById('asset-image-preview').innerHTML = 
+                        `<img src="${asset.image}" alt="Preview" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px;">`;
+                }
+            }
+        } else {
+            title.innerText = 'Tambah Aset';
+            document.getElementById('asset-form').reset();
+            document.getElementById('asset-id').value = '';
+            document.getElementById('asset-image-preview').innerHTML = '';
+        }
+        
+        modal.style.display = 'flex';
+    }
+
+    function saveAsset(event) {
+        event.preventDefault();
+        
+        const assetData = {
+            name: document.getElementById('asset-name').value,
+            category: document.getElementById('asset-category').value,
+            quantity: parseInt(document.getElementById('asset-quantity').value),
+            purchaseDate: document.getElementById('asset-purchase-date').value,
+            price: parseInt(document.getElementById('asset-price').value),
+            currentValue: parseInt(document.getElementById('asset-current-value').value),
+            location: document.getElementById('asset-location').value,
+            status: document.getElementById('asset-status').value,
+            lostQuantity: parseInt(document.getElementById('asset-lost-quantity').value) || 0
+        };
+        
+        const assetId = document.getElementById('asset-id').value;
+        
+        // Handle image upload
+        const imageInput = document.getElementById('asset-image');
+        if (imageInput.files && imageInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                assetData.image = e.target.result;
+                saveAssetData(assetId, assetData);
+            };
+            reader.readAsDataURL(imageInput.files[0]);
+        } else {
+            // Keep existing image if editing
+            if (assetId) {
+                const existingAsset = state.assets.find(asset => asset.id == assetId);
+                if (existingAsset && existingAsset.image) {
+                    assetData.image = existingAsset.image;
+                }
+            }
+            saveAssetData(assetId, assetData);
+        }
+    }
+
+    function saveAssetData(assetId, assetData) {
+        if (assetId) {
+            const index = state.assets.findIndex(asset => asset.id == assetId);
+            if (index !== -1) {
+                state.assets[index] = { ...state.assets[index], ...assetData };
+                showNotification('Aset berhasil diperbarui!', 'success');
+            }
+        } else {
+            state.assets.push({
+                id: Date.now(),
+                ...assetData
+            });
+            showNotification('Aset berhasil ditambahkan!', 'success');
+        }
+        
+        saveState();
+        closeModal('asset-modal');
+        renderAssetManagement();
+    }
+
+    function editAsset(assetId) {
+        openAssetModal(assetId);
+    }
+
+    function deleteAsset(assetId) {
+        if (confirm('Apakah Anda yakin ingin menghapus aset ini?')) {
+            state.assets = state.assets.filter(asset => asset.id !== assetId);
+            saveState();
+            showNotification('Aset berhasil dihapus!', 'success');
+            renderAssetManagement();
+        }
+    }
+
+    // --- FINANCIAL MANAGEMENT ---
+    function renderFinancialManagement() {
+        renderFinancialSummary();
+        renderFinancialCharts();
+        renderTransactionList();
+    }
+
+    function renderFinancialSummary() {
+        const now = new Date();
+        const thisMonth = now.getMonth();
+        const thisYear = now.getFullYear();
+        
+        const monthlyTransactions = state.transactions.filter(transaction => {
+            const transactionDate = new Date(transaction.date);
+            return transactionDate.getMonth() === thisMonth && transactionDate.getFullYear() === thisYear;
+        });
+        
+        const monthlyIncome = monthlyTransactions
+            .filter(t => t.type === 'income')
+            .reduce((sum, t) => sum + t.amount, 0);
+        
+        const monthlyExpenses = monthlyTransactions
+            .filter(t => t.type === 'expense')
+            .reduce((sum, t) => sum + t.amount, 0);
+        
+        const netProfit = monthlyIncome - monthlyExpenses;
+        
+        document.getElementById('monthly-revenue').textContent = `Rp ${monthlyIncome.toLocaleString('id-ID')}`;
+        document.getElementById('monthly-expenses').textContent = `Rp ${monthlyExpenses.toLocaleString('id-ID')}`;
+        document.getElementById('net-profit').textContent = `Rp ${netProfit.toLocaleString('id-ID')}`;
+        document.getElementById('total-transactions').textContent = monthlyTransactions.length.toLocaleString('id-ID');
+    }
+
+    function renderFinancialCharts() {
+        renderFinancialChart();
+        renderExpenseChart();
+    }
+
+    function renderFinancialChart() {
+        const ctx = document.getElementById('financial-chart');
+        if (!ctx) return;
+        
+        // Generate data for the last 6 months
+        const labels = [];
+        const incomeData = [];
+        const expenseData = [];
+        
+        for (let i = 5; i >= 0; i--) {
+            const date = new Date();
+            date.setMonth(date.getMonth() - i);
+            const monthStr = date.toLocaleDateString('id-ID', { month: 'short', year: 'numeric' });
+            labels.push(monthStr);
+            
+            const monthTransactions = state.transactions.filter(transaction => {
+                const transactionDate = new Date(transaction.date);
+                return transactionDate.getMonth() === date.getMonth() && 
+                       transactionDate.getFullYear() === date.getFullYear();
+            });
+            
+            const monthIncome = monthTransactions
+                .filter(t => t.type === 'income')
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            const monthExpense = monthTransactions
+                .filter(t => t.type === 'expense')
+                .reduce((sum, t) => sum + t.amount, 0);
+            
+            incomeData.push(monthIncome);
+            expenseData.push(monthExpense);
+        }
+        
+        // Destroy existing chart if it exists
+        if (window.financialChart) {
+            window.financialChart.destroy();
+        }
+        
+        // Create new chart
+        window.financialChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Pemasukan',
+                        data: incomeData,
+                        backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Pengeluaran',
+                        data: expenseData,
+                        backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                        borderColor: 'rgba(239, 68, 68, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return 'Rp ' + value.toLocaleString('id-ID');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function renderExpenseChart() {
+        const ctx = document.getElementById('expense-chart');
+        if (!ctx) return;
+        
+        // Calculate expenses by category
+        const expensesByCategory = {};
+        state.transactions
+            .filter(t => t.type === 'expense')
+            .forEach(transaction => {
+                if (!expensesByCategory[transaction.category]) {
+                    expensesByCategory[transaction.category] = 0;
+                }
+                expensesByCategory[transaction.category] += transaction.amount;
+            });
+        
+        const labels = Object.keys(expensesByCategory);
+        const data = Object.values(expensesByCategory);
+        
+        // Destroy existing chart if it exists
+        if (window.expenseChart) {
+            window.expenseChart.destroy();
+        }
+        
+        // Create new chart
+        window.expenseChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: [
+                        'rgba(239, 68, 68, 0.8)',
+                        'rgba(245, 158, 11, 0.8)',
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(16, 185, 129, 0.8)',
+                        'rgba(139, 92, 246, 0.8)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    }
+
+    function renderTransactionList() {
+        const container = document.getElementById('transaction-list');
+        const transactions = state.transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        if (transactions.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada transaksi.</p>';
+        } else {
+            container.innerHTML = transactions.slice(0, 10).map(transaction => `
+                <div class="transaction-item">
+                    <div>
+                        <div style="font-weight: 600;">${transaction.category}</div>
+                        <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                            ${new Date(transaction.date).toLocaleDateString('id-ID')} • ${transaction.description || '-'}</div>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="transaction-amount" style="color: ${transaction.type === 'income' ? 'var(--accent-success)' : 'var(--accent-danger)'};">
+                            ${transaction.type === 'income' ? '+' : '-'}Rp ${transaction.amount.toLocaleString('id-ID')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+    }
+
+    function openTransactionModal() {
+        const modal = document.getElementById('transaction-modal');
+        document.getElementById('transaction-form').reset();
+        document.getElementById('transaction-date').value = new Date().toISOString().split('T')[0];
+        modal.style.display = 'flex';
+    }
+
+    function saveTransaction(event) {
+        event.preventDefault();
+        
+        const transactionData = {
+            type: document.getElementById('transaction-type').value,
+            category: document.getElementById('transaction-category').value,
+            amount: parseInt(document.getElementById('transaction-amount').value),
+            description: document.getElementById('transaction-description').value,
+            date: document.getElementById('transaction-date').value
+        };
+        
+        state.transactions.push({
+            id: Date.now(),
+            ...transactionData
+        });
+        
+        saveState();
+        closeModal('transaction-modal');
+        showNotification('Transaksi berhasil ditambahkan!', 'success');
+        renderFinancialManagement();
+    }
+
+    // --- PAYROLL MANAGEMENT ---
+    function renderPayrollManagement() {
+        const container = document.getElementById('payroll-grid');
+        const employees = state.users.filter(u => u.role !== 'owner');
+        
+        if (employees.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada karyawan.</p>';
+        } else {
+            container.innerHTML = employees.map(employee => {
+                const payroll = state.payroll.find(p => p.employeeId === employee.id);
+                const currentMonth = new Date().toISOString().slice(0, 7);
+                const currentPayroll = payroll && payroll.period === currentMonth ? payroll : null;
+                
+                return `
+                    <div class="payroll-card">
+                        <div class="payroll-header">
+                            <div class="payroll-name">${employee.name}</div>
+                            <div class="payroll-role">${getRoleLabel(employee.role)}</div>
+                        </div>
+                        <div class="payroll-details">
+                            <div class="payroll-detail"><strong>Periode:</strong> ${currentMonth}</div>
+                            <div class="payroll-detail"><strong>Gaji Pokok:</strong> Rp ${(currentPayroll?.base || 0).toLocaleString('id-ID')}</div>
+                            <div class="payroll-detail"><strong>Tunjangan:</strong> Rp ${(currentPayroll?.allowance || 0).toLocaleString('id-ID')}</div>
+                            <div class="payroll-detail"><strong>Potongan:</strong> Rp ${(currentPayroll?.deduction || 0).toLocaleString('id-ID')}</div>
+                            <div class="payroll-detail"><strong>Total:</strong> <strong style="color: var(--accent-primary);">Rp ${(currentPayroll?.total || 0).toLocaleString('id-ID')}</strong></div>
+                        </div>
+                        <div class="payroll-actions">
+                            <button class="btn btn-primary" onclick="openPayrollModal(${employee.id})">
+                                <i data-lucide="edit"></i> ${currentPayroll ? 'Edit' : 'Tambah'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        lucide.createIcons();
+    }
+
+    function openPayrollModal(employeeId = null) {
+        const modal = document.getElementById('payroll-modal');
+        const title = document.getElementById('payroll-modal-title');
+        const employeeSelect = document.getElementById('payroll-employee');
+        
+        // Populate employee select
+        const employees = state.users.filter(u => u.role !== 'owner');
+        employeeSelect.innerHTML = '<option value="">Pilih Karyawan</option>' +
+            employees.map(emp => `<option value="${emp.id}">${emp.name} - ${getRoleLabel(emp.role)}</option>`).join('');
+        
+        if (employeeId) {
+            const employee = employees.find(e => e.id === employeeId);
+            const payroll = state.payroll.find(p => p.employeeId === employeeId && p.period === new Date().toISOString().slice(0, 7));
+            
+            if (payroll) {
+                title.innerText = 'Edit Gaji';
+                document.getElementById('payroll-id').value = payroll.id;
+                employeeSelect.value = employeeId;
+                document.getElementById('payroll-period').value = payroll.period;
+                document.getElementById('payroll-base').value = payroll.base;
+                document.getElementById('payroll-allowance').value = payroll.allowance;
+                document.getElementById('payroll-deduction').value = payroll.deduction;
+                document.getElementById('payroll-total').value = payroll.total;
+            } else {
+                title.innerText = 'Tambah Gaji';
+                document.getElementById('payroll-form').reset();
+                document.getElementById('payroll-id').value = '';
+                employeeSelect.value = employeeId;
+                document.getElementById('payroll-period').value = new Date().toISOString().slice(0, 7);
+            }
+        } else {
+            title.innerText = 'Tambah Gaji';
+            document.getElementById('payroll-form').reset();
+            document.getElementById('payroll-id').value = '';
+            document.getElementById('payroll-period').value = new Date().toISOString().slice(0, 7);
+        }
+        
+        modal.style.display = 'flex';
+    }
+
+    function savePayroll(event) {
+        event.preventDefault();
+        
+        const payrollData = {
+            employeeId: parseInt(document.getElementById('payroll-employee').value),
+            period: document.getElementById('payroll-period').value,
+            base: parseInt(document.getElementById('payroll-base').value),
+            allowance: parseInt(document.getElementById('payroll-allowance').value),
+            deduction: parseInt(document.getElementById('payroll-deduction').value),
+            total: parseInt(document.getElementById('payroll-total').value)
+        };
+        
+        const payrollId = document.getElementById('payroll-id').value;
+        
+        if (payrollId) {
+            const index = state.payroll.findIndex(p => p.id == payrollId);
+            if (index !== -1) {
+                state.payroll[index] = { ...state.payroll[index], ...payrollData };
+                showNotification('Gaji berhasil diperbarui!', 'success');
+            }
+        } else {
+            state.payroll.push({
+                id: Date.now(),
+                ...payrollData
+            });
+            showNotification('Gaji berhasil ditambahkan!', 'success');
+        }
+        
+        saveState();
+        closeModal('payroll-modal');
+        renderPayrollManagement();
+    }
+
+    // --- SHIFT MANAGEMENT ---
+    function renderShiftManagement() {
+        const container = document.getElementById('shift-grid');
+        
+        if (state.shifts.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada shift.</p>';
+        } else {
+            container.innerHTML = state.shifts.map(shift => {
+                const shiftEmployees = state.users.filter(u => shift.employees.includes(u.id));
+                
+                return `
+                    <div class="shift-card">
+                        <div class="shift-header">
+                            <div class="shift-name">${shift.name}</div>
+                            <div class="shift-time">${shift.startTime} - ${shift.endTime}</div>
+                        </div>
+                        <div class="shift-employees">
+                            ${shiftEmployees.map(employee => `
+                                <div class="shift-employee">
+                                    <div class="shift-employee-avatar">${employee.name.charAt(0)}</div>
+                                    <div>
+                                        <div style="font-weight: 500;">${employee.name}</div>
+                                        <div style="font-size: 0.75rem; color: var(--text-secondary);">${getRoleLabel(employee.role)}</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="shift-actions">
+                            <button class="btn btn-secondary" onclick="openShiftModal(${shift.id})">
+                                <i data-lucide="edit"></i> Edit
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        lucide.createIcons();
+    }
+
+    function openShiftModal(shiftId = null) {
+        const modal = document.getElementById('shift-modal');
+        const title = document.getElementById('shift-modal-title');
+        const employeesList = document.getElementById('shift-employees-list');
+        
+        // Populate employees list
+        const employees = state.users.filter(u => u.role !== 'owner');
+        employeesList.innerHTML = employees.map(employee => `
+            <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <input type="checkbox" name="shift-employees" value="${employee.id}" ${shiftId && state.shifts.find(s => s.id === shiftId)?.employees.includes(employee.id) ? 'checked' : ''}>
+                <span>${employee.name} - ${getRoleLabel(employee.role)}</span>
+            </label>
+        `).join('');
+        
+        if (shiftId) {
+            const shift = state.shifts.find(s => s.id === shiftId);
+            if (shift) {
+                title.innerText = 'Edit Shift';
+                document.getElementById('shift-id').value = shift.id;
+                document.getElementById('shift-name').value = shift.name;
+                document.getElementById('shift-start').value = shift.startTime;
+                document.getElementById('shift-end').value = shift.endTime;
+            }
+        } else {
+            title.innerText = 'Tambah Shift';
+            document.getElementById('shift-form').reset();
+            document.getElementById('shift-id').value = '';
+        }
+        
+        modal.style.display = 'flex';
+    }
+
+    function saveShift(event) {
+        event.preventDefault();
+        
+        const selectedEmployees = Array.from(document.querySelectorAll('input[name="shift-employees"]:checked'))
+            .map(cb => parseInt(cb.value));
+        
+        const shiftData = {
+            name: document.getElementById('shift-name').value,
+            startTime: document.getElementById('shift-start').value,
+            endTime: document.getElementById('shift-end').value,
+            employees: selectedEmployees
+        };
+        
+        const shiftId = document.getElementById('shift-id').value;
+        
+        if (shiftId) {
+            const index = state.shifts.findIndex(s => s.id == shiftId);
+            if (index !== -1) {
+                state.shifts[index] = { ...state.shifts[index], ...shiftData };
+                showNotification('Shift berhasil diperbarui!', 'success');
+            }
+        } else {
+            state.shifts.push({
+                id: Date.now(),
+                ...shiftData
+            });
+            showNotification('Shift berhasil ditambahkan!', 'success');
+        }
+        
+        saveState();
+        closeModal('shift-modal');
+        renderShiftManagement();
+    }
+
+    // --- BRANCH MANAGEMENT ---
+    function renderBranchManagement() {
+        const container = document.getElementById('branch-grid');
+        
+        if (state.branches.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada cabang.</p>';
+        } else {
+            container.innerHTML = state.branches.map(branch => {
+                const manager = state.users.find(u => u.id === branch.manager);
+                
+                return `
+                    <div class="branch-card">
+                        <div class="branch-header">
+                            <div class="branch-name">${branch.name}</div>
+                            <div class="branch-status ${branch.status}">${branch.status === 'active' ? 'Aktif' : 'Tidak Aktif'}</div>
+                        </div>
+                        <div class="branch-details">
+                            <div class="branch-detail"><strong>Alamat:</strong> ${branch.address}</div>
+                            <div class="branch-detail"><strong>Telepon:</strong> ${branch.phone}</div>
+                            <div class="branch-detail"><strong>Email:</strong> ${branch.email || '-'}</div>
+                            <div class="branch-detail"><strong>Manager:</strong> ${manager ? manager.name : '-'}</div>
+                        </div>
+                        <div class="branch-actions">
+                            <button class="btn btn-secondary" onclick="openBranchModal(${branch.id})">
+                                <i data-lucide="edit"></i> Edit
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        lucide.createIcons();
+    }
+
+    function openBranchModal(branchId = null) {
+        const modal = document.getElementById('branch-modal');
+        const title = document.getElementById('branch-modal-title');
+        const managerSelect = document.getElementById('branch-manager');
+        
+        // Populate manager select
+        const managers = state.users.filter(u => u.role === 'admin' || u.role === 'owner');
+        managerSelect.innerHTML = '<option value="">Pilih Manager</option>' +
+            managers.map(manager => `<option value="${manager.id}">${manager.name}</option>`).join('');
+        
+        if (branchId) {
+            const branch = state.branches.find(b => b.id === branchId);
+            if (branch) {
+                title.innerText = 'Edit Cabang';
+                document.getElementById('branch-id').value = branch.id;
+                document.getElementById('branch-name').value = branch.name;
+                document.getElementById('branch-address').value = branch.address;
+                document.getElementById('branch-phone').value = branch.phone;
+                document.getElementById('branch-email').value = branch.email || '';
+                managerSelect.value = branch.manager;
+                document.getElementById('branch-status').value = branch.status;
+            }
+        } else {
+            title.innerText = 'Tambah Cabang';
+            document.getElementById('branch-form').reset();
+            document.getElementById('branch-id').value = '';
+        }
+        
+        modal.style.display = 'flex';
+    }
+
+    function saveBranch(event) {
+        event.preventDefault();
+        
+        const branchData = {
+            name: document.getElementById('branch-name').value,
+            address: document.getElementById('branch-address').value,
+            phone: document.getElementById('branch-phone').value,
+            email: document.getElementById('branch-email').value,
+            manager: parseInt(document.getElementById('branch-manager').value),
+            status: document.getElementById('branch-status').value
+        };
+        
+        const branchId = document.getElementById('branch-id').value;
+        
+        if (branchId) {
+            const index = state.branches.findIndex(b => b.id == branchId);
+            if (index !== -1) {
+                state.branches[index] = { ...state.branches[index], ...branchData };
+                showNotification('Cabang berhasil diperbarui!', 'success');
+            }
+        } else {
+            state.branches.push({
+                id: Date.now(),
+                ...branchData
+            });
+            showNotification('Cabang berhasil ditambahkan!', 'success');
+        }
+        
+        saveState();
+        closeModal('branch-modal');
+        renderBranchManagement();
+    }
+
+    // --- LICENSE MANAGEMENT ---
     function renderLicensePage() {
         updateLicenseInfo();
         renderUsageStatistics();
@@ -3011,7 +5560,7 @@
 
     function renderTransactionHistory() {
         const container = document.getElementById('transaction-history');
-        const transactions = state.license.transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+        const transactions = state.licenseTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
         
         if (transactions.length === 0) {
             container.innerHTML = '<p style="text-align:center; color: var(--text-secondary); padding: 2rem 0;">Belum ada transaksi.</p>';
@@ -3172,7 +5721,7 @@
             paymentMethod: 'Transfer Bank'
         };
         
-        state.license.transactions.push(newTransaction);
+        state.licenseTransactions.push(newTransaction);
         state.license.plan = planId;
         state.license.maxUsers = selectedPlan.maxUsers;
         state.license.status = 'active';
@@ -3209,7 +5758,7 @@
                 paymentMethod: 'QRIS'
             };
             
-            state.license.transactions.push(newTransaction);
+            state.licenseTransactions.push(newTransaction);
             
             const currentExpiry = new Date(state.license.expiryDate);
             currentExpiry.setDate(currentExpiry.getDate() + 30);
@@ -3223,7 +5772,7 @@
     }
 
     function showLicenseKey() {
-        document.getElementById('license-key-display').value = state.license.key;
+        document.getElementById('license-key-display').value = state.license.key || 'Tidak ada kunci lisensi';
         document.getElementById('license-expiry-display').value = new Date(state.license.expiryDate).toLocaleDateString('id-ID');
         document.getElementById('license-key-modal').style.display = 'flex';
     }
@@ -3313,12 +5862,25 @@
             document.getElementById('payment-change').textContent = `Rp ${Math.max(0, change).toLocaleString('id-ID')}`;
         });
 
+        // Auto-calculate payroll total
+        document.getElementById('payroll-base')?.addEventListener('input', calculatePayrollTotal);
+        document.getElementById('payroll-allowance')?.addEventListener('input', calculatePayrollTotal);
+        document.getElementById('payroll-deduction')?.addEventListener('input', calculatePayrollTotal);
+
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('filter-date-from').value = today;
         document.getElementById('filter-date-to').value = today;
 
         renderUserInterface();
     });
+
+    function calculatePayrollTotal() {
+        const base = parseInt(document.getElementById('payroll-base').value) || 0;
+        const allowance = parseInt(document.getElementById('payroll-allowance').value) || 0;
+        const deduction = parseInt(document.getElementById('payroll-deduction').value) || 0;
+        const total = base + allowance - deduction;
+        document.getElementById('payroll-total').value = total;
+    }
 </script>
 
 </body>
