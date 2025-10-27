@@ -1858,45 +1858,8 @@
             .kpi-grid { grid-template-columns: 1fr; }
             .content-area { padding: 1rem; }
         }
-        
-        /* Tambahkan ini di dalam tag <style> */
-.sidebar {
-    width: var(--sidebar-width);
-    background-color: var(--bg-secondary);
-    border-right: 1px solid var(--border-color);
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh; /* Ubah dari 100vh menjadi min-height */
-    z-index: 1000;
-    transition: transform 0.3s ease;
-    box-shadow: var(--shadow);
-    overflow-y: auto; /* Aktifkan scrolling */
-    overflow-x: hidden; /* Cegah horizontal scroll */
-    max-height: 100vh; /* Batas maksimum tinggi */
-}
 
-/* Scrollbar styling untuk tampilan yang lebih baik */
-.sidebar::-webkit-scrollbar {
-    width: 6px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-    background: var(--bg-tertiary);
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-    background: var(--text-light);
-    border-radius: 3px;
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover {
-    background: var(--text-secondary);
-}
-
-/* Tambahkan ini di dalam tag <style> */
+         /* Tambahkan ini di dalam tag <style> */
 @media (max-width: 768px) {
     .sidebar {
         transform: translateX(-100%);
@@ -1948,6 +1911,43 @@
     .sidebar-menu li.visible::before {
         animation: scrollIndicator 2s infinite;
     }
+
+    /* Tambahkan ini di dalam tag <style> */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh; /* Ubah dari 100vh menjadi min-height */
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    box-shadow: var(--shadow);
+    overflow-y: auto; /* Aktifkan scrolling */
+    overflow-x: hidden; /* Cegah horizontal scroll */
+    max-height: 100vh; /* Batas maksimum tinggi */
+}
+
+/* Scrollbar styling untuk tampilan yang lebih baik */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: var(--text-light);
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
 }
     </style>
 </head>
@@ -1958,7 +1958,7 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h1><i data-lucide="coffee"></i> E-Pos</h1>
-            <div class="company-name">BAHLIL RESTO & CLUBING</div>
+            <div class="company-name">DNT Network Cafe</div>
         </div>
         <ul class="sidebar-menu" id="sidebarMenu">
             <li><a href="#" class="nav-link active" data-page="dashboard"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
@@ -2031,6 +2031,21 @@
         <div class="content-area" id="contentArea">
             <!-- DASHBOARD PAGE -->
             <div class="page active" id="dashboard-page">
+                <div class="license-activation">
+                    <div class="license-activation-header">
+                        <div class="license-activation-title">Status Lisensi</div>
+                        <div class="license-activation-status status-trial">Trial</div>
+                    </div>
+                    <div class="trial-info">
+                        <div class="trial-days" id="trial-days-left">7</div>
+                        <div class="trial-text">hari tersisa dalam masa trial</div>
+                    </div>
+                    <div class="license-input-group">
+                        <input type="text" class="form-group license-input" id="license-key-input" placeholder="Masukkan kode lisensi">
+                        <button class="btn btn-primary" onclick="activateLicense()">Aktivasi</button>
+                    </div>
+                </div>
+
                 <div class="kpi-grid">
                     <div class="kpi-card">
                         <p id="kpi-revenue">Rp 0</p>
@@ -5958,7 +5973,73 @@
         document.getElementById('payroll-total').value = total;
     }
 
-    // --- FUNGSI SCROLL SIDEBAR ---
+    document.addEventListener('DOMContentLoaded', function() {
+    loadState();
+    lucide.createIcons();
+    
+    // Inisialisasi scroll sidebar
+    initSidebarScroll();
+    
+    // Event listener untuk scroll
+    const sidebar = document.getElementById('sidebar');
+    sidebar.addEventListener('scroll', handleSidebarScroll);
+    
+    // Event listener untuk resize
+    window.addEventListener('resize', () => {
+        handleSidebarScroll();
+        setupScrollIndicators();
+    });
+    
+    // Event listener untuk menu links
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            showPage(this.dataset.page);
+            
+            // Scroll ke atas saat navigasi di mobile
+            if (window.innerWidth <= 768) {
+                scrollToTop();
+            }
+        });
+    });
+
+    function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.querySelector('.main-content');
+    
+    sidebar.classList.toggle('open');
+    
+    // Reset scroll position saat toggle
+    if (!sidebar.classList.contains('open')) {
+        sidebar.scrollTop = 0;
+    }
+    
+    // Untuk mobile, tutup overlay saat sidebar terbuka
+    if (window.innerWidth <= 768) {
+        const overlay = document.createElement('div');
+        overlay.className = 'sidebar-overlay';
+        overlay.style.css = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        `;
+        document.body.appendChild(overlay);
+        
+        if (sidebar.classList.contains('open')) {
+            overlay.style.display = 'block';
+            overlay.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+                overlay.remove();
+            });
+        }
+    }
+}
+        // --- FUNGSI SCROLL SIDEBAR ---
 function initSidebarScroll() {
     const sidebar = document.getElementById('sidebar');
     const sidebarContent = sidebar.querySelector('.sidebar-menu');
@@ -6051,74 +6132,6 @@ function setupScrollIndicators() {
         }
     });
 }
-
-function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.querySelector('.main-content');
-    
-    sidebar.classList.toggle('open');
-    
-    // Reset scroll position saat toggle
-    if (!sidebar.classList.contains('open')) {
-        sidebar.scrollTop = 0;
-    }
-    
-    // Untuk mobile, tutup overlay saat sidebar terbuka
-    if (window.innerWidth <= 768) {
-        const overlay = document.createElement('div');
-        overlay.className = 'sidebar-overlay';
-        overlay.style.css = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            display: none;
-        `;
-        document.body.appendChild(overlay);
-        
-        if (sidebar.classList.contains('open')) {
-            overlay.style.display = 'block';
-            overlay.addEventListener('click', () => {
-                sidebar.classList.remove('open');
-                overlay.remove();
-            });
-        }
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    loadState();
-    lucide.createIcons();
-    
-    // Inisialisasi scroll sidebar
-    initSidebarScroll();
-    
-    // Event listener untuk scroll
-    const sidebar = document.getElementById('sidebar');
-    sidebar.addEventListener('scroll', handleSidebarScroll);
-    
-    // Event listener untuk resize
-    window.addEventListener('resize', () => {
-        handleSidebarScroll();
-        setupScrollIndicators();
-    });
-    
-    // Event listener untuk menu links
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            showPage(this.dataset.page);
-            
-            // Scroll ke atas saat navigasi di mobile
-            if (window.innerWidth <= 768) {
-                scrollToTop();
-            }
-        });
-    });
-    
     // ... kode lainnya ...
 });
 </script>
