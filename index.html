@@ -57,6 +57,7 @@
             z-index: 1000;
             transition: transform 0.3s ease;
             box-shadow: var(--shadow);
+            overflow-y: auto;
         }
 
         .sidebar-header {
@@ -64,6 +65,9 @@
             border-bottom: 1px solid var(--border-color);
             text-align: center;
             background-color: var(--bg-secondary);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .sidebar-header h1 {
@@ -141,6 +145,9 @@
             align-items: center;
             padding: 0 2rem;
             box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .topbar-title {
@@ -1573,7 +1580,7 @@
         /* Shift Management Styles */
         .shift-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 1.5rem;
         }
 
@@ -1830,6 +1837,493 @@
             border-bottom-color: var(--accent-primary);
         }
 
+        /* Chatbox Styles */
+        .chatbox {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            height: 450px;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1500;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(calc(100% - 60px));
+            transition: transform 0.3s ease;
+        }
+
+        .chatbox.open {
+            transform: translateY(0);
+        }
+
+        .chatbox-header {
+            padding: 1rem;
+            background-color: var(--accent-primary);
+            color: white;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .chatbox-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chatbox-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+
+        .chatbox-body {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .chat-message {
+            max-width: 80%;
+            padding: 0.75rem;
+            border-radius: 12px;
+            word-wrap: break-word;
+        }
+
+        .chat-message.user {
+            align-self: flex-end;
+            background-color: var(--accent-primary);
+            color: white;
+        }
+
+        .chat-message.bot {
+            align-self: flex-start;
+            background-color: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .chatbox-input {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chatbox-input input {
+            flex-grow: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .chatbox-input button {
+            background-color: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* Reservation Styles */
+        .reservation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .reservation-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .reservation-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .reservation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .reservation-id {
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        .reservation-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .reservation-status.confirmed {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: var(--accent-success);
+        }
+
+        .reservation-status.pending {
+            background-color: rgba(245, 158, 11, 0.2);
+            color: var(--accent-warning);
+        }
+
+        .reservation-status.cancelled {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: var(--accent-danger);
+        }
+
+        .reservation-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .reservation-detail {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .reservation-detail strong {
+            color: var(--text-primary);
+        }
+
+        .reservation-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Print Styles */
+        .print-receipt {
+            width: 300px;
+            padding: 20px;
+            font-family: monospace;
+            background-color: white;
+            color: black;
+        }
+
+        .print-receipt-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .print-receipt-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .print-receipt-subtitle {
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .print-receipt-details {
+            margin-bottom: 20px;
+        }
+
+        .print-receipt-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .print-receipt-divider {
+            border-top: 1px dashed black;
+            margin: 10px 0;
+        }
+
+        .print-receipt-total {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .print-receipt-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+
+        /* Settings Styles */
+        .settings-section {
+            margin-bottom: 2rem;
+        }
+
+        .settings-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .settings-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 500px;
+        }
+
+        .settings-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Stock Opname Styles */
+        .stock-opname-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stock-opname-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+
+        .stock-opname-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stock-opname-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stock-opname-name {
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        .stock-opname-category {
+            padding: 0.25rem 0.75rem;
+            background-color: var(--bg-tertiary);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .stock-opname-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stock-opname-detail {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+        }
+
+        .stock-opname-detail-label {
+            color: var(--text-secondary);
+        }
+
+        .stock-opname-detail-value {
+            font-weight: 500;
+        }
+
+        .stock-opname-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stock-opname-status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .stock-opname-status-indicator.good {
+            background-color: var(--accent-success);
+        }
+
+        .stock-opname-status-indicator.low {
+            background-color: var(--accent-warning);
+        }
+
+        .stock-opname-status-indicator.out {
+            background-color: var(--accent-danger);
+        }
+
+        .stock-opname-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .stock-opname-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .stock-opname-form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .stock-opname-form-row .form-group {
+            flex: 1;
+        }
+
+        /* Professional Stock Opname Styles */
+        .stock-opname-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        .stock-opname-table th, .stock-opname-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stock-opname-table th {
+            background-color: var(--bg-tertiary);
+            font-weight: 600;
+        }
+
+        .stock-opname-table tr:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        .stock-opname-summary {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: var(--bg-tertiary);
+            border-radius: 8px;
+        }
+
+        .stock-opname-summary-item {
+            text-align: center;
+        }
+
+        .stock-opname-summary-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .stock-opname-summary-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* Professional Payroll Styles */
+        .payroll-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+
+        .payroll-table th, .payroll-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .payroll-table th {
+            background-color: var(--bg-tertiary);
+            font-weight: 600;
+        }
+
+        .payroll-table tr:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        .payroll-summary {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: var(--bg-tertiary);
+            border-radius: 8px;
+        }
+
+        .payroll-summary-item {
+            text-align: center;
+        }
+
+        .payroll-summary-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .payroll-summary-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        /* Professional Shift Management Styles */
+        .shift-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .shift-day {
+            background-color: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        .shift-day-header {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.25rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .shift-day-content {
+            font-size: 0.875rem;
+        }
+
+        .shift-assignment {
+            margin-top: 0.25rem;
+            padding: 0.25rem;
+            background-color: var(--bg-secondary);
+            border-radius: 4px;
+        }
+
         /* Responsive Design */
         @media (max-width: 1024px) {
             .grid-cols-4 { grid-template-columns: repeat(3, 1fr); }
@@ -1851,6 +2345,13 @@
             .grid-cols-3 { grid-template-columns: repeat(2, 1fr); }
             .kpi-grid { grid-template-columns: repeat(2, 1fr); }
             .license-actions { flex-direction: column; }
+            .chatbox {
+                width: 100%;
+                right: 0;
+                bottom: 0;
+                border-radius: 12px 12px 0 0;
+                height: 350px;
+            }
         }
 
         @media (max-width: 640px) {
@@ -1858,97 +2359,6 @@
             .kpi-grid { grid-template-columns: 1fr; }
             .content-area { padding: 1rem; }
         }
-
-         /* Tambahkan ini di dalam tag <style> */
-@media (max-width: 768px) {
-    .sidebar {
-        transform: translateX(-100%);
-        height: 100vh;
-        overflow-y: auto;
-    }
-    
-    .sidebar.open {
-        transform: translateX(0);
-        z-index: 1001;
-    }
-    
-    /* Overlay untuk mobile */
-    .sidebar-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-        display: none;
-    }
-    
-    /* Scroll indicator untuk mobile */
-    .sidebar-menu li::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 3px;
-        height: 100%;
-        background: linear-gradient(to bottom, var(--accent-primary), transparent);
-        opacity: 0;
-        transition: opacity 0.3s;
-    }
-    
-    .sidebar-menu li.visible::before {
-        opacity: 1;
-    }
-    
-    /* Animasi untuk scroll indicator */
-    @keyframes scrollIndicator {
-        0% { opacity: 0; }
-        50% { opacity: 1; }
-        100% { opacity: 0; }
-    }
-    
-    .sidebar-menu li.visible::before {
-        animation: scrollIndicator 2s infinite;
-    }
-
-    /* Tambahkan ini di dalam tag <style> */
-.sidebar {
-    width: var(--sidebar-width);
-    background-color: var(--bg-secondary);
-    border-right: 1px solid var(--border-color);
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh; /* Ubah dari 100vh menjadi min-height */
-    z-index: 1000;
-    transition: transform 0.3s ease;
-    box-shadow: var(--shadow);
-    overflow-y: auto; /* Aktifkan scrolling */
-    overflow-x: hidden; /* Cegah horizontal scroll */
-    max-height: 100vh; /* Batas maksimum tinggi */
-}
-
-/* Scrollbar styling untuk tampilan yang lebih baik */
-.sidebar::-webkit-scrollbar {
-    width: 6px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-    background: var(--bg-tertiary);
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-    background: var(--text-light);
-    border-radius: 3px;
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover {
-    background: var(--text-secondary);
-}
-}
     </style>
 </head>
 <body>
@@ -1972,18 +2382,19 @@
             <li><a href="#" class="nav-link" data-page="order-status"><i data-lucide="clock"></i> Status Pesanan</a></li>
             <li><a href="#" class="nav-link" data-page="table-selection"><i data-lucide="square-stack"></i> Pilih Meja</a></li>
             <li><a href="#" class="nav-link" data-page="table-order"><i data-lucide="smartphone"></i> Pesan via Meja</a></li>
-            <li><a href="#" class="nav-link" data-page="ride-hailing"><i data-lucide="truck"></i> Ojek Online</a></li>
+            <li><a href="#" class="nav-link" data-page="reservations"><i data-lucide="calendar"></i> Reservasi</a></li>
             <li><a href="#" class="nav-link" data-page="menu-management"><i data-lucide="utensils"></i> Kelola Menu</a></li>
             <li><a href="#" class="nav-link" data-page="table-management"><i data-lucide="table"></i> Manajemen Meja</a></li>
             <li><a href="#" class="nav-link" data-page="order-history"><i data-lucide="file-text"></i> Riwayat Pesanan</a></li>
             <li><a href="#" class="nav-link" data-page="user-management"><i data-lucide="users"></i> Kelola Pengguna</a></li>
-            <li><a href="#" class="nav-link" data-page="inventory"><i data-lucide="package"></i> Manajemen Barang</a></li>
+            <li><a href="#" class="nav-link" data-page="stock-opname"><i data-lucide="package"></i> Stock Opname</a></li>
             <li><a href="#" class="nav-link" data-page="asset"><i data-lucide="briefcase"></i> Manajemen Aset</a></li>
             <li><a href="#" class="nav-link" data-page="financial"><i data-lucide="dollar-sign"></i> Keuangan</a></li>
             <li><a href="#" class="nav-link" data-page="payroll"><i data-lucide="credit-card"></i> Penggajian</a></li>
             <li><a href="#" class="nav-link" data-page="shift"><i data-lucide="calendar"></i> Shift</a></li>
             <li><a href="#" class="nav-link" data-page="branch"><i data-lucide="map-pin"></i> Multi Cabang</a></li>
             <li><a href="#" class="nav-link" data-page="license"><i data-lucide="crown"></i> Lisensi</a></li>
+            <li><a href="#" class="nav-link" data-page="settings"><i data-lucide="settings"></i> Pengaturan</a></li>
         </ul>
     </aside>
 
@@ -2031,8 +2442,6 @@
         <div class="content-area" id="contentArea">
             <!-- DASHBOARD PAGE -->
             <div class="page active" id="dashboard-page">
-                
-
                 <div class="kpi-grid">
                     <div class="kpi-card">
                         <p id="kpi-revenue">Rp 0</p>
@@ -2167,37 +2576,28 @@
                 </div>
             </div>
 
-            <!-- RIDE HAILING PAGE -->
-            <div class="page" id="ride-hailing-page">
+            <!-- RESERVATIONS PAGE -->
+            <div class="page" id="reservations-page">
                 <div class="card">
-                    <div class="card-header">Input Pesanan Ojek Online</div>
-                    <form id="ride-hailing-form" onsubmit="createRideHailingOrder(event)">
-                        <div class="grid grid-cols-2">
-                            <div class="form-group">
-                                <label>Platform</label>
-                                <select name="platform" required>
-                                    <option value="Gojek">Gojek</option>
-                                    <option value="Grab">Grab</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>ID Driver / Nama</label>
-                                <input type="text" name="driverName" required>
-                            </div>
+                    <div class="card-header">
+                        <span>Reservasi Meja</span>
+                        <button class="btn btn-primary" onclick="openReservationModal()">Tambah Reservasi</button>
+                    </div>
+                    <div class="history-filters">
+                        <div class="form-group" style="width: 200px;">
+                            <label>Dari Tanggal</label>
+                            <input type="date" id="filter-reservation-date-from">
                         </div>
-                        <div class="form-group">
-                            <label>Pesanan (pisahkan dengan koma)</label>
-                            <input type="text" name="orderItems" placeholder="contoh: 2x Nasi Goreng, 1x Es Teh" required>
+                        <div class="form-group" style="width: 200px;">
+                            <label>Sampai Tanggal</label>
+                            <input type="date" id="filter-reservation-date-to">
                         </div>
-                        <div class="form-group">
-                            <label>Prioritas</label>
-                            <select name="priority">
-                                <option value="normal">Normal</option>
-                                <option value="high">Tinggi</option>
-                            </select>
+                        <div class="form-group" style="width: 150px;">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-primary" onclick="filterReservations()">Filter</button>
                         </div>
-                        <button type="submit" class="btn btn-primary">Buat Pesanan</button>
-                    </form>
+                    </div>
+                    <div class="reservation-grid" id="reservation-grid"></div>
                 </div>
             </div>
 
@@ -2290,27 +2690,68 @@
                 </div>
             </div>
 
-            <!-- INVENTORY PAGE -->
-            <div class="page" id="inventory-page">
+            <!-- STOCK OPNAME PAGE -->
+            <div class="page" id="stock-opname-page">
                 <div class="card">
                     <div class="card-header">
-                        <span>Manajemen Barang/Bahan</span>
-                        <button class="btn btn-primary" onclick="openInventoryModal()">Tambah Barang</button>
+                        <span>Stock Opname</span>
+                        <button class="btn btn-primary" onclick="openStockOpnameModal()">Tambah Barang</button>
                     </div>
                     
                     <!-- Low Stock Alert -->
                     <div id="low-stock-alerts"></div>
                     
                     <!-- Category Tabs -->
-                    <div class="category-tabs" id="inventory-category-tabs">
-                        <button class="category-tab active" onclick="filterInventoryByCategory('all', this)">Semua</button>
-                        <button class="category-tab" onclick="filterInventoryByCategory('Makanan', this)">Makanan</button>
-                        <button class="category-tab" onclick="filterInventoryByCategory('Minuman', this)">Minuman</button>
-                        <button class="category-tab" onclick="filterInventoryByCategory('Bahan Baku', this)">Bahan Baku</button>
-                        <button class="category-tab" onclick="filterInventoryByCategory('Peralatan', this)">Peralatan</button>
+                    <div class="category-tabs" id="stock-opname-category-tabs">
+                        <button class="category-tab active" onclick="filterStockOpnameByCategory('all', this)">Semua</button>
+                        <button class="category-tab" onclick="filterStockOpnameByCategory('Makanan', this)">Makanan</button>
+                        <button class="category-tab" onclick="filterStockOpnameByCategory('Minuman', this)">Minuman</button>
+                        <button class="category-tab" onclick="filterStockOpnameByCategory('Bahan Baku', this)">Bahan Baku</button>
+                        <button class="category-tab" onclick="filterStockOpnameByCategory('Peralatan', this)">Peralatan</button>
                     </div>
                     
-                    <div class="inventory-grid" id="inventory-grid"></div>
+                    <!-- Professional Stock Opname Table -->
+                    <div class="card" style="margin-top: 1.5rem;">
+                        <div class="card-header">Tabel Stok Barang</div>
+                        <table class="stock-opname-table">
+                            <thead>
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Nama Barang</th>
+                                    <th>Kategori</th>
+                                    <th>Stok Saat Ini</th>
+                                    <th>Satuan</th>
+                                    <th>Stok Minimum</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stock-opname-table-body">
+                            </tbody>
+                        </table>
+                        
+                        <!-- Stock Summary -->
+                        <div class="stock-opname-summary">
+                            <div class="stock-opname-summary-item">
+                                <div class="stock-opname-summary-value" id="total-items">0</div>
+                                <div class="stock-opname-summary-label">Total Item</div>
+                            </div>
+                            <div class="stock-opname-summary-item">
+                                <div class="stock-opname-summary-value" id="good-stock">0</div>
+                                <div class="stock-opname-summary-label">Stok Aman</div>
+                            </div>
+                            <div class="stock-opname-summary-item">
+                                <div class="stock-opname-summary-value" id="low-stock">0</div>
+                                <div class="stock-opname-summary-label">Stok Rendah</div>
+                            </div>
+                            <div class="stock-opname-summary-item">
+                                <div class="stock-opname-summary-value" id="out-stock">0</div>
+                                <div class="stock-opname-summary-label">Stok Habis</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stock-opname-grid" id="stock-opname-grid"></div>
                 </div>
             </div>
 
@@ -2416,6 +2857,50 @@
                         <span>Manajemen Penggajian</span>
                         <button class="btn btn-primary" onclick="openPayrollModal()">Tambah Gaji</button>
                     </div>
+                    
+                    <!-- Professional Payroll Table -->
+                    <div class="card" style="margin-top: 1.5rem;">
+                        <div class="card-header">Tabel Gaji Karyawan</div>
+                        <table class="payroll-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nama Karyawan</th>
+                                    <th>Posisi</th>
+                                    <th>Periode</th>
+                                    <th>Gaji Pokok</th>
+                                    <th>Tunjangan</th>
+                                    <th>Potongan</th>
+                                    <th>Total Gaji</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="payroll-table-body">
+                            </tbody>
+                        </table>
+                        
+                        <!-- Payroll Summary -->
+                        <div class="payroll-summary">
+                            <div class="payroll-summary-item">
+                                <div class="payroll-summary-value" id="total-payroll">Rp 0</div>
+                                <div class="payroll-summary-label">Total Gaji</div>
+                            </div>
+                            <div class="payroll-summary-item">
+                                <div class="payroll-summary-value" id="avg-payroll">Rp 0</div>
+                                <div class="payroll-summary-label">Rata-rata Gaji</div>
+                            </div>
+                            <div class="payroll-summary-item">
+                                <div class="payroll-summary-value" id="highest-payroll">Rp 0</div>
+                                <div class="payroll-summary-label">Gaji Tertinggi</div>
+                            </div>
+                            <div class="payroll-summary-item">
+                                <div class="payroll-summary-value" id="lowest-payroll">Rp 0</div>
+                                <div class="payroll-summary-label">Gaji Terendah</div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="payroll-grid" id="payroll-grid"></div>
                 </div>
             </div>
@@ -2427,6 +2912,15 @@
                         <span>Manajemen Shift</span>
                         <button class="btn btn-primary" onclick="openShiftModal()">Tambah Shift</button>
                     </div>
+                    
+                    <!-- Professional Shift Calendar -->
+                    <div class="card" style="margin-top: 1.5rem;">
+                        <div class="card-header">Kalender Shift</div>
+                        <div class="shift-calendar" id="shift-calendar">
+                            <!-- Calendar will be generated by JavaScript -->
+                        </div>
+                    </div>
+                    
                     <div class="shift-grid" id="shift-grid"></div>
                 </div>
             </div>
@@ -2520,6 +3014,59 @@
                     </div>
                 </div>
             </div>
+
+            <!-- SETTINGS PAGE -->
+            <div class="page" id="settings-page">
+                <div class="card">
+                    <div class="card-header">Pengaturan Profil</div>
+                    <div class="settings-section">
+                        <div class="settings-title">Informasi Akun</div>
+                        <div class="settings-form">
+                            <div class="form-group">
+                                <label>Nama</label>
+                                <input type="text" id="settings-name" value="Admin">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="settings-email" value="admin@restaurant.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Peran</label>
+                                <select id="settings-role">
+                                    <option value="admin" selected>Admin</option>
+                                    <option value="owner">Owner</option>
+                                    <option value="cashier">Kasir</option>
+                                    <option value="kitchen">Dapur</option>
+                                </select>
+                            </div>
+                            <div class="settings-actions">
+                                <button class="btn btn-primary" onclick="updateProfile()">Simpan Perubahan</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <div class="settings-title">Ubah Password</div>
+                        <div class="settings-form">
+                            <div class="form-group">
+                                <label>Password Lama</label>
+                                <input type="password" id="settings-old-password">
+                            </div>
+                            <div class="form-group">
+                                <label>Password Baru</label>
+                                <input type="password" id="settings-new-password">
+                            </div>
+                            <div class="form-group">
+                                <label>Konfirmasi Password Baru</label>
+                                <input type="password" id="settings-confirm-password">
+                            </div>
+                            <div class="settings-actions">
+                                <button class="btn btn-primary" onclick="changePassword()">Ubah Password</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- FOOTER -->
@@ -2527,6 +3074,30 @@
             © 2025 DNT Network - E-Pos System
         </footer>
     </main>
+</div>
+
+<!-- CHATBOX -->
+<div class="chatbox" id="chatbox">
+    <div class="chatbox-header" onclick="toggleChatbox()">
+        <div class="chatbox-title">
+            <i data-lucide="message-circle"></i>
+            <span>Customer Service</span>
+        </div>
+        <button class="chatbox-close">
+            <i data-lucide="minimize-2"></i>
+        </button>
+    </div>
+    <div class="chatbox-body" id="chatbox-body">
+        <div class="chat-message bot">
+            Halo! Saya adalah asisten AI untuk membantu Anda. Ada yang bisa saya bantu?
+        </div>
+    </div>
+    <div class="chatbox-input">
+        <input type="text" id="chatbox-input" placeholder="Ketik pesan..." onkeypress="handleChatInputKeypress(event)">
+        <button onclick="sendMessage()">
+            <i data-lucide="send"></i>
+        </button>
+    </div>
 </div>
 
 <!-- PAYMENT MODAL -->
@@ -2552,7 +3123,12 @@
             <input type="number" id="payment-amount" placeholder="0">
         </div>
         <div class="pos-summary-row total"><span>Kembalian</span><span id="payment-change">Rp 0</span></div>
-        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="processPayment()">Proses Pembayaran</button>
+        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+            <button class="btn btn-primary" style="flex-grow: 1;" onclick="processPayment()">Proses Pembayaran</button>
+            <button class="btn btn-secondary" onclick="printReceipt()" id="print-receipt-btn" style="display: none;">
+                <i data-lucide="printer"></i> Cetak Struk
+            </button>
+        </div>
     </div>
 </div>
 
@@ -2588,6 +3164,11 @@
                 <input type="file" id="menu-image" accept="image/*">
                 <div id="menu-image-preview" style="margin-top: 0.5rem;"></div>
             </div>
+            <div class="form-group">
+                <label>Bahan yang Diperlukan</label>
+                <div id="menu-ingredients-list"></div>
+                <button type="button" class="btn btn-secondary" onclick="addMenuIngredientField()">Tambah Bahan</button>
+            </div>
             <button type="submit" class="btn btn-primary" style="width: 100%;">Simpan</button>
         </form>
     </div>
@@ -2600,10 +3181,6 @@
         <h2 id="table-modal-title">Tambah Meja</h2>
         <form id="table-form" onsubmit="saveTable(event)">
             <input type="hidden" id="table-id">
-            <div class="form-group">
-                <label>Nomor Meja</label>
-                <input type="number" id="table-number" required>
-            </div>
             <div class="form-group">
                 <label>Kapasitas</label>
                 <input type="number" id="table-capacity" required>
@@ -2653,20 +3230,24 @@
     </div>
 </div>
 
-<!-- INVENTORY MODAL -->
-<div class="modal" id="inventory-modal">
+<!-- STOCK OPNAME MODAL -->
+<div class="modal" id="stock-opname-modal">
     <div class="modal-content">
-        <span class="modal-close" onclick="closeModal('inventory-modal')">&times;</span>
-        <h2 id="inventory-modal-title">Tambah Barang</h2>
-        <form id="inventory-form" onsubmit="saveInventoryItem(event)">
-            <input type="hidden" id="inventory-id">
+        <span class="modal-close" onclick="closeModal('stock-opname-modal')">&times;</span>
+        <h2 id="stock-opname-modal-title">Tambah Barang</h2>
+        <form id="stock-opname-form" onsubmit="saveStockOpnameItem(event)">
+            <input type="hidden" id="stock-opname-id">
+            <div class="form-group">
+                <label>Kode Barang</label>
+                <input type="text" id="stock-opname-code" required>
+            </div>
             <div class="form-group">
                 <label>Nama Barang</label>
-                <input type="text" id="inventory-name" required>
+                <input type="text" id="stock-opname-name" required>
             </div>
             <div class="form-group">
                 <label>Kategori</label>
-                <select id="inventory-category" required>
+                <select id="stock-opname-category" required>
                     <option value="Makanan">Makanan</option>
                     <option value="Minuman">Minuman</option>
                     <option value="Bahan Baku">Bahan Baku</option>
@@ -2675,19 +3256,23 @@
             </div>
             <div class="form-group">
                 <label>Jumlah</label>
-                <input type="number" id="inventory-quantity" required>
+                <input type="number" id="stock-opname-quantity" required>
             </div>
             <div class="form-group">
                 <label>Satuan</label>
-                <input type="text" id="inventory-unit" placeholder="kg, liter, pcs, dll">
+                <input type="text" id="stock-opname-unit" placeholder="kg, liter, pcs, dll">
             </div>
             <div class="form-group">
                 <label>Stok Minimum</label>
-                <input type="number" id="inventory-min-stock" required>
+                <input type="number" id="stock-opname-min-stock" required>
             </div>
             <div class="form-group">
                 <label>Harga Beli</label>
-                <input type="number" id="inventory-price" required>
+                <input type="number" id="stock-opname-price" required>
+            </div>
+            <div class="form-group">
+                <label>Supplier</label>
+                <input type="text" id="stock-opname-supplier">
             </div>
             <button type="submit" class="btn btn-primary" style="width: 100%;">Simpan</button>
         </form>
@@ -2842,6 +3427,13 @@
                 <label>Total Gaji</label>
                 <input type="number" id="payroll-total" readonly>
             </div>
+            <div class="form-group">
+                <label>Status Pembayaran</label>
+                <select id="payroll-status" required>
+                    <option value="pending">Menunggu Pembayaran</option>
+                    <option value="paid">Sudah Dibayar</option>
+                </select>
+            </div>
             <button type="submit" class="btn btn-primary" style="width: 100%;">Simpan</button>
         </form>
     </div>
@@ -2865,6 +3457,32 @@
             <div class="form-group">
                 <label>Jam Selesai</label>
                 <input type="time" id="shift-end" required>
+            </div>
+            <div class="form-group">
+                <label>Hari</label>
+                <div id="shift-days-list">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <input type="checkbox" name="shift-days" value="Senin"> Senin
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <input type="checkbox" name="shift-days" value="Selasa"> Selasa
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <input type="checkbox" name="shift-days" value="Rabu"> Rabu
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <input type="checkbox" name="shift-days" value="Kamis"> Kamis
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <input type="checkbox" name="shift-days" value="Jumat"> Jumat
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <input type="checkbox" name="shift-days" value="Sabtu"> Sabtu
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <input type="checkbox" name="shift-days" value="Minggu"> Minggu
+                    </label>
+                </div>
             </div>
             <div class="form-group">
                 <label>Karyawan</label>
@@ -2916,6 +3534,60 @@
     </div>
 </div>
 
+<!-- RESERVATION MODAL -->
+<div class="modal" id="reservation-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('reservation-modal')">&times;</span>
+        <h2 id="reservation-modal-title">Tambah Reservasi</h2>
+        <form id="reservation-form" onsubmit="saveReservation(event)">
+            <input type="hidden" id="reservation-id">
+            <div class="form-group">
+                <label>Nama Pemesan</label>
+                <input type="text" id="reservation-name" required>
+            </div>
+            <div class="form-group">
+                <label>Telepon</label>
+                <input type="tel" id="reservation-phone" required>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="reservation-email">
+            </div>
+            <div class="form-group">
+                <label>Tanggal Reservasi</label>
+                <input type="date" id="reservation-date" required>
+            </div>
+            <div class="form-group">
+                <label>Waktu Reservasi</label>
+                <input type="time" id="reservation-time" required>
+            </div>
+            <div class="form-group">
+                <label>Jumlah Tamu</label>
+                <input type="number" id="reservation-guests" required>
+            </div>
+            <div class="form-group">
+                <label>Meja</label>
+                <select id="reservation-table" required>
+                    <option value="">Pilih Meja</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Permintaan Khusus</label>
+                <textarea id="reservation-notes" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select id="reservation-status" required>
+                    <option value="pending">Menunggu Konfirmasi</option>
+                    <option value="confirmed">Dikonfirmasi</option>
+                    <option value="cancelled">Dibatalkan</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Simpan</button>
+        </form>
+    </div>
+</div>
+
 <!-- LICENSE MODALS -->
 <div class="modal" id="upgrade-modal">
     <div class="modal-content">
@@ -2943,6 +3615,9 @@
     </div>
 </div>
 
+<!-- PRINT RECEIPT (HIDDEN) -->
+<div id="print-receipt" style="display: none;"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // --- GLOBAL STATE & INITIALIZATION ---
@@ -2961,12 +3636,92 @@
         },
         
         menu: [
-            { id: 1, name: 'Nasi Goreng Spesial', category: 'Makanan', price: 25000, description: 'Nasi goreng dengan telur mata sapi, ayam suwir, dan kerupuk', image: null, isBestSeller: true, outOfStock: false },
-            { id: 2, name: 'Mie Ayam Bakso', category: 'Makanan', price: 22000, description: 'Mie ayam dengan bakso sapi dan pangsit goreng', image: null, isBestSeller: false, outOfStock: false },
-            { id: 3, name: 'Ayam Bakar Madu', category: 'Makanan', price: 35000, description: 'Ayam bakar dengan saus madu, nasi, dan lalapan', image: null, isBestSeller: true, outOfStock: false },
-            { id: 4, name: 'Es Teh Manis', category: 'Minuman', price: 5000, description: 'Teh manis dingin dengan es batu', image: null, isBestSeller: false, outOfStock: false },
-            { id: 5, name: 'Jus Alpukat', category: 'Minuman', price: 18000, description: 'Jus alpukat segar dengan susu dan madu', image: null, isBestSeller: false, outOfStock: false },
-            { id: 6, name: 'Es Kopi Susu', category: 'Minuman', price: 15000, description: 'Kopi espresso dengan susu dan gula aren', image: null, isBestSeller: true, outOfStock: false }
+            { 
+                id: 1, 
+                name: 'Nasi Goreng Spesial', 
+                category: 'Makanan', 
+                price: 25000, 
+                description: 'Nasi goreng dengan telur mata sapi, ayam suwir, dan kerupuk', 
+                image: null, 
+                isBestSeller: true, 
+                outOfStock: false,
+                ingredients: [
+                    { id: 1, name: 'Beras', quantity: 0.2, unit: 'kg' },
+                    { id: 2, name: 'Telur', quantity: 1, unit: 'pcs' },
+                    { id: 3, name: 'Ayam', quantity: 0.1, unit: 'kg' }
+                ]
+            },
+            { 
+                id: 2, 
+                name: 'Mie Ayam Bakso', 
+                category: 'Makanan', 
+                price: 22000, 
+                description: 'Mie ayam dengan bakso sapi dan pangsit goreng', 
+                image: null, 
+                isBestSeller: false, 
+                outOfStock: false,
+                ingredients: [
+                    { id: 4, name: 'Mie', quantity: 0.2, unit: 'kg' },
+                    { id: 3, name: 'Ayam', quantity: 0.1, unit: 'kg' }
+                ]
+            },
+            { 
+                id: 3, 
+                name: 'Ayam Bakar Madu', 
+                category: 'Makanan', 
+                price: 35000, 
+                description: 'Ayam bakar dengan saus madu, nasi, dan lalapan', 
+                image: null, 
+                isBestSeller: true, 
+                outOfStock: false,
+                ingredients: [
+                    { id: 3, name: 'Ayam', quantity: 0.3, unit: 'kg' },
+                    { id: 5, name: 'Madu', quantity: 0.05, unit: 'kg' }
+                ]
+            },
+            { 
+                id: 4, 
+                name: 'Es Teh Manis', 
+                category: 'Minuman', 
+                price: 5000, 
+                description: 'Teh manis dingin dengan es batu', 
+                image: null, 
+                isBestSeller: false, 
+                outOfStock: false,
+                ingredients: [
+                    { id: 6, name: 'Teh', quantity: 0.01, unit: 'kg' },
+                    { id: 7, name: 'Gula', quantity: 0.03, unit: 'kg' }
+                ]
+            },
+            { 
+                id: 5, 
+                name: 'Jus Alpukat', 
+                category: 'Minuman', 
+                price: 18000, 
+                description: 'Jus alpukat segar dengan susu dan madu', 
+                image: null, 
+                isBestSeller: false, 
+                outOfStock: false,
+                ingredients: [
+                    { id: 8, name: 'Alpukat', quantity: 0.2, unit: 'kg' },
+                    { id: 9, name: 'Susu', quantity: 0.1, unit: 'liter' }
+                ]
+            },
+            { 
+                id: 6, 
+                name: 'Es Kopi Susu', 
+                category: 'Minuman', 
+                price: 15000, 
+                description: 'Kopi espresso dengan susu dan gula aren', 
+                image: null, 
+                isBestSeller: true, 
+                outOfStock: false,
+                ingredients: [
+                    { id: 10, name: 'Kopi', quantity: 0.02, unit: 'kg' },
+                    { id: 9, name: 'Susu', quantity: 0.1, unit: 'liter' },
+                    { id: 7, name: 'Gula', quantity: 0.02, unit: 'kg' }
+                ]
+            }
         ],
         orders: [],
         users: [
@@ -2987,13 +3742,18 @@
         tableOrder: { items: [], tableId: 1 },
         currentUser: { id: 1, name: 'Admin', role: 'admin' },
         
-        // Inventory management
-        inventory: [
-            { id: 1, name: 'Beras', category: 'Bahan Baku', quantity: 50, unit: 'kg', minStock: 10, price: 12000 },
-            { id: 2, name: 'Telur', category: 'Bahan Baku', quantity: 100, unit: 'pcs', minStock: 20, price: 2000 },
-            { id: 3, name: 'Ayam', category: 'Bahan Baku', quantity: 30, unit: 'kg', minStock: 5, price: 35000 },
-            { id: 4, name: 'Teh', category: 'Bahan Baku', quantity: 5, unit: 'kg', minStock: 2, price: 80000 },
-            { id: 5, name: 'Gula', category: 'Bahan Baku', quantity: 20, unit: 'kg', minStock: 5, price: 15000 }
+        // Stock Opname (Inventory management)
+        stockOpname: [
+            { id: 1, code: 'BR001', name: 'Beras', category: 'Bahan Baku', quantity: 50, unit: 'kg', minStock: 10, price: 12000, supplier: 'Toko Beras Jaya' },
+            { id: 2, code: 'TL001', name: 'Telur', category: 'Bahan Baku', quantity: 100, unit: 'pcs', minStock: 20, price: 2000, supplier: 'Peternakan Sejahtera' },
+            { id: 3, code: 'AY001', name: 'Ayam', category: 'Bahan Baku', quantity: 30, unit: 'kg', minStock: 5, price: 35000, supplier: 'Daging Segar' },
+            { id: 4, code: 'MI001', name: 'Mie', category: 'Bahan Baku', quantity: 20, unit: 'kg', minStock: 5, price: 15000, supplier: 'Mie Indo' },
+            { id: 5, code: 'MD001', name: 'Madu', category: 'Bahan Baku', quantity: 5, unit: 'kg', minStock: 2, price: 80000, supplier: 'Lebah Farm' },
+            { id: 6, code: 'TH001', name: 'Teh', category: 'Bahan Baku', quantity: 5, unit: 'kg', minStock: 2, price: 80000, supplier: 'Teh Nusantara' },
+            { id: 7, code: 'GU001', name: 'Gula', category: 'Bahan Baku', quantity: 20, unit: 'kg', minStock: 5, price: 15000, supplier: 'Gula Manis' },
+            { id: 8, code: 'AP001', name: 'Alpukat', category: 'Bahan Baku', quantity: 10, unit: 'kg', minStock: 3, price: 25000, supplier: 'Buah Segar' },
+            { id: 9, code: 'SU001', name: 'Susu', category: 'Bahan Baku', quantity: 15, unit: 'liter', minStock: 5, price: 18000, supplier: 'Susu Sehat' },
+            { id: 10, code: 'KP001', name: 'Kopi', category: 'Bahan Baku', quantity: 5, unit: 'kg', minStock: 2, price: 120000, supplier: 'Kopi Nusantara' }
         ],
         
         // Asset management
@@ -3011,14 +3771,31 @@
         
         // Shift management
         shifts: [
-            { id: 1, name: 'Pagi', startTime: '08:00', endTime: '16:00', employees: [1, 2] },
-            { id: 2, name: 'Sore', startTime: '16:00', endTime: '00:00', employees: [3, 4] }
+            { 
+                id: 1, 
+                name: 'Pagi', 
+                startTime: '08:00', 
+                endTime: '16:00', 
+                days: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'],
+                employees: [1, 2] 
+            },
+            { 
+                id: 2, 
+                name: 'Sore', 
+                startTime: '16:00', 
+                endTime: '00:00', 
+                days: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'],
+                employees: [3, 4] 
+            }
         ],
         
         // Branch management
         branches: [
             { id: 1, name: 'Cabang Utama', address: 'Jl. Sudirman No. 123', phone: '021-123456', email: 'utama@restaurant.com', manager: 2, status: 'active' }
         ],
+        
+        // Reservations
+        reservations: [],
         
         // Notifications
         notifications: [],
@@ -3058,8 +3835,7 @@
             const daysLeft = Math.ceil((trialEndDate - now) / (1000 * 60 * 60 * 24));
             
             // Update trial days left
-            document.getElementById('trial-days-left').textContent = daysLeft;
-            document.getElementById('license-days-left').textContent = `${daysLeft} Hari`;
+            document.getElementById('license-days-left').textContent = daysLeft;
             
             // Check if trial has expired
             if (daysLeft <= 0) {
@@ -3206,32 +3982,36 @@
                 { page: 'order-status', label: 'Status Pesanan', icon: 'clock' },
                 { page: 'table-selection', label: 'Pilih Meja', icon: 'square-stack' },
                 { page: 'table-order', label: 'Pesan via Meja', icon: 'smartphone' },
-                { page: 'ride-hailing', label: 'Ojek Online', icon: 'truck' },
+                { page: 'reservations', label: 'Reservasi', icon: 'calendar' },
                 { page: 'menu-management', label: 'Kelola Menu', icon: 'utensils' },
                 { page: 'table-management', label: 'Manajemen Meja', icon: 'table' },
-                { page: 'inventory', label: 'Manajemen Barang', icon: 'package' },
-                { page: 'asset', label: 'Manajemen Aset', icon: 'briefcase' },
+                { page: 'stock-opname', label: 'Stock Opname', icon: 'package' },
                 { page: 'order-history', label: 'Riwayat Pesanan', icon: 'file-text' },
                 { page: 'user-management', label: 'Kelola Pengguna', icon: 'users' },
+                { page: 'asset', label: 'Manajemen Aset', icon: 'briefcase' },
                 { page: 'financial', label: 'Keuangan', icon: 'dollar-sign' },
                 { page: 'payroll', label: 'Penggajian', icon: 'credit-card' },
                 { page: 'shift', label: 'Shift', icon: 'calendar' },
                 { page: 'branch', label: 'Multi Cabang', icon: 'map-pin' },
-                { page: 'license', label: 'Lisensi', icon: 'crown' }
+                { page: 'license', label: 'Lisensi', icon: 'crown' },
+                { page: 'settings', label: 'Pengaturan', icon: 'settings' }
             ],
             owner: [
                 { page: 'financial', label: 'Keuangan', icon: 'dollar-sign' },
                 { page: 'order-status', label: 'Status Pesanan', icon: 'clock' },
+                { page: 'reservations', label: 'Reservasi', icon: 'calendar' },
                 { page: 'order-history', label: 'Riwayat Pesanan', icon: 'file-text' },
                 { page: 'user-management', label: 'Kelola Pengguna', icon: 'users' },
                 { page: 'payroll', label: 'Penggajian', icon: 'credit-card' },
                 { page: 'branch', label: 'Multi Cabang', icon: 'map-pin' },
-                { page: 'license', label: 'Lisensi', icon: 'crown' }
+                { page: 'license', label: 'Lisensi', icon: 'crown' },
+                { page: 'settings', label: 'Pengaturan', icon: 'settings' }
             ],
             cashier: [
                 { page: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard' },
                 { page: 'pos', label: 'Kasir', icon: 'shopping-cart' },
                 { page: 'order-status', label: 'Status Pesanan', icon: 'clock' },
+                { page: 'reservations', label: 'Reservasi', icon: 'calendar' },
                 { page: 'order-history', label: 'Riwayat Pesanan', icon: 'file-text' }
             ],
             kitchen: [
@@ -3257,6 +4037,10 @@
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 showPage(link.dataset.page);
+                // Close sidebar on mobile after clicking a menu item
+                if (window.innerWidth <= 768) {
+                    document.getElementById('sidebar').classList.remove('open');
+                }
             });
         });
     }
@@ -3340,6 +4124,75 @@
         }
     }
 
+    // --- INVENTORY & MENU INTEGRATION ---
+    function checkAndUpdateMenuStock() {
+        // Check each menu item and update outOfStock status based on ingredient availability
+        state.menu.forEach(menuItem => {
+            let canMake = true;
+            
+            if (menuItem.ingredients && menuItem.ingredients.length > 0) {
+                menuItem.ingredients.forEach(ingredient => {
+                    const stockItem = state.stockOpname.find(item => item.name === ingredient.name);
+                    if (stockItem && stockItem.quantity < ingredient.quantity) {
+                        canMake = false;
+                    }
+                });
+            }
+            
+            // Update menu item status
+            if (menuItem.outOfStock !== !canMake) {
+                menuItem.outOfStock = !canMake;
+                
+                // Send notification if menu item is now out of stock
+                if (menuItem.outOfStock) {
+                    showNotification(`Menu "${menuItem.name}" sekarang tidak tersedia karena stok bahan habis!`, 'warning');
+                    
+                    // Add persistent notification for customers
+                    state.notifications.push({
+                        id: Date.now(),
+                        title: 'Menu Tidak Tersedia',
+                        message: `Maaf, menu "${menuItem.name}" sedang tidak tersedia karena stok bahan habis. Silakan pilih menu lain.`,
+                        type: 'warning',
+                        timestamp: new Date().toISOString(),
+                        read: false,
+                        persistent: true
+                    });
+                }
+            }
+        });
+        
+        saveState();
+    }
+
+    function reduceStockFromOrder(order) {
+        // Reduce stock based on order items
+        order.items.forEach(orderItem => {
+            const menuItem = state.menu.find(item => item.id === orderItem.id);
+            if (menuItem && menuItem.ingredients) {
+                menuItem.ingredients.forEach(ingredient => {
+                    const stockItem = state.stockOpname.find(item => item.name === ingredient.name);
+                    if (stockItem) {
+                        const reduction = ingredient.quantity * orderItem.quantity;
+                        stockItem.quantity = Math.max(0, stockItem.quantity - reduction);
+                        
+                        // Check if stock is now low
+                        if (stockItem.quantity <= stockItem.minStock && stockItem.quantity > 0) {
+                            showNotification(`Peringatan: Stok "${stockItem.name}" menipis! Sisa: ${stockItem.quantity} ${stockItem.unit}`, 'warning');
+                        }
+                        
+                        // Check if stock is now out
+                        if (stockItem.quantity === 0) {
+                            showNotification(`Stok "${stockItem.name}" habis!`, 'error');
+                        }
+                    }
+                });
+            }
+        });
+        
+        // Update menu stock status
+        checkAndUpdateMenuStock();
+    }
+
     // --- ROUTING & NAVIGATION ---
     function showPage(pageId) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -3359,17 +4212,19 @@
             case 'order-status': renderOrderStatusPage(); break;
             case 'table-selection': renderTableSelection(); break;
             case 'table-order': renderTableOrder(); break;
+            case 'reservations': renderReservations(); break;
             case 'menu-management': renderMenuManagement(); break;
             case 'table-management': renderTableManagement(); break;
             case 'order-history': renderOrderHistory(); break;
             case 'user-management': renderUserManagement(); break;
-            case 'license': renderLicensePage(); break;
-            case 'inventory': renderInventoryManagement(); break;
+            case 'stock-opname': renderStockOpname(); break;
             case 'asset': renderAssetManagement(); break;
             case 'financial': renderFinancialManagement(); break;
             case 'payroll': renderPayrollManagement(); break;
             case 'shift': renderShiftManagement(); break;
             case 'branch': renderBranchManagement(); break;
+            case 'license': renderLicensePage(); break;
+            case 'settings': renderSettings(); break;
         }
     }
 
@@ -3572,15 +4427,102 @@
             ]
         };
 
+        // Reduce stock from inventory
+        reduceStockFromOrder(newOrder);
+
         state.orders.push(newOrder);
         state.currentOrder = { items: [], tableId: 0 };
         saveState();
         
         closeModal('payment-modal');
         showNotification(`Pembayaran ${method} sebesar Rp ${total.toLocaleString('id-ID')} berhasil!`, 'success');
+        
+        // Show print button for cash payments
+        if (method === 'Tunai') {
+            document.getElementById('print-receipt-btn').style.display = 'flex';
+        } else {
+            document.getElementById('print-receipt-btn').style.display = 'none';
+        }
+        
         renderPOS();
         renderDashboard();
         renderKDS();
+    }
+
+    function printReceipt() {
+        const total = parseInt(document.getElementById('modal-total').textContent.replace(/\D/g,''));
+        const method = document.getElementById('payment-method').value;
+        const paidAmount = parseInt(document.getElementById('payment-amount').value) || 0;
+        const change = paidAmount - total;
+        
+        const receiptContent = `
+            <div class="print-receipt">
+                <div class="print-receipt-header">
+                    <div class="print-receipt-title">DNT Network Cafe</div>
+                    <div class="print-receipt-subtitle">Jl. Sudirman No. 123</div>
+                    <div class="print-receipt-subtitle">Tel: 021-123456</div>
+                </div>
+                <div class="print-receipt-details">
+                    <div class="print-receipt-row">
+                        <span>Tanggal:</span>
+                        <span>${new Date().toLocaleDateString('id-ID')}</span>
+                    </div>
+                    <div class="print-receipt-row">
+                        <span>Kasir:</span>
+                        <span>${state.currentUser.name}</span>
+                    </div>
+                    <div class="print-receipt-row">
+                        <span>Meja:</span>
+                        <span>${state.currentOrder.tableId === 0 ? 'Take Away' : `Meja ${state.currentOrder.tableId}`}</span>
+                    </div>
+                </div>
+                <div class="print-receipt-divider"></div>
+                <div class="print-receipt-details">
+                    ${state.currentOrder.items.map(item => `
+                        <div class="print-receipt-row">
+                            <span>${item.name} x${item.quantity}</span>
+                            <span>Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="print-receipt-divider"></div>
+                <div class="print-receipt-details">
+                    <div class="print-receipt-row">
+                        <span>Subtotal:</span>
+                        <span>${document.getElementById('modal-subtotal').textContent}</span>
+                    </div>
+                    <div class="print-receipt-row">
+                        <span>Pajak (10%):</span>
+                        <span>${document.getElementById('modal-tax').textContent}</span>
+                    </div>
+                    <div class="print-receipt-row print-receipt-total">
+                        <span>Total:</span>
+                        <span>${document.getElementById('modal-total').textContent}</span>
+                    </div>
+                    ${method === 'Tunai' ? `
+                        <div class="print-receipt-row">
+                            <span>Tunai:</span>
+                            <span>Rp ${paidAmount.toLocaleString('id-ID')}</span>
+                        </div>
+                        <div class="print-receipt-row">
+                            <span>Kembalian:</span>
+                            <span>Rp ${change.toLocaleString('id-ID')}</span>
+                        </div>
+                    ` : ''}
+                </div>
+                <div class="print-receipt-footer">
+                    <div>Terima kasih atas kunjungan Anda</div>
+                    <div>Barang yang sudah dibeli tidak dapat dikembalikan</div>
+                </div>
+            </div>
+        `;
+        
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(receiptContent);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
     }
 
     // --- KDS SYSTEM ---
@@ -3887,6 +4829,9 @@
         const table = state.tables.find(t => t.id === state.tableOrder.tableId);
         if (table) table.status = 'occupied';
         
+        // Reduce stock from inventory
+        reduceStockFromOrder(newOrder);
+        
         state.orders.push(newOrder);
         state.tableOrder = { items: [], tableId: 1 };
         saveState();
@@ -3927,42 +4872,191 @@
         updateTableCart();
     }
 
-    // --- RIDE HAILING ---
-    function createRideHailingOrder(event) {
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        const items = formData.get('orderItems').split(',').map(i => i.trim());
-        const orderItems = items.map(itemText => {
-            const [quantity, ...nameParts] = itemText.split(' ');
-            const name = nameParts.join(' ');
-            return { name, quantity: parseInt(quantity), price: 25000 };
-        });
-
-        const total = orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        const priority = formData.get('priority');
+    // --- RESERVATION SYSTEM ---
+    function renderReservations() {
+        const container = document.getElementById('reservation-grid');
+        const reservations = state.reservations.sort((a, b) => new Date(a.date + ' ' + a.time) - new Date(b.date + ' ' + b.time));
         
-        const newOrder = {
-            id: Date.now(),
-            tableId: 0,
-            items: orderItems,
-            status: priority === 'high' ? 'dimasak' : 'baru',
-            total: total,
-            type: 'ride-hailing',
-            platform: formData.get('platform'),
-            driverName: formData.get('driverName'),
-            timestamp: new Date().toISOString(),
-            statusHistory: [
-                { status: priority === 'high' ? 'dimasak' : 'baru', timestamp: new Date().toISOString() }
-            ]
+        if (reservations.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada reservasi.</p>';
+        } else {
+            container.innerHTML = reservations.map(reservation => `
+                <div class="reservation-card">
+                    <div class="reservation-header">
+                        <div class="reservation-id">#${reservation.id}</div>
+                        <div class="reservation-status ${reservation.status}">${getReservationStatusLabel(reservation.status)}</div>
+                    </div>
+                    <div class="reservation-details">
+                        <div class="reservation-detail"><strong>Nama:</strong> ${reservation.name}</div>
+                        <div class="reservation-detail"><strong>Telepon:</strong> ${reservation.phone}</div>
+                        <div class="reservation-detail"><strong>Tanggal:</strong> ${new Date(reservation.date).toLocaleDateString('id-ID')}</div>
+                        <div class="reservation-detail"><strong>Waktu:</strong> ${reservation.time}</div>
+                        <div class="reservation-detail"><strong>Tamu:</strong> ${reservation.guests} orang</div>
+                        <div class="reservation-detail"><strong>Meja:</strong> Meja ${reservation.table}</div>
+                        ${reservation.notes ? `<div class="reservation-detail"><strong>Catatan:</strong> ${reservation.notes}</div>` : ''}
+                    </div>
+                    <div class="reservation-actions">
+                        ${reservation.status === 'pending' ? `
+                            <button class="btn btn-success" onclick="updateReservationStatus(${reservation.id}, 'confirmed')">Konfirmasi</button>
+                            <button class="btn btn-danger" onclick="updateReservationStatus(${reservation.id}, 'cancelled')">Batalkan</button>
+                        ` : ''}
+                        ${reservation.status === 'confirmed' ? `
+                            <button class="btn btn-danger" onclick="updateReservationStatus(${reservation.id}, 'cancelled')">Batalkan</button>
+                        ` : ''}
+                        <button class="btn btn-secondary" onclick="editReservation(${reservation.id})">Edit</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        lucide.createIcons();
+    }
+
+    function getReservationStatusLabel(status) {
+        const statusMap = {
+            'pending': 'Menunggu Konfirmasi',
+            'confirmed': 'Dikonfirmasi',
+            'cancelled': 'Dibatalkan'
+        };
+        return statusMap[status] || status;
+    }
+
+    function openReservationModal(reservationId = null) {
+        const modal = document.getElementById('reservation-modal');
+        const title = document.getElementById('reservation-modal-title');
+        const tableSelect = document.getElementById('reservation-table');
+        
+        // Populate table select
+        tableSelect.innerHTML = '<option value="">Pilih Meja</option>' +
+            state.tables.map(table => `<option value="${table.id}">Meja ${table.number} (Kapasitas: ${table.capacity})</option>`).join('');
+        
+        if (reservationId) {
+            const reservation = state.reservations.find(r => r.id === reservationId);
+            if (reservation) {
+                title.innerText = 'Edit Reservasi';
+                document.getElementById('reservation-id').value = reservation.id;
+                document.getElementById('reservation-name').value = reservation.name;
+                document.getElementById('reservation-phone').value = reservation.phone;
+                document.getElementById('reservation-email').value = reservation.email || '';
+                document.getElementById('reservation-date').value = reservation.date;
+                document.getElementById('reservation-time').value = reservation.time;
+                document.getElementById('reservation-guests').value = reservation.guests;
+                tableSelect.value = reservation.table;
+                document.getElementById('reservation-notes').value = reservation.notes || '';
+                document.getElementById('reservation-status').value = reservation.status;
+            }
+        } else {
+            title.innerText = 'Tambah Reservasi';
+            document.getElementById('reservation-form').reset();
+            document.getElementById('reservation-id').value = '';
+            // Set default date to today
+            document.getElementById('reservation-date').value = new Date().toISOString().split('T')[0];
+        }
+        
+        modal.style.display = 'flex';
+    }
+
+    function saveReservation(event) {
+        event.preventDefault();
+        
+        const reservationData = {
+            name: document.getElementById('reservation-name').value,
+            phone: document.getElementById('reservation-phone').value,
+            email: document.getElementById('reservation-email').value,
+            date: document.getElementById('reservation-date').value,
+            time: document.getElementById('reservation-time').value,
+            guests: parseInt(document.getElementById('reservation-guests').value),
+            table: parseInt(document.getElementById('reservation-table').value),
+            notes: document.getElementById('reservation-notes').value,
+            status: document.getElementById('reservation-status').value
         };
         
-        state.orders.push(newOrder);
-        saveState();
+        const reservationId = document.getElementById('reservation-id').value;
         
-        showNotification(`Pesanan dari ${formData.get('platform')} oleh ${formData.get('driverName')} telah dibuat!`, 'success');
-        event.target.reset();
-        renderDashboard();
-        renderKDS();
+        if (reservationId) {
+            const index = state.reservations.findIndex(r => r.id == reservationId);
+            if (index !== -1) {
+                state.reservations[index] = { ...state.reservations[index], ...reservationData };
+                showNotification('Reservasi berhasil diperbarui!', 'success');
+            }
+        } else {
+            state.reservations.push({
+                id: Date.now(),
+                ...reservationData
+            });
+            showNotification('Reservasi berhasil ditambahkan!', 'success');
+        }
+        
+        saveState();
+        closeModal('reservation-modal');
+        renderReservations();
+    }
+
+    function editReservation(reservationId) {
+        openReservationModal(reservationId);
+    }
+
+    function updateReservationStatus(reservationId, newStatus) {
+        const reservation = state.reservations.find(r => r.id === reservationId);
+        if (reservation) {
+            reservation.status = newStatus;
+            saveState();
+            showNotification(`Status reservasi #${reservationId} berhasil diperbarui menjadi ${getReservationStatusLabel(newStatus)}`, 'success');
+            renderReservations();
+        }
+    }
+
+    function filterReservations() {
+        const fromDate = document.getElementById('filter-reservation-date-from').value;
+        const toDate = document.getElementById('filter-reservation-date-to').value;
+        
+        let filteredReservations = state.reservations;
+        
+        if (fromDate) {
+            filteredReservations = filteredReservations.filter(reservation => 
+                reservation.date >= fromDate
+            );
+        }
+        
+        if (toDate) {
+            filteredReservations = filteredReservations.filter(reservation => 
+                reservation.date <= toDate
+            );
+        }
+        
+        const container = document.getElementById('reservation-grid');
+        
+        if (filteredReservations.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Tidak ada reservasi dalam rentang tanggal yang dipilih.</p>';
+        } else {
+            container.innerHTML = filteredReservations.map(reservation => `
+                <div class="reservation-card">
+                    <div class="reservation-header">
+                        <div class="reservation-id">#${reservation.id}</div>
+                        <div class="reservation-status ${reservation.status}">${getReservationStatusLabel(reservation.status)}</div>
+                    </div>
+                    <div class="reservation-details">
+                        <div class="reservation-detail"><strong>Nama:</strong> ${reservation.name}</div>
+                        <div class="reservation-detail"><strong>Telepon:</strong> ${reservation.phone}</div>
+                        <div class="reservation-detail"><strong>Tanggal:</strong> ${new Date(reservation.date).toLocaleDateString('id-ID')}</div>
+                        <div class="reservation-detail"><strong>Waktu:</strong> ${reservation.time}</div>
+                        <div class="reservation-detail"><strong>Tamu:</strong> ${reservation.guests} orang</div>
+                        <div class="reservation-detail"><strong>Meja:</strong> Meja ${reservation.table}</div>
+                        ${reservation.notes ? `<div class="reservation-detail"><strong>Catatan:</strong> ${reservation.notes}</div>` : ''}
+                    </div>
+                    <div class="reservation-actions">
+                        ${reservation.status === 'pending' ? `
+                            <button class="btn btn-success" onclick="updateReservationStatus(${reservation.id}, 'confirmed')">Konfirmasi</button>
+                            <button class="btn btn-danger" onclick="updateReservationStatus(${reservation.id}, 'cancelled')">Batalkan</button>
+                        ` : ''}
+                        ${reservation.status === 'confirmed' ? `
+                            <button class="btn btn-danger" onclick="updateReservationStatus(${reservation.id}, 'cancelled')">Batalkan</button>
+                        ` : ''}
+                        <button class="btn btn-secondary" onclick="editReservation(${reservation.id})">Edit</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        lucide.createIcons();
     }
 
     // --- ORDER STATUS ---
@@ -4105,6 +5199,12 @@
     function openMenuModal(itemId = null) {
         const modal = document.getElementById('menu-modal');
         const title = document.getElementById('menu-modal-title');
+        const ingredientsList = document.getElementById('menu-ingredients-list');
+        
+        // Populate ingredients list
+        if (!ingredientsList.innerHTML) {
+            addMenuIngredientField();
+        }
         
         if (itemId) {
             const menuItem = state.menu.find(item => item.id === itemId);
@@ -4121,15 +5221,79 @@
                     document.getElementById('menu-image-preview').innerHTML = 
                         `<img src="${menuItem.image}" alt="Preview" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px;">`;
                 }
+                
+                // Populate ingredients
+                ingredientsList.innerHTML = '';
+                if (menuItem.ingredients && menuItem.ingredients.length > 0) {
+                    menuItem.ingredients.forEach(ingredient => {
+                        addMenuIngredientField(ingredient);
+                    });
+                } else {
+                    addMenuIngredientField();
+                }
             }
         } else {
             title.innerText = 'Tambah Menu';
             document.getElementById('menu-form').reset();
             document.getElementById('menu-id').value = '';
             document.getElementById('menu-image-preview').innerHTML = '';
+            ingredientsList.innerHTML = '';
+            addMenuIngredientField();
         }
         
         modal.style.display = 'flex';
+    }
+
+    function addMenuIngredientField(existingIngredient = null) {
+        const ingredientsList = document.getElementById('menu-ingredients-list');
+        const ingredientId = Date.now();
+        
+        // Create stock options
+        const stockOptions = state.stockOpname.map(item => 
+            `<option value="${item.name}" ${existingIngredient && existingIngredient.name === item.name ? 'selected' : ''}>${item.name}</option>`
+        ).join('');
+        
+        const ingredientField = document.createElement('div');
+        ingredientField.className = 'form-group';
+        ingredientField.id = `ingredient-${ingredientId}`;
+        ingredientField.innerHTML = `
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <select style="flex: 2;" onchange="updateIngredientUnit(${ingredientId})">
+                    <option value="">Pilih Bahan</option>
+                    ${stockOptions}
+                </select>
+                <input type="number" placeholder="Jumlah" style="flex: 1;" min="0" step="0.01" value="${existingIngredient ? existingIngredient.quantity : ''}">
+                <span style="flex: 1;">${existingIngredient ? existingIngredient.unit : 'unit'}</span>
+                <button type="button" class="btn btn-danger" onclick="removeMenuIngredientField(${ingredientId})">
+                    <i data-lucide="trash-2"></i>
+                </button>
+            </div>
+        `;
+        
+        ingredientsList.appendChild(ingredientField);
+        lucide.createIcons();
+    }
+
+    function removeMenuIngredientField(ingredientId) {
+        const ingredientField = document.getElementById(`ingredient-${ingredientId}`);
+        if (ingredientField) {
+            ingredientField.remove();
+        }
+    }
+
+    function updateIngredientUnit(ingredientId) {
+        const ingredientField = document.getElementById(`ingredient-${ingredientId}`);
+        const select = ingredientField.querySelector('select');
+        const unitSpan = ingredientField.querySelector('span');
+        
+        if (select.value) {
+            const stockItem = state.stockOpname.find(item => item.name === select.value);
+            if (stockItem) {
+                unitSpan.textContent = stockItem.unit;
+            }
+        } else {
+            unitSpan.textContent = 'unit';
+        }
     }
 
     function saveMenuItem(event) {
@@ -4139,8 +5303,28 @@
             name: document.getElementById('menu-name').value,
             category: document.getElementById('menu-category').value,
             price: parseInt(document.getElementById('menu-price').value),
-            description: document.getElementById('menu-description').value
+            description: document.getElementById('menu-description').value,
+            ingredients: []
         };
+        
+        // Collect ingredients
+        const ingredientFields = document.querySelectorAll('#menu-ingredients-list > div');
+        ingredientFields.forEach(field => {
+            const select = field.querySelector('select');
+            const quantityInput = field.querySelector('input[type="number"]');
+            
+            if (select.value && quantityInput.value) {
+                const stockItem = state.stockOpname.find(item => item.name === select.value);
+                if (stockItem) {
+                    menuItem.ingredients.push({
+                        id: stockItem.id,
+                        name: stockItem.name,
+                        quantity: parseFloat(quantityInput.value),
+                        unit: stockItem.unit
+                    });
+                }
+            }
+        });
         
         const menuId = document.getElementById('menu-id').value;
         
@@ -4182,6 +5366,9 @@
             showNotification('Menu berhasil ditambahkan!', 'success');
         }
         
+        // Check if menu can be made with current stock
+        checkAndUpdateMenuStock();
+        
         saveState();
         closeModal('menu-modal');
         renderMenuManagement();
@@ -4219,7 +5406,9 @@
                         <button class="btn btn-secondary" onclick="editTable(${table.id})"><i data-lucide="edit"></i></button>
                         ${table.status === 'occupied' ? 
                             `<button class="btn btn-success" onclick="freeTable(${table.id})">Bebaskan</button>` : 
-                            `<button class="btn btn-danger" onclick="deleteTable(${table.id})"><i data-lucide="trash-2"></i></button>`
+                            (state.currentUser.role === 'owner' ? 
+                                `<button class="btn btn-danger" onclick="deleteTable(${table.id})"><i data-lucide="trash-2"></i></button>` : 
+                                '')
                         }
                     </div>
                 </div>
@@ -4237,7 +5426,6 @@
             if (table) {
                 title.innerText = 'Edit Meja';
                 document.getElementById('table-id').value = table.id;
-                document.getElementById('table-number').value = table.number;
                 document.getElementById('table-capacity').value = table.capacity;
                 document.getElementById('table-status').value = table.status;
             }
@@ -4253,10 +5441,9 @@
     function saveTable(event) {
         event.preventDefault();
         
-        if (!checkLicenseLimits()) return;
+        if (!checkLicenseLimits('table')) return;
         
         const tableData = {
-            number: parseInt(document.getElementById('table-number').value),
             capacity: parseInt(document.getElementById('table-capacity').value),
             status: document.getElementById('table-status').value
         };
@@ -4270,13 +5457,12 @@
                 showNotification('Meja berhasil diperbarui!', 'success');
             }
         } else {
-            if (state.tables.some(t => t.number === tableData.number)) {
-                showNotification('Nomor meja sudah ada!', 'error');
-                return;
-            }
+            // Auto-increment table number
+            const maxTableNumber = Math.max(...state.tables.map(t => t.number), 0);
             
             state.tables.push({
                 id: Date.now(),
+                number: maxTableNumber + 1,
                 ...tableData
             });
             showNotification('Meja berhasil ditambahkan!', 'success');
@@ -4294,6 +5480,11 @@
     }
 
     function deleteTable(tableId) {
+        if (state.currentUser.role !== 'owner') {
+            showNotification('Hanya owner yang dapat menghapus meja!', 'error');
+            return;
+        }
+        
         if (confirm('Apakah Anda yakin ingin menghapus meja ini?')) {
             state.tables = state.tables.filter(t => t.id !== tableId);
             saveState();
@@ -4393,7 +5584,7 @@
     function saveUser(event) {
         event.preventDefault();
         
-        if (!checkLicenseLimits()) return;
+        if (!checkLicenseLimits('user')) return;
         
         const userData = {
             name: document.getElementById('user-name-input').value,
@@ -4438,6 +5629,495 @@
             saveState();
             showNotification('Pengguna berhasil dihapus!', 'success');
             renderUserManagement();
+        }
+    }
+
+    // --- STOCK OPNAME (INVENTORY MANAGEMENT) ---
+    function renderStockOpname() {
+        renderLowStockAlerts();
+        renderStockOpnameTable();
+        renderStockOpnameGrid();
+        updateStockSummary();
+    }
+
+    function renderLowStockAlerts() {
+        const container = document.getElementById('low-stock-alerts');
+        const lowStockItems = state.stockOpname.filter(item => item.quantity <= item.minStock);
+        
+        if (lowStockItems.length === 0) {
+            container.innerHTML = '';
+        } else {
+            container.innerHTML = `
+                <div class="low-stock-alert">
+                    <div class="low-stock-alert-icon">
+                        <i data-lucide="alert-triangle"></i>
+                    </div>
+                    <div class="low-stock-alert-content">
+                        <div class="low-stock-alert-title">Peringatan Stok Menipis</div>
+                        <div class="low-stock-alert-text">
+                            ${lowStockItems.length} item dengan stok rendah: ${lowStockItems.map(item => item.name).join(', ')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+    }
+
+    function renderStockOpnameTable() {
+        const tableBody = document.getElementById('stock-opname-table-body');
+        
+        if (state.stockOpname.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center; color: var(--text-secondary);">Belum ada barang.</td></tr>';
+        } else {
+            tableBody.innerHTML = state.stockOpname.map(item => {
+                let statusClass = 'status-good';
+                let statusText = 'Stok Aman';
+                
+                if (item.quantity <= 0) {
+                    statusClass = 'status-out';
+                    statusText = 'Habis';
+                } else if (item.quantity <= item.minStock) {
+                    statusClass = 'status-low';
+                    statusText = 'Stok Rendah';
+                }
+                
+                return `
+                    <tr>
+                        <td>${item.code}</td>
+                        <td>${item.name}</td>
+                        <td>${item.category}</td>
+                        <td>${item.quantity} ${item.unit}</td>
+                        <td>${item.unit}</td>
+                        <td>${item.minStock} ${item.unit}</td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <div class="stock-opname-status-indicator ${statusClass}"></div>
+                                <div>${statusText}</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-secondary" onclick="editStockOpnameItem(${item.id})" style="padding: 0.25rem 0.5rem;">
+                                    <i data-lucide="edit" style="width: 14px; height: 14px;"></i>
+                                </button>
+                                <button class="btn btn-danger" onclick="deleteStockOpnameItem(${item.id})" style="padding: 0.25rem 0.5rem;">
+                                    <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+    }
+
+    function updateStockSummary() {
+        const totalItems = state.stockOpname.length;
+        const goodStock = state.stockOpname.filter(item => item.quantity > item.minStock).length;
+        const lowStock = state.stockOpname.filter(item => item.quantity > 0 && item.quantity <= item.minStock).length;
+        const outStock = state.stockOpname.filter(item => item.quantity <= 0).length;
+        
+        document.getElementById('total-items').textContent = totalItems;
+        document.getElementById('good-stock').textContent = goodStock;
+        document.getElementById('low-stock').textContent = lowStock;
+        document.getElementById('out-stock').textContent = outStock;
+    }
+
+    function renderStockOpnameGrid() {
+        const stockOpnameGrid = document.getElementById('stock-opname-grid');
+        if (state.stockOpname.length === 0) {
+            stockOpnameGrid.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada barang.</p>';
+        } else {
+            stockOpnameGrid.innerHTML = state.stockOpname.map(item => {
+                let statusClass = 'status-good';
+                let statusText = 'Stok Aman';
+                
+                if (item.quantity <= 0) {
+                    statusClass = 'status-out';
+                    statusText = 'Habis';
+                } else if (item.quantity <= item.minStock) {
+                    statusClass = 'status-low';
+                    statusText = 'Stok Rendah';
+                }
+                
+                return `
+                    <div class="stock-opname-card">
+                        <div class="stock-opname-header">
+                            <div class="stock-opname-name">${item.name}</div>
+                            <div class="stock-opname-category">${item.category}</div>
+                        </div>
+                        <div class="stock-opname-details">
+                            <div class="stock-opname-detail">
+                                <span class="stock-opname-detail-label">Stok Saat Ini:</span>
+                                <span class="stock-opname-detail-value">${item.quantity} ${item.unit}</span>
+                            </div>
+                            <div class="stock-opname-detail">
+                                <span class="stock-opname-detail-label">Stok Minimum:</span>
+                                <span class="stock-opname-detail-value">${item.minStock} ${item.unit}</span>
+                            </div>
+                            <div class="stock-opname-detail">
+                                <span class="stock-opname-detail-label">Harga Beli:</span>
+                                <span class="stock-opname-detail-value">Rp ${item.price.toLocaleString('id-ID')}</span>
+                            </div>
+                            <div class="stock-opname-detail">
+                                <span class="stock-opname-detail-label">Supplier:</span>
+                                <span class="stock-opname-detail-value">${item.supplier || '-'}</span>
+                            </div>
+                        </div>
+                        <div class="stock-opname-status">
+                            <div class="stock-opname-status-indicator ${statusClass}"></div>
+                            <div>${statusText}</div>
+                        </div>
+                        <div class="stock-opname-actions">
+                            <button class="btn btn-secondary" onclick="editStockOpnameItem(${item.id})" style="flex-grow: 1;">
+                                <i data-lucide="edit"></i> Edit
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteStockOpnameItem(${item.id})" style="flex-grow: 1;">
+                                <i data-lucide="trash-2"></i> Hapus
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        lucide.createIcons();
+    }
+
+    function filterStockOpnameByCategory(category, button) {
+        document.querySelectorAll('#stock-opname-category-tabs .category-tab').forEach(tab => tab.classList.remove('active'));
+        button.classList.add('active');
+        
+        const stockOpnameGrid = document.getElementById('stock-opname-grid');
+        const itemsToRender = category === 'all' ? state.stockOpname : state.stockOpname.filter(item => item.category === category);
+        
+        if (itemsToRender.length === 0) {
+            stockOpnameGrid.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Tidak ada barang dalam kategori ini.</p>';
+        } else {
+            stockOpnameGrid.innerHTML = itemsToRender.map(item => {
+                let statusClass = 'status-good';
+                let statusText = 'Stok Aman';
+                
+                if (item.quantity <= 0) {
+                    statusClass = 'status-out';
+                    statusText = 'Habis';
+                } else if (item.quantity <= item.minStock) {
+                    statusClass = 'status-low';
+                    statusText = 'Stok Rendah';
+                }
+                
+                return `
+                    <div class="stock-opname-card">
+                        <div class="stock-opname-header">
+                            <div class="stock-opname-name">${item.name}</div>
+                            <div class="stock-opname-category">${item.category}</div>
+                        </div>
+                        <div class="stock-opname-details">
+                            <div class="stock-opname-detail">
+                                <span class="stock-opname-detail-label">Stok Saat Ini:</span>
+                                <span class="stock-opname-detail-value">${item.quantity} ${item.unit}</span>
+                            </div>
+                            <div class="stock-opname-detail">
+                                <span class="stock-opname-detail-label">Stok Minimum:</span>
+                                <span class="stock-opname-detail-value">${item.minStock} ${item.unit}</span>
+                            </div>
+                            <div class="stock-opname-detail">
+                                <span class="stock-opname-detail-label">Harga Beli:</span>
+                                <span class="stock-opname-detail-value">Rp ${item.price.toLocaleString('id-ID')}</span>
+                            </div>
+                            <div class="stock-opname-detail">
+                                <span class="stock-opname-detail-label">Supplier:</span>
+                                <span class="stock-opname-detail-value">${item.supplier || '-'}</span>
+                            </div>
+                        </div>
+                        <div class="stock-opname-status">
+                            <div class="stock-opname-status-indicator ${statusClass}"></div>
+                            <div>${statusText}</div>
+                        </div>
+                        <div class="stock-opname-actions">
+                            <button class="btn btn-secondary" onclick="editStockOpnameItem(${item.id})" style="flex-grow: 1;">
+                                <i data-lucide="edit"></i> Edit
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteStockOpnameItem(${item.id})" style="flex-grow: 1;">
+                                <i data-lucide="trash-2"></i> Hapus
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        lucide.createIcons();
+    }
+
+    function openStockOpnameModal(itemId = null) {
+        const modal = document.getElementById('stock-opname-modal');
+        const title = document.getElementById('stock-opname-modal-title');
+        
+        if (itemId) {
+            const item = state.stockOpname.find(i => i.id === itemId);
+            if (item) {
+                title.innerText = 'Edit Barang';
+                document.getElementById('stock-opname-id').value = item.id;
+                document.getElementById('stock-opname-code').value = item.code;
+                document.getElementById('stock-opname-name').value = item.name;
+                document.getElementById('stock-opname-category').value = item.category;
+                document.getElementById('stock-opname-quantity').value = item.quantity;
+                document.getElementById('stock-opname-unit').value = item.unit;
+                document.getElementById('stock-opname-min-stock').value = item.minStock;
+                document.getElementById('stock-opname-price').value = item.price;
+                document.getElementById('stock-opname-supplier').value = item.supplier || '';
+            }
+        } else {
+            title.innerText = 'Tambah Barang';
+            document.getElementById('stock-opname-form').reset();
+            document.getElementById('stock-opname-id').value = '';
+            // Auto-generate item code
+            const maxCode = Math.max(...state.stockOpname.map(item => {
+                const codeNum = parseInt(item.code.replace(/\D/g, ''));
+                return isNaN(codeNum) ? 0 : codeNum;
+            }), 0);
+            document.getElementById('stock-opname-code').value = `IT${String(maxCode + 1).padStart(3, '0')}`;
+        }
+        
+        modal.style.display = 'flex';
+    }
+
+    function saveStockOpnameItem(event) {
+        event.preventDefault();
+        
+        const itemData = {
+            code: document.getElementById('stock-opname-code').value,
+            name: document.getElementById('stock-opname-name').value,
+            category: document.getElementById('stock-opname-category').value,
+            quantity: parseInt(document.getElementById('stock-opname-quantity').value),
+            unit: document.getElementById('stock-opname-unit').value,
+            minStock: parseInt(document.getElementById('stock-opname-min-stock').value),
+            price: parseInt(document.getElementById('stock-opname-price').value),
+            supplier: document.getElementById('stock-opname-supplier').value
+        };
+        
+        const itemId = document.getElementById('stock-opname-id').value;
+        
+        if (itemId) {
+            const index = state.stockOpname.findIndex(item => item.id == itemId);
+            if (index !== -1) {
+                state.stockOpname[index] = { ...state.stockOpname[index], ...itemData };
+                showNotification('Barang berhasil diperbarui!', 'success');
+            }
+        } else {
+            state.stockOpname.push({
+                id: Date.now(),
+                ...itemData
+            });
+            showNotification('Barang berhasil ditambahkan!', 'success');
+        }
+        
+        // Check if menu items can be made with updated stock
+        checkAndUpdateMenuStock();
+        
+        saveState();
+        closeModal('stock-opname-modal');
+        renderStockOpname();
+    }
+
+    function editStockOpnameItem(itemId) {
+        openStockOpnameModal(itemId);
+    }
+
+    function deleteStockOpnameItem(itemId) {
+        if (confirm('Apakah Anda yakin ingin menghapus barang ini?')) {
+            state.stockOpname = state.stockOpname.filter(item => item.id !== itemId);
+            saveState();
+            showNotification('Barang berhasil dihapus!', 'success');
+            renderStockOpname();
+        }
+    }
+
+    // --- ASSET MANAGEMENT ---
+    function renderAssetManagement() {
+        renderAssetGrid();
+    }
+
+    function renderAssetGrid() {
+        const assetGrid = document.getElementById('asset-grid');
+        if (state.assets.length === 0) {
+            assetGrid.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada aset.</p>';
+        } else {
+            assetGrid.innerHTML = state.assets.map(asset => `
+                <div class="asset-card">
+                    ${asset.image ? `<img src="${asset.image}" alt="${asset.name}" class="asset-image">` : ''}
+                    <div class="asset-name">${asset.name}</div>
+                    <div class="asset-category">${asset.category}</div>
+                    <div class="asset-details">
+                        <div>Jumlah: ${asset.quantity} ${asset.lostQuantity > 0 ? `(${asset.lostQuantity} hilang)` : ''}</div>
+                        <div>Tanggal Beli: ${new Date(asset.purchaseDate).toLocaleDateString('id-ID')}</div>
+                    </div>
+                    <div class="asset-details">
+                        <div>Harga: Rp ${asset.price.toLocaleString('id-ID')}</div>
+                        <div>Nilai Saat Ini: Rp ${asset.currentValue.toLocaleString('id-ID')}</div>
+                    </div>
+                    <div class="asset-details">
+                        <div>Lokasi: ${asset.location}</div>
+                        <div>Status: ${asset.status}</div>
+                    </div>
+                    <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                        <button class="btn btn-secondary" onclick="editAsset(${asset.id})" style="flex-grow: 1;">
+                            <i data-lucide="edit"></i> Edit
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteAsset(${asset.id})" style="flex-grow: 1;">
+                            <i data-lucide="trash-2"></i> Hapus
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        lucide.createIcons();
+    }
+
+    function filterAssetsByCategory(category, button) {
+        document.querySelectorAll('#asset-category-tabs .category-tab').forEach(tab => tab.classList.remove('active'));
+        button.classList.add('active');
+        
+        const assetGrid = document.getElementById('asset-grid');
+        const assetsToRender = category === 'all' ? state.assets : state.assets.filter(asset => asset.category === category);
+        
+        if (assetsToRender.length === 0) {
+            assetGrid.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Tidak ada aset dalam kategori ini.</p>';
+        } else {
+            assetGrid.innerHTML = assetsToRender.map(asset => `
+                <div class="asset-card">
+                    ${asset.image ? `<img src="${asset.image}" alt="${asset.name}" class="asset-image">` : ''}
+                    <div class="asset-name">${asset.name}</div>
+                    <div class="asset-category">${asset.category}</div>
+                    <div class="asset-details">
+                        <div>Jumlah: ${asset.quantity} ${asset.lostQuantity > 0 ? `(${asset.lostQuantity} hilang)` : ''}</div>
+                        <div>Tanggal Beli: ${new Date(asset.purchaseDate).toLocaleDateString('id-ID')}</div>
+                    </div>
+                    <div class="asset-details">
+                        <div>Harga: Rp ${asset.price.toLocaleString('id-ID')}</div>
+                        <div>Nilai Saat Ini: Rp ${asset.currentValue.toLocaleString('id-ID')}</div>
+                    </div>
+                    <div class="asset-details">
+                        <div>Lokasi: ${asset.location}</div>
+                        <div>Status: ${asset.status}</div>
+                    </div>
+                    <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                        <button class="btn btn-secondary" onclick="editAsset(${asset.id})" style="flex-grow: 1;">
+                            <i data-lucide="edit"></i> Edit
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteAsset(${asset.id})" style="flex-grow: 1;">
+                            <i data-lucide="trash-2"></i> Hapus
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        lucide.createIcons();
+    }
+
+    function openAssetModal(assetId = null) {
+        const modal = document.getElementById('asset-modal');
+        const title = document.getElementById('asset-modal-title');
+        
+        if (assetId) {
+            const asset = state.assets.find(a => a.id === assetId);
+            if (asset) {
+                title.innerText = 'Edit Aset';
+                document.getElementById('asset-id').value = asset.id;
+                document.getElementById('asset-name').value = asset.name;
+                document.getElementById('asset-category').value = asset.category;
+                document.getElementById('asset-quantity').value = asset.quantity;
+                document.getElementById('asset-purchase-date').value = asset.purchaseDate;
+                document.getElementById('asset-price').value = asset.price;
+                document.getElementById('asset-current-value').value = asset.currentValue;
+                document.getElementById('asset-location').value = asset.location;
+                document.getElementById('asset-status').value = asset.status;
+                document.getElementById('asset-lost-quantity').value = asset.lostQuantity || 0;
+                
+                // Show image preview if exists
+                if (asset.image) {
+                    document.getElementById('asset-image-preview').innerHTML = 
+                        `<img src="${asset.image}" alt="Preview" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px;">`;
+                }
+            }
+        } else {
+            title.innerText = 'Tambah Aset';
+            document.getElementById('asset-form').reset();
+            document.getElementById('asset-id').value = '';
+            document.getElementById('asset-image-preview').innerHTML = '';
+        }
+        
+        modal.style.display = 'flex';
+    }
+
+    function saveAsset(event) {
+        event.preventDefault();
+        
+        const assetData = {
+            name: document.getElementById('asset-name').value,
+            category: document.getElementById('asset-category').value,
+            quantity: parseInt(document.getElementById('asset-quantity').value),
+            purchaseDate: document.getElementById('asset-purchase-date').value,
+            price: parseInt(document.getElementById('asset-price').value),
+            currentValue: parseInt(document.getElementById('asset-current-value').value),
+            location: document.getElementById('asset-location').value,
+            status: document.getElementById('asset-status').value,
+            lostQuantity: parseInt(document.getElementById('asset-lost-quantity').value) || 0
+        };
+        
+        const assetId = document.getElementById('asset-id').value;
+        
+        // Handle image upload
+        const imageInput = document.getElementById('asset-image');
+        if (imageInput.files && imageInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                assetData.image = e.target.result;
+                saveAssetData(assetId, assetData);
+            };
+            reader.readAsDataURL(imageInput.files[0]);
+        } else {
+            // Keep existing image if editing
+            if (assetId) {
+                const existingAsset = state.assets.find(asset => asset.id == assetId);
+                if (existingAsset && existingAsset.image) {
+                    assetData.image = existingAsset.image;
+                }
+            }
+            saveAssetData(assetId, assetData);
+        }
+    }
+
+    function saveAssetData(assetId, assetData) {
+        if (assetId) {
+            const index = state.assets.findIndex(asset => asset.id == assetId);
+            if (index !== -1) {
+                state.assets[index] = { ...state.assets[index], ...assetData };
+                showNotification('Aset berhasil diperbarui!', 'success');
+            }
+        } else {
+            state.assets.push({
+                id: Date.now(),
+                ...assetData
+            });
+            showNotification('Aset berhasil ditambahkan!', 'success');
+        }
+        
+        saveState();
+        closeModal('asset-modal');
+        renderAssetManagement();
+    }
+
+    function editAsset(assetId) {
+        openAssetModal(assetId);
+    }
+
+    function deleteAsset(assetId) {
+        if (confirm('Apakah Anda yakin ingin menghapus aset ini?')) {
+            state.assets = state.assets.filter(asset => asset.id !== assetId);
+            saveState();
+            showNotification('Aset berhasil dihapus!', 'success');
+            renderAssetManagement();
         }
     }
 
@@ -4668,400 +6348,6 @@
         }
     }
 
-    // --- INVENTORY MANAGEMENT ---
-    function renderInventoryManagement() {
-        renderLowStockAlerts();
-        renderInventoryGrid();
-    }
-
-    function renderLowStockAlerts() {
-        const container = document.getElementById('low-stock-alerts');
-        const lowStockItems = state.inventory.filter(item => item.quantity <= item.minStock);
-        
-        if (lowStockItems.length === 0) {
-            container.innerHTML = '';
-        } else {
-            container.innerHTML = `
-                <div class="low-stock-alert">
-                    <div class="low-stock-alert-icon">
-                        <i data-lucide="alert-triangle"></i>
-                    </div>
-                    <div class="low-stock-alert-content">
-                        <div class="low-stock-alert-title">Peringatan Stok Menipis</div>
-                        <div class="low-stock-alert-text">
-                            ${lowStockItems.length} item dengan stok rendah: ${lowStockItems.map(item => item.name).join(', ')}
-                        </div>
-                    </div>
-                </div>
-            `;
-            lucide.createIcons();
-        }
-    }
-
-    function renderInventoryGrid() {
-        const inventoryGrid = document.getElementById('inventory-grid');
-        if (state.inventory.length === 0) {
-            inventoryGrid.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada barang.</p>';
-        } else {
-            inventoryGrid.innerHTML = state.inventory.map(item => {
-                let statusClass = 'status-good';
-                let statusText = 'Stok Aman';
-                
-                if (item.quantity <= 0) {
-                    statusClass = 'status-out';
-                    statusText = 'Habis';
-                } else if (item.quantity <= item.minStock) {
-                    statusClass = 'status-low';
-                    statusText = 'Stok Rendah';
-                }
-                
-                return `
-                    <div class="inventory-item-card">
-                        <div class="inventory-item-header">
-                            <div class="inventory-item-name">${item.name}</div>
-                            <div class="inventory-item-quantity">${item.quantity} ${item.unit}</div>
-                        </div>
-                        <div class="inventory-item-status">
-                            <div class="status-indicator ${statusClass}"></div>
-                            <div>${statusText}</div>
-                        </div>
-                        <div class="inventory-item-details">
-                            <div>Kategori: ${item.category}</div>
-                            <div>Min. Stok: ${item.minStock} ${item.unit}</div>
-                        </div>
-                        <div class="inventory-item-details">
-                            <div>Harga: Rp ${item.price.toLocaleString('id-ID')}</div>
-                            <div>Total: Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</div>
-                        </div>
-                        <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                            <button class="btn btn-secondary" onclick="editInventoryItem(${item.id})" style="flex-grow: 1;">
-                                <i data-lucide="edit"></i> Edit
-                            </button>
-                            <button class="btn btn-danger" onclick="deleteInventoryItem(${item.id})" style="flex-grow: 1;">
-                                <i data-lucide="trash-2"></i> Hapus
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-        lucide.createIcons();
-    }
-
-    function filterInventoryByCategory(category, button) {
-        document.querySelectorAll('#inventory-category-tabs .category-tab').forEach(tab => tab.classList.remove('active'));
-        button.classList.add('active');
-        
-        const inventoryGrid = document.getElementById('inventory-grid');
-        const itemsToRender = category === 'all' ? state.inventory : state.inventory.filter(item => item.category === category);
-        
-        if (itemsToRender.length === 0) {
-            inventoryGrid.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Tidak ada barang dalam kategori ini.</p>';
-        } else {
-            inventoryGrid.innerHTML = itemsToRender.map(item => {
-                let statusClass = 'status-good';
-                let statusText = 'Stok Aman';
-                
-                if (item.quantity <= 0) {
-                    statusClass = 'status-out';
-                    statusText = 'Habis';
-                } else if (item.quantity <= item.minStock) {
-                    statusClass = 'status-low';
-                    statusText = 'Stok Rendah';
-                }
-                
-                return `
-                    <div class="inventory-item-card">
-                        <div class="inventory-item-header">
-                            <div class="inventory-item-name">${item.name}</div>
-                            <div class="inventory-item-quantity">${item.quantity} ${item.unit}</div>
-                        </div>
-                        <div class="inventory-item-status">
-                            <div class="status-indicator ${statusClass}"></div>
-                            <div>${statusText}</div>
-                        </div>
-                        <div class="inventory-item-details">
-                            <div>Kategori: ${item.category}</div>
-                            <div>Min. Stok: ${item.minStock} ${item.unit}</div>
-                        </div>
-                        <div class="inventory-item-details">
-                            <div>Harga: Rp ${item.price.toLocaleString('id-ID')}</div>
-                            <div>Total: Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</div>
-                        </div>
-                        <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                            <button class="btn btn-secondary" onclick="editInventoryItem(${item.id})" style="flex-grow: 1;">
-                                <i data-lucide="edit"></i> Edit
-                            </button>
-                            <button class="btn btn-danger" onclick="deleteInventoryItem(${item.id})" style="flex-grow: 1;">
-                                <i data-lucide="trash-2"></i> Hapus
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-        lucide.createIcons();
-    }
-
-    function openInventoryModal(itemId = null) {
-        const modal = document.getElementById('inventory-modal');
-        const title = document.getElementById('inventory-modal-title');
-        
-        if (itemId) {
-            const item = state.inventory.find(i => i.id === itemId);
-            if (item) {
-                title.innerText = 'Edit Barang';
-                document.getElementById('inventory-id').value = item.id;
-                document.getElementById('inventory-name').value = item.name;
-                document.getElementById('inventory-category').value = item.category;
-                document.getElementById('inventory-quantity').value = item.quantity;
-                document.getElementById('inventory-unit').value = item.unit;
-                document.getElementById('inventory-min-stock').value = item.minStock;
-                document.getElementById('inventory-price').value = item.price;
-            }
-        } else {
-            title.innerText = 'Tambah Barang';
-            document.getElementById('inventory-form').reset();
-            document.getElementById('inventory-id').value = '';
-        }
-        
-        modal.style.display = 'flex';
-    }
-
-    function saveInventoryItem(event) {
-        event.preventDefault();
-        
-        const itemData = {
-            name: document.getElementById('inventory-name').value,
-            category: document.getElementById('inventory-category').value,
-            quantity: parseInt(document.getElementById('inventory-quantity').value),
-            unit: document.getElementById('inventory-unit').value,
-            minStock: parseInt(document.getElementById('inventory-min-stock').value),
-            price: parseInt(document.getElementById('inventory-price').value)
-        };
-        
-        const itemId = document.getElementById('inventory-id').value;
-        
-        if (itemId) {
-            const index = state.inventory.findIndex(item => item.id == itemId);
-            if (index !== -1) {
-                state.inventory[index] = { ...state.inventory[index], ...itemData };
-                showNotification('Barang berhasil diperbarui!', 'success');
-            }
-        } else {
-            state.inventory.push({
-                id: Date.now(),
-                ...itemData
-            });
-            showNotification('Barang berhasil ditambahkan!', 'success');
-        }
-        
-        saveState();
-        closeModal('inventory-modal');
-        renderInventoryManagement();
-    }
-
-    function editInventoryItem(itemId) {
-        openInventoryModal(itemId);
-    }
-
-    function deleteInventoryItem(itemId) {
-        if (confirm('Apakah Anda yakin ingin menghapus barang ini?')) {
-            state.inventory = state.inventory.filter(item => item.id !== itemId);
-            saveState();
-            showNotification('Barang berhasil dihapus!', 'success');
-            renderInventoryManagement();
-        }
-    }
-
-    // --- ASSET MANAGEMENT ---
-    function renderAssetManagement() {
-        renderAssetGrid();
-    }
-
-    function renderAssetGrid() {
-        const assetGrid = document.getElementById('asset-grid');
-        if (state.assets.length === 0) {
-            assetGrid.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada aset.</p>';
-        } else {
-            assetGrid.innerHTML = state.assets.map(asset => `
-                <div class="asset-card">
-                    ${asset.image ? `<img src="${asset.image}" alt="${asset.name}" class="asset-image">` : ''}
-                    <div class="asset-name">${asset.name}</div>
-                    <div class="asset-category">${asset.category}</div>
-                    <div class="asset-details">
-                        <div>Jumlah: ${asset.quantity} ${asset.lostQuantity > 0 ? `(${asset.lostQuantity} hilang)` : ''}</div>
-                        <div>Tanggal Beli: ${new Date(asset.purchaseDate).toLocaleDateString('id-ID')}</div>
-                    </div>
-                    <div class="asset-details">
-                        <div>Harga: Rp ${asset.price.toLocaleString('id-ID')}</div>
-                        <div>Nilai Saat Ini: Rp ${asset.currentValue.toLocaleString('id-ID')}</div>
-                    </div>
-                    <div class="asset-details">
-                        <div>Lokasi: ${asset.location}</div>
-                        <div>Status: ${asset.status}</div>
-                    </div>
-                    <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                        <button class="btn btn-secondary" onclick="editAsset(${asset.id})" style="flex-grow: 1;">
-                            <i data-lucide="edit"></i> Edit
-                        </button>
-                        <button class="btn btn-danger" onclick="deleteAsset(${asset.id})" style="flex-grow: 1;">
-                            <i data-lucide="trash-2"></i> Hapus
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
-        lucide.createIcons();
-    }
-
-    function filterAssetsByCategory(category, button) {
-        document.querySelectorAll('#asset-category-tabs .category-tab').forEach(tab => tab.classList.remove('active'));
-        button.classList.add('active');
-        
-        const assetGrid = document.getElementById('asset-grid');
-        const assetsToRender = category === 'all' ? state.assets : state.assets.filter(asset => asset.category === category);
-        
-        if (assetsToRender.length === 0) {
-            assetGrid.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Tidak ada aset dalam kategori ini.</p>';
-        } else {
-            assetGrid.innerHTML = assetsToRender.map(asset => `
-                <div class="asset-card">
-                    ${asset.image ? `<img src="${asset.image}" alt="${asset.name}" class="asset-image">` : ''}
-                    <div class="asset-name">${asset.name}</div>
-                    <div class="asset-category">${asset.category}</div>
-                    <div class="asset-details">
-                        <div>Jumlah: ${asset.quantity} ${asset.lostQuantity > 0 ? `(${asset.lostQuantity} hilang)` : ''}</div>
-                        <div>Tanggal Beli: ${new Date(asset.purchaseDate).toLocaleDateString('id-ID')}</div>
-                    </div>
-                    <div class="asset-details">
-                        <div>Harga: Rp ${asset.price.toLocaleString('id-ID')}</div>
-                        <div>Nilai Saat Ini: Rp ${asset.currentValue.toLocaleString('id-ID')}</div>
-                    </div>
-                    <div class="asset-details">
-                        <div>Lokasi: ${asset.location}</div>
-                        <div>Status: ${asset.status}</div>
-                    </div>
-                    <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                        <button class="btn btn-secondary" onclick="editAsset(${asset.id})" style="flex-grow: 1;">
-                            <i data-lucide="edit"></i> Edit
-                        </button>
-                        <button class="btn btn-danger" onclick="deleteAsset(${asset.id})" style="flex-grow: 1;">
-                            <i data-lucide="trash-2"></i> Hapus
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
-        lucide.createIcons();
-    }
-
-    function openAssetModal(assetId = null) {
-        const modal = document.getElementById('asset-modal');
-        const title = document.getElementById('asset-modal-title');
-        
-        if (assetId) {
-            const asset = state.assets.find(a => a.id === assetId);
-            if (asset) {
-                title.innerText = 'Edit Aset';
-                document.getElementById('asset-id').value = asset.id;
-                document.getElementById('asset-name').value = asset.name;
-                document.getElementById('asset-category').value = asset.category;
-                document.getElementById('asset-quantity').value = asset.quantity;
-                document.getElementById('asset-purchase-date').value = asset.purchaseDate;
-                document.getElementById('asset-price').value = asset.price;
-                document.getElementById('asset-current-value').value = asset.currentValue;
-                document.getElementById('asset-location').value = asset.location;
-                document.getElementById('asset-status').value = asset.status;
-                document.getElementById('asset-lost-quantity').value = asset.lostQuantity || 0;
-                
-                // Show image preview if exists
-                if (asset.image) {
-                    document.getElementById('asset-image-preview').innerHTML = 
-                        `<img src="${asset.image}" alt="Preview" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px;">`;
-                }
-            }
-        } else {
-            title.innerText = 'Tambah Aset';
-            document.getElementById('asset-form').reset();
-            document.getElementById('asset-id').value = '';
-            document.getElementById('asset-image-preview').innerHTML = '';
-        }
-        
-        modal.style.display = 'flex';
-    }
-
-    function saveAsset(event) {
-        event.preventDefault();
-        
-        const assetData = {
-            name: document.getElementById('asset-name').value,
-            category: document.getElementById('asset-category').value,
-            quantity: parseInt(document.getElementById('asset-quantity').value),
-            purchaseDate: document.getElementById('asset-purchase-date').value,
-            price: parseInt(document.getElementById('asset-price').value),
-            currentValue: parseInt(document.getElementById('asset-current-value').value),
-            location: document.getElementById('asset-location').value,
-            status: document.getElementById('asset-status').value,
-            lostQuantity: parseInt(document.getElementById('asset-lost-quantity').value) || 0
-        };
-        
-        const assetId = document.getElementById('asset-id').value;
-        
-        // Handle image upload
-        const imageInput = document.getElementById('asset-image');
-        if (imageInput.files && imageInput.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                assetData.image = e.target.result;
-                saveAssetData(assetId, assetData);
-            };
-            reader.readAsDataURL(imageInput.files[0]);
-        } else {
-            // Keep existing image if editing
-            if (assetId) {
-                const existingAsset = state.assets.find(asset => asset.id == assetId);
-                if (existingAsset && existingAsset.image) {
-                    assetData.image = existingAsset.image;
-                }
-            }
-            saveAssetData(assetId, assetData);
-        }
-    }
-
-    function saveAssetData(assetId, assetData) {
-        if (assetId) {
-            const index = state.assets.findIndex(asset => asset.id == assetId);
-            if (index !== -1) {
-                state.assets[index] = { ...state.assets[index], ...assetData };
-                showNotification('Aset berhasil diperbarui!', 'success');
-            }
-        } else {
-            state.assets.push({
-                id: Date.now(),
-                ...assetData
-            });
-            showNotification('Aset berhasil ditambahkan!', 'success');
-        }
-        
-        saveState();
-        closeModal('asset-modal');
-        renderAssetManagement();
-    }
-
-    function editAsset(assetId) {
-        openAssetModal(assetId);
-    }
-
-    function deleteAsset(assetId) {
-        if (confirm('Apakah Anda yakin ingin menghapus aset ini?')) {
-            state.assets = state.assets.filter(asset => asset.id !== assetId);
-            saveState();
-            showNotification('Aset berhasil dihapus!', 'success');
-            renderAssetManagement();
-        }
-    }
-
     // --- FINANCIAL MANAGEMENT ---
     function renderFinancialManagement() {
         renderFinancialSummary();
@@ -5241,7 +6527,7 @@
                     <div>
                         <div style="font-weight: 600;">${transaction.category}</div>
                         <div style="font-size: 0.875rem; color: var(--text-secondary);">
-                            ${new Date(transaction.date).toLocaleDateString('id-ID')} • ${transaction.description || '-'}</div>
+                            ${new Date(transaction.date).toLocaleDateString('id-ID')} • ${transaction.description || '-'}
                         </div>
                     </div>
                     <div style="text-align: right;">
@@ -5285,6 +6571,75 @@
 
     // --- PAYROLL MANAGEMENT ---
     function renderPayrollManagement() {
+        renderPayrollTable();
+        renderPayrollGrid();
+        updatePayrollSummary();
+    }
+
+    function renderPayrollTable() {
+        const tableBody = document.getElementById('payroll-table-body');
+        const employees = state.users.filter(u => u.role !== 'owner');
+        
+        if (state.payroll.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="10" style="text-align:center; color: var(--text-secondary);">Belum ada data gaji.</td></tr>';
+        } else {
+            tableBody.innerHTML = state.payroll.map(payroll => {
+                const employee = employees.find(e => e.id === payroll.employeeId);
+                if (!employee) return '';
+                
+                return `
+                    <tr>
+                        <td>${payroll.id}</td>
+                        <td>${employee.name}</td>
+                        <td>${getRoleLabel(employee.role)}</td>
+                        <td>${payroll.period}</td>
+                        <td>Rp ${payroll.base.toLocaleString('id-ID')}</td>
+                        <td>Rp ${payroll.allowance.toLocaleString('id-ID')}</td>
+                        <td>Rp ${payroll.deduction.toLocaleString('id-ID')}</td>
+                        <td style="font-weight: 600; color: var(--accent-primary);">Rp ${payroll.total.toLocaleString('id-ID')}</td>
+                        <td>
+                            <span class="subscription-status ${payroll.status === 'paid' ? 'status-active' : 'status-warning'}">
+                                ${payroll.status === 'paid' ? 'Sudah Dibayar' : 'Menunggu Pembayaran'}
+                            </span>
+                        </td>
+                        <td>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button class="btn btn-secondary" onclick="editPayroll(${payroll.id})" style="padding: 0.25rem 0.5rem;">
+                                    <i data-lucide="edit" style="width: 14px; height: 14px;"></i>
+                                </button>
+                                <button class="btn btn-danger" onclick="deletePayroll(${payroll.id})" style="padding: 0.25rem 0.5rem;">
+                                    <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        lucide.createIcons();
+    }
+
+    function updatePayrollSummary() {
+        if (state.payroll.length === 0) {
+            document.getElementById('total-payroll').textContent = 'Rp 0';
+            document.getElementById('avg-payroll').textContent = 'Rp 0';
+            document.getElementById('highest-payroll').textContent = 'Rp 0';
+            document.getElementById('lowest-payroll').textContent = 'Rp 0';
+            return;
+        }
+        
+        const totalPayroll = state.payroll.reduce((sum, p) => sum + p.total, 0);
+        const avgPayroll = totalPayroll / state.payroll.length;
+        const highestPayroll = Math.max(...state.payroll.map(p => p.total));
+        const lowestPayroll = Math.min(...state.payroll.map(p => p.total));
+        
+        document.getElementById('total-payroll').textContent = `Rp ${totalPayroll.toLocaleString('id-ID')}`;
+        document.getElementById('avg-payroll').textContent = `Rp ${Math.round(avgPayroll).toLocaleString('id-ID')}`;
+        document.getElementById('highest-payroll').textContent = `Rp ${highestPayroll.toLocaleString('id-ID')}`;
+        document.getElementById('lowest-payroll').textContent = `Rp ${lowestPayroll.toLocaleString('id-ID')}`;
+    }
+
+    function renderPayrollGrid() {
         const container = document.getElementById('payroll-grid');
         const employees = state.users.filter(u => u.role !== 'owner');
         
@@ -5344,6 +6699,7 @@
                 document.getElementById('payroll-allowance').value = payroll.allowance;
                 document.getElementById('payroll-deduction').value = payroll.deduction;
                 document.getElementById('payroll-total').value = payroll.total;
+                document.getElementById('payroll-status').value = payroll.status;
             } else {
                 title.innerText = 'Tambah Gaji';
                 document.getElementById('payroll-form').reset();
@@ -5370,7 +6726,8 @@
             base: parseInt(document.getElementById('payroll-base').value),
             allowance: parseInt(document.getElementById('payroll-allowance').value),
             deduction: parseInt(document.getElementById('payroll-deduction').value),
-            total: parseInt(document.getElementById('payroll-total').value)
+            total: parseInt(document.getElementById('payroll-total').value),
+            status: document.getElementById('payroll-status').value
         };
         
         const payrollId = document.getElementById('payroll-id').value;
@@ -5394,8 +6751,79 @@
         renderPayrollManagement();
     }
 
+    function editPayroll(payrollId) {
+        const payroll = state.payroll.find(p => p.id === payrollId);
+        if (payroll) {
+            openPayrollModal(payroll.employeeId);
+        }
+    }
+
+    function deletePayroll(payrollId) {
+        if (confirm('Apakah Anda yakin ingin menghapus data gaji ini?')) {
+            state.payroll = state.payroll.filter(p => p.id !== payrollId);
+            saveState();
+            showNotification('Data gaji berhasil dihapus!', 'success');
+            renderPayrollManagement();
+        }
+    }
+
     // --- SHIFT MANAGEMENT ---
     function renderShiftManagement() {
+        renderShiftCalendar();
+        renderShiftGrid();
+    }
+
+    function renderShiftCalendar() {
+        const calendarContainer = document.getElementById('shift-calendar');
+        const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+        
+        // Create calendar header
+        let calendarHTML = '<div class="shift-day-header" style="grid-column: 1/-1;">Hari</div>';
+        
+        // Create day columns
+        days.forEach(day => {
+            calendarHTML += `
+                <div class="shift-day">
+                    <div class="shift-day-header">${day}</div>
+                    <div class="shift-day-content">
+                        ${renderShiftsForDay(day)}
+                    </div>
+                </div>
+            `;
+        });
+        
+        calendarContainer.innerHTML = calendarHTML;
+        lucide.createIcons();
+    }
+
+    function renderShiftsForDay(day) {
+        const dayShifts = state.shifts.filter(shift => shift.days.includes(day));
+        
+        if (dayShifts.length === 0) {
+            return '<div style="color: var(--text-secondary); font-size: 0.875rem;">Tidak ada shift</div>';
+        }
+        
+        return dayShifts.map(shift => {
+            const employees = state.users.filter(u => shift.employees.includes(u.id));
+            
+            return `
+                <div class="shift-assignment">
+                    <div style="font-weight: 600;">${shift.name}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-secondary);">${shift.startTime} - ${shift.endTime}</div>
+                    <div style="margin-top: 0.25rem;">
+                        ${employees.map(emp => `
+                            <div style="font-size: 0.75rem; display: flex; align-items: center; gap: 0.25rem;">
+                                <div class="shift-employee-avatar">${emp.name.charAt(0)}</div>
+                                <span>${emp.name}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function renderShiftGrid() {
         const container = document.getElementById('shift-grid');
         
         if (state.shifts.length === 0) {
@@ -5411,6 +6839,15 @@
                             <div class="shift-time">${shift.startTime} - ${shift.endTime}</div>
                         </div>
                         <div class="shift-employees">
+                            <div style="font-weight: 600; margin-bottom: 0.5rem;">Hari Kerja:</div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.25rem; margin-bottom: 0.5rem;">
+                                ${shift.days.map(day => `
+                                    <span style="background-color: var(--bg-tertiary); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem;">
+                                        ${day}
+                                    </span>
+                                `).join('')}
+                            </div>
+                            <div style="font-weight: 600; margin-bottom: 0.5rem;">Karyawan:</div>
                             ${shiftEmployees.map(employee => `
                                 <div class="shift-employee">
                                     <div class="shift-employee-avatar">${employee.name.charAt(0)}</div>
@@ -5455,6 +6892,12 @@
                 document.getElementById('shift-name').value = shift.name;
                 document.getElementById('shift-start').value = shift.startTime;
                 document.getElementById('shift-end').value = shift.endTime;
+                
+                // Check days
+                const dayCheckboxes = document.querySelectorAll('input[name="shift-days"]');
+                dayCheckboxes.forEach(checkbox => {
+                    checkbox.checked = shift.days.includes(checkbox.value);
+                });
             }
         } else {
             title.innerText = 'Tambah Shift';
@@ -5471,10 +6914,14 @@
         const selectedEmployees = Array.from(document.querySelectorAll('input[name="shift-employees"]:checked'))
             .map(cb => parseInt(cb.value));
         
+        const selectedDays = Array.from(document.querySelectorAll('input[name="shift-days"]:checked'))
+            .map(cb => cb.value);
+        
         const shiftData = {
             name: document.getElementById('shift-name').value,
             startTime: document.getElementById('shift-start').value,
             endTime: document.getElementById('shift-end').value,
+            days: selectedDays,
             employees: selectedEmployees
         };
         
@@ -5875,13 +7322,13 @@
         return planMap[planId] || planId;
     }
 
-    function checkLicenseLimits() {
-        if (state.users.length >= state.license.maxUsers) {
+    function checkLicenseLimits(itemType) {
+        if (itemType === 'user' && state.users.length >= state.license.maxUsers) {
             showNotification(`Batas maksimal pengguna (${state.license.maxUsers}) telah tercapai! Upgrade paket untuk menambah lebih banyak pengguna.`, 'error');
             return false;
         }
         
-        if (state.tables.length >= state.license.maxTables) {
+        if (itemType === 'table' && state.tables.length >= state.license.maxTables) {
             showNotification(`Batas maksimal meja (${state.license.maxTables}) telah tercapai! Upgrade paket untuk menambah lebih banyak meja.`, 'error');
             return false;
         }
@@ -5892,6 +7339,124 @@
         }
         
         return true;
+    }
+
+    // --- SETTINGS ---
+    function renderSettings() {
+        // Populate settings form with current user data
+        const user = state.currentUser;
+        document.getElementById('settings-name').value = user.name;
+        document.getElementById('settings-email').value = user.email;
+        document.getElementById('settings-role').value = user.role;
+    }
+
+    function updateProfile() {
+        const name = document.getElementById('settings-name').value;
+        const email = document.getElementById('settings-email').value;
+        const role = document.getElementById('settings-role').value;
+        
+        // Update current user in state
+        const userIndex = state.users.findIndex(u => u.id === state.currentUser.id);
+        if (userIndex !== -1) {
+            state.users[userIndex].name = name;
+            state.users[userIndex].email = email;
+            state.users[userIndex].role = role;
+            state.currentUser.name = name;
+            state.currentUser.email = email;
+            state.currentUser.role = role;
+            
+            saveState();
+            showNotification('Profil berhasil diperbarui!', 'success');
+            renderUserInterface();
+        }
+    }
+
+    function changePassword() {
+        const oldPassword = document.getElementById('settings-old-password').value;
+        const newPassword = document.getElementById('settings-new-password').value;
+        const confirmPassword = document.getElementById('settings-confirm-password').value;
+        
+        // Validate old password
+        if (oldPassword !== state.currentUser.password) {
+            showNotification('Password lama tidak sesuai!', 'error');
+            return;
+        }
+        
+        // Validate new password
+        if (newPassword.length < 6) {
+            showNotification('Password baru minimal 6 karakter!', 'error');
+            return;
+        }
+        
+        // Validate password confirmation
+        if (newPassword !== confirmPassword) {
+            showNotification('Konfirmasi password tidak sesuai!', 'error');
+            return;
+        }
+        
+        // Update password
+        const userIndex = state.users.findIndex(u => u.id === state.currentUser.id);
+        if (userIndex !== -1) {
+            state.users[userIndex].password = newPassword;
+            state.currentUser.password = newPassword;
+            
+            saveState();
+            showNotification('Password berhasil diubah!', 'success');
+            
+            // Clear form
+            document.getElementById('settings-old-password').value = '';
+            document.getElementById('settings-new-password').value = '';
+            document.getElementById('settings-confirm-password').value = '';
+        }
+    }
+
+    // --- CHATBOX ---
+    function toggleChatbox() {
+        document.getElementById('chatbox').classList.toggle('open');
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('chatbox-input');
+        const message = input.value.trim();
+        
+        if (!message) return;
+        
+        // Add user message
+        addChatMessage(message, 'user');
+        
+        // Clear input
+        input.value = '';
+        
+        // Simulate AI response
+        setTimeout(() => {
+            const responses = [
+                'Terima kasih atas pertanyaan Anda. Saya akan membantu Anda.',
+                'Silakan jelaskan lebih detail tentang masalah yang Anda alami.',
+                'Berdasarkan informasi yang Anda berikan, saya sarankan untuk...',
+                'Untuk informasi lebih lanjut, Anda dapat menghubungi tim support kami.',
+                'Apakah ada hal lain yang bisa saya bantu?'
+            ];
+            
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            addChatMessage(randomResponse, 'bot');
+        }, 1000);
+    }
+
+    function addChatMessage(message, sender) {
+        const chatboxBody = document.getElementById('chatbox-body');
+        const messageElement = document.createElement('div');
+        messageElement.className = `chat-message ${sender}`;
+        messageElement.textContent = message;
+        chatboxBody.appendChild(messageElement);
+        
+        // Scroll to bottom
+        chatboxBody.scrollTop = chatboxBody.scrollHeight;
+    }
+
+    function handleChatInputKeypress(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
     }
 
     // --- UI HELPERS ---
@@ -5948,6 +7513,8 @@
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('filter-date-from').value = today;
         document.getElementById('filter-date-to').value = today;
+        document.getElementById('filter-reservation-date-from').value = today;
+        document.getElementById('filter-reservation-date-to').value = today;
 
         renderUserInterface();
     });
@@ -5959,170 +7526,7 @@
         const total = base + allowance - deduction;
         document.getElementById('payroll-total').value = total;
     }
-
-    document.addEventListener('DOMContentLoaded', function() {
-    loadState();
-    lucide.createIcons();
-    
-    // Inisialisasi scroll sidebar
-    initSidebarScroll();
-    
-    // Event listener untuk scroll
-    const sidebar = document.getElementById('sidebar');
-    sidebar.addEventListener('scroll', handleSidebarScroll);
-    
-    // Event listener untuk resize
-    window.addEventListener('resize', () => {
-        handleSidebarScroll();
-        setupScrollIndicators();
-    });
-    
-    // Event listener untuk menu links
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            showPage(this.dataset.page);
-            
-            // Scroll ke atas saat navigasi di mobile
-            if (window.innerWidth <= 768) {
-                scrollToTop();
-            }
-        });
-    });
-
-    function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.querySelector('.main-content');
-    
-    sidebar.classList.toggle('open');
-    
-    // Reset scroll position saat toggle
-    if (!sidebar.classList.contains('open')) {
-        sidebar.scrollTop = 0;
-    }
-    
-    // Untuk mobile, tutup overlay saat sidebar terbuka
-    if (window.innerWidth <= 768) {
-        const overlay = document.createElement('div');
-        overlay.className = 'sidebar-overlay';
-        overlay.style.css = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            display: none;
-        `;
-        document.body.appendChild(overlay);
-        
-        if (sidebar.classList.contains('open')) {
-            overlay.style.display = 'block';
-            overlay.addEventListener('click', () => {
-                sidebar.classList.remove('open');
-                overlay.remove();
-            });
-        }
-    }
-}
-        // --- FUNGSI SCROLL SIDEBAR ---
-function initSidebarScroll() {
-    const sidebar = document.getElementById('sidebar');
-    const sidebarContent = sidebar.querySelector('.sidebar-menu');
-    
-    // Deteksi touch device
-    let isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    
-    if (isTouchDevice) {
-        // Untuk mobile: sidebar disembuny scroll saat tidak aktif
-        sidebar.addEventListener('touchstart', function(e) {
-            if (!sidebar.classList.contains('open')) {
-                sidebar.style.overflowY = 'auto';
-            }
-        });
-        
-        sidebar.addEventListener('touchend', function(e) {
-            setTimeout(() => {
-                if (!sidebar.classList.contains('open')) {
-                    sidebar.style.overflowY = 'hidden';
-                }
-            }, 300);
-        });
-    } else {
-        // Untuk desktop: sidebar selalu bisa di-scroll
-        sidebar.style.overflowY = 'auto';
-    }
-}
-
-// --- FUNGSI TOGGLE SIDEBAR YANG LEBIH BAIK ---
-function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.querySelector('.main-content');
-    
-    sidebar.classList.toggle('open');
-    
-    // Animasi smooth scroll ke atas saat dibuka
-    if (sidebar.classList.contains('open')) {
-        sidebar.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    }
-}
-
-// --- FUNGSI SCROLL OTOMATIS ---
-function scrollToTop() {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-}
-
-function scrollToBottom() {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.scrollTo({
-        top: sidebar.scrollHeight,
-        behavior: 'smooth'
-    });
-}
-
-// --- FUNGSI HANDLE SCROLL EVENT ---
-function handleSidebarScroll() {
-    const sidebar = document.getElementById('sidebar');
-    const scrollPosition = sidebar.scrollTop;
-    const maxScroll = sidebar.scrollHeight - sidebar.clientHeight;
-    
-    // Tambahkan indikator scroll jika diperlukan
-    if (scrollPosition > 100) {
-        sidebar.classList.add('scrolled');
-    } else {
-        sidebar.classList.remove('scrolled');
-    }
-}
-
-// --- FUNGSI DETEKSI TINGGI LAYAR ---
-function setupScrollIndicators() {
-    const sidebar = document.getElementById('sidebar');
-    const menuItems = document.querySelectorAll('.sidebar-menu li');
-    
-    menuItems.forEach(item => {
-        const rect = item.getBoundingClientRect();
-        const sidebarRect = sidebar.getBoundingClientRect();
-        
-        // Cek apakah item terlihat di viewport
-        if (rect.top >= sidebarRect.top && rect.bottom <= sidebarRect.bottom) {
-            item.classList.add('visible');
-        } else {
-            item.classList.remove('visible');
-        }
-    });
-}
-    // ... kode lainnya ...
-});
 </script>
 
 </body>
 </html>
-
