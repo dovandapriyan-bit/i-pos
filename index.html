@@ -846,6 +846,11 @@
             opacity: 0.8;
         }
 
+        .table-management-card.reserved {
+            border-color: var(--accent-warning);
+            opacity: 0.8;
+        }
+
         .table-number {
             font-size: 2rem;
             font-weight: 700;
@@ -2324,6 +2329,149 @@
             border-radius: 4px;
         }
 
+        /* Queue List Styles */
+        .queue-list {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .queue-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s;
+        }
+
+        .queue-item:last-child {
+            border-bottom: none;
+        }
+
+        .queue-item:hover {
+            background-color: var(--bg-tertiary);
+        }
+
+        .queue-table {
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+
+        .queue-order {
+            font-weight: 500;
+        }
+
+        .queue-time {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .queue-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .queue-status.new {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: var(--accent-success);
+        }
+
+        .queue-status.processing {
+            background-color: rgba(245, 158, 11, 0.2);
+            color: var(--accent-warning);
+        }
+
+        .queue-status.ready {
+            background-color: rgba(59, 130, 246, 0.2);
+            color: var(--accent-primary);
+        }
+
+        /* Position Management Styles */
+        .position-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .position-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            background-color: var(--bg-tertiary);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .position-badge button {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0;
+            margin-left: 0.25rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .position-badge button:hover {
+            color: var(--accent-danger);
+        }
+
+        /* Print Reservation Styles */
+        .print-reservation {
+            width: 300px;
+            padding: 20px;
+            font-family: monospace;
+            background-color: white;
+            color: black;
+        }
+
+        .print-reservation-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .print-reservation-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .print-reservation-subtitle {
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .print-reservation-details {
+            margin-bottom: 20px;
+        }
+
+        .print-reservation-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .print-reservation-divider {
+            border-top: 1px dashed black;
+            margin: 10px 0;
+        }
+
+        .print-reservation-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+
         /* Responsive Design */
         @media (max-width: 1024px) {
             .grid-cols-4 { grid-template-columns: repeat(3, 1fr); }
@@ -2379,8 +2527,6 @@
                     <span class="notification-badge" id="kds-notification" style="display: none;">0</span>
                 </a>
             </li>
-            <li><a href="#" class="nav-link" data-page="order-status"><i data-lucide="clock"></i> Status Pesanan</a></li>
-            <li><a href="#" class="nav-link" data-page="table-selection"><i data-lucide="square-stack"></i> Pilih Meja</a></li>
             <li><a href="#" class="nav-link" data-page="table-order"><i data-lucide="smartphone"></i> Pesan via Meja</a></li>
             <li><a href="#" class="nav-link" data-page="reservations"><i data-lucide="calendar"></i> Reservasi</a></li>
             <li><a href="#" class="nav-link" data-page="menu-management"><i data-lucide="utensils"></i> Kelola Menu</a></li>
@@ -2512,29 +2658,6 @@
                 <div class="kds-grid" id="kds-orders-grid"></div>
             </div>
 
-            <!-- ORDER STATUS PAGE -->
-            <div class="page" id="order-status-page">
-                <div class="order-status-container">
-                    <div class="card">
-                        <div class="card-header">Cek Status Pesanan</div>
-                        <div class="form-group">
-                            <label>Nomor Pesanan</label>
-                            <input type="text" id="order-id-input" placeholder="Masukkan nomor pesanan">
-                        </div>
-                        <button class="btn btn-primary" onclick="checkOrderStatus()">Cek Status</button>
-                    </div>
-                    <div id="order-status-result"></div>
-                </div>
-            </div>
-
-            <!-- TABLE SELECTION PAGE -->
-            <div class="page" id="table-selection-page">
-                <div class="card">
-                    <div class="card-header">Pilih Meja</div>
-                    <div class="table-grid" id="table-grid"></div>
-                </div>
-            </div>
-
             <!-- TABLE ORDER PAGE -->
             <div class="page" id="table-order-page">
                 <div class="table-order-layout">
@@ -2554,6 +2677,12 @@
                             <p style="color: var(--text-secondary); margin-bottom: 1rem;">Pelanggan memindai QR Code di meja dan melihat menu ini.</p>
                             <div class="pos-categories" id="table-categories"></div>
                             <div class="pos-menu-grid" id="table-menu-grid"></div>
+                        </div>
+                        
+                        <!-- Queue List -->
+                        <div class="queue-list">
+                            <div class="card-header">Antrean Pesanan</div>
+                            <div id="queue-list"></div>
                         </div>
                         
                         <!-- Daftar Pesanan untuk Meja Ini -->
@@ -2617,7 +2746,6 @@
                 <div class="card">
                     <div class="card-header">
                         <span>Manajemen Meja</span>
-                        <button class="btn btn-primary" onclick="openTableModal()">Tambah Meja</button>
                     </div>
                     <div class="table-management-grid" id="table-management-grid"></div>
                 </div>
@@ -2687,6 +2815,19 @@
                         <button class="btn btn-primary" onclick="openUserModal()">Tambah Pengguna</button>
                     </div>
                     <div id="user-list"></div>
+                </div>
+                
+                <!-- Position Management -->
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div class="card-header">Manajemen Posisi Karyawan</div>
+                    <div class="position-list" id="position-list"></div>
+                    <div class="form-group">
+                        <label>Tambah Posisi Baru</label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="text" id="new-position" placeholder="Nama posisi" style="flex-grow: 1;">
+                            <button class="btn btn-primary" onclick="addPosition()">Tambah</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -3174,29 +3315,6 @@
     </div>
 </div>
 
-<!-- TABLE MODAL -->
-<div class="modal" id="table-modal">
-    <div class="modal-content">
-        <span class="modal-close" onclick="closeModal('table-modal')">&times;</span>
-        <h2 id="table-modal-title">Tambah Meja</h2>
-        <form id="table-form" onsubmit="saveTable(event)">
-            <input type="hidden" id="table-id">
-            <div class="form-group">
-                <label>Kapasitas</label>
-                <input type="number" id="table-capacity" required>
-            </div>
-            <div class="form-group">
-                <label>Status</label>
-                <select id="table-status" required>
-                    <option value="available">Tersedia</option>
-                    <option value="occupied">Terisi</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary" style="width: 100%;">Simpan</button>
-        </form>
-    </div>
-</div>
-
 <!-- USER MODAL -->
 <div class="modal" id="user-modal">
     <div class="modal-content">
@@ -3550,10 +3668,6 @@
                 <input type="tel" id="reservation-phone" required>
             </div>
             <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="reservation-email">
-            </div>
-            <div class="form-group">
                 <label>Tanggal Reservasi</label>
                 <input type="date" id="reservation-date" required>
             </div>
@@ -3578,13 +3692,39 @@
             <div class="form-group">
                 <label>Status</label>
                 <select id="reservation-status" required>
-                    <option value="pending">Menunggu Konfirmasi</option>
-                    <option value="confirmed">Dikonfirmasi</option>
-                    <option value="cancelled">Dibatalkan</option>
+                    <option value="pending">Menunggu Kedatangan</option>
+                    <option value="confirmed">Datang</option>
+                    <option value="completed">Selesai</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary" style="width: 100%;">Simpan</button>
+            <div class="form-group">
+                <label>DP (Down Payment)</label>
+                <input type="number" id="reservation-dp" placeholder="0">
+            </div>
+            <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                <button type="submit" class="btn btn-primary" style="flex-grow: 1;">Simpan</button>
+                <button type="button" class="btn btn-secondary" onclick="printReservationReceipt()" style="flex-grow: 1;">
+                    <i data-lucide="printer"></i> Cetak Nota
+                </button>
+            </div>
         </form>
+    </div>
+</div>
+
+<!-- TAKE AWAY CUSTOMER MODAL -->
+<div class="modal" id="takeaway-customer-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('takeaway-customer-modal')">&times;</span>
+        <h2>Informasi Pelanggan</h2>
+        <div class="form-group">
+            <label>Nama Pelanggan</label>
+            <input type="text" id="takeaway-customer-name" placeholder="Masukkan nama pelanggan" required>
+        </div>
+        <div class="form-group">
+            <label>Nomor Telepon (Opsional)</label>
+            <input type="tel" id="takeaway-customer-phone" placeholder="Masukkan nomor telepon">
+        </div>
+        <button class="btn btn-primary" style="width: 100%;" onclick="proceedWithTakeaway()">Lanjutkan</button>
     </div>
 </div>
 
@@ -3617,6 +3757,9 @@
 
 <!-- PRINT RECEIPT (HIDDEN) -->
 <div id="print-receipt" style="display: none;"></div>
+
+<!-- PRINT RESERVATION (HIDDEN) -->
+<div id="print-reservation" style="display: none;"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -3721,6 +3864,57 @@
                     { id: 9, name: 'Susu', quantity: 0.1, unit: 'liter' },
                     { id: 7, name: 'Gula', quantity: 0.02, unit: 'kg' }
                 ]
+            },
+            // Demo packages
+            { 
+                id: 7, 
+                name: 'Paket Hemat 1', 
+                category: 'Paket', 
+                price: 35000, 
+                description: 'Nasi Goreng + Es Teh Manis', 
+                image: null, 
+                isBestSeller: true, 
+                outOfStock: false,
+                ingredients: [
+                    { id: 1, name: 'Beras', quantity: 0.2, unit: 'kg' },
+                    { id: 2, name: 'Telur', quantity: 1, unit: 'pcs' },
+                    { id: 3, name: 'Ayam', quantity: 0.1, unit: 'kg' },
+                    { id: 6, name: 'Teh', quantity: 0.01, unit: 'kg' },
+                    { id: 7, name: 'Gula', quantity: 0.03, unit: 'kg' }
+                ]
+            },
+            { 
+                id: 8, 
+                name: 'Paket Hemat 2', 
+                category: 'Paket', 
+                price: 40000, 
+                description: 'Mie Ayam Bakso + Es Teh Manis', 
+                image: null, 
+                isBestSeller: false, 
+                outOfStock: false,
+                ingredients: [
+                    { id: 4, name: 'Mie', quantity: 0.2, unit: 'kg' },
+                    { id: 3, name: 'Ayam', quantity: 0.1, unit: 'kg' },
+                    { id: 6, name: 'Teh', quantity: 0.01, unit: 'kg' },
+                    { id: 7, name: 'Gula', quantity: 0.03, unit: 'kg' }
+                ]
+            },
+            { 
+                id: 9, 
+                name: 'Paket Komplit', 
+                category: 'Paket', 
+                price: 45000, 
+                description: 'Ayam Bakar Madu + Nasi + Jus Alpukat', 
+                image: null, 
+                isBestSeller: true, 
+                outOfStock: false,
+                ingredients: [
+                    { id: 3, name: 'Ayam', quantity: 0.3, unit: 'kg' },
+                    { id: 5, name: 'Madu', quantity: 0.05, unit: 'kg' },
+                    { id: 1, name: 'Beras', quantity: 0.2, unit: 'kg' },
+                    { id: 8, name: 'Alpukat', quantity: 0.2, unit: 'kg' },
+                    { id: 9, name: 'Susu', quantity: 0.1, unit: 'liter' }
+                ]
             }
         ],
         orders: [],
@@ -3801,7 +3995,17 @@
         notifications: [],
         
         // License transactions
-        licenseTransactions: []
+        licenseTransactions: [],
+        
+        // User positions
+        positions: [
+            { id: 1, name: 'Admin' },
+            { id: 2, name: 'Owner' },
+            { id: 3, name: 'Kasir' },
+            { id: 4, name: 'Dapur' },
+            { id: 5, name: 'Pelayan' },
+            { id: 6, name: 'Supervisor' }
+        ]
     };
 
     // Load state from localStorage
@@ -3979,8 +4183,6 @@
                 { page: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard' },
                 { page: 'pos', label: 'Kasir', icon: 'shopping-cart' },
                 { page: 'kds', label: 'Dapur', icon: 'chef-hat', notification: true },
-                { page: 'order-status', label: 'Status Pesanan', icon: 'clock' },
-                { page: 'table-selection', label: 'Pilih Meja', icon: 'square-stack' },
                 { page: 'table-order', label: 'Pesan via Meja', icon: 'smartphone' },
                 { page: 'reservations', label: 'Reservasi', icon: 'calendar' },
                 { page: 'menu-management', label: 'Kelola Menu', icon: 'utensils' },
@@ -3998,7 +4200,6 @@
             ],
             owner: [
                 { page: 'financial', label: 'Keuangan', icon: 'dollar-sign' },
-                { page: 'order-status', label: 'Status Pesanan', icon: 'clock' },
                 { page: 'reservations', label: 'Reservasi', icon: 'calendar' },
                 { page: 'order-history', label: 'Riwayat Pesanan', icon: 'file-text' },
                 { page: 'user-management', label: 'Kelola Pengguna', icon: 'users' },
@@ -4010,16 +4211,15 @@
             cashier: [
                 { page: 'dashboard', label: 'Dashboard', icon: 'layout-dashboard' },
                 { page: 'pos', label: 'Kasir', icon: 'shopping-cart' },
-                { page: 'order-status', label: 'Status Pesanan', icon: 'clock' },
                 { page: 'reservations', label: 'Reservasi', icon: 'calendar' },
-                { page: 'order-history', label: 'Riwayat Pesanan', icon: 'file-text' }
+                { page: 'order-history', label: 'Riwayat Pesanan', icon: 'file-text' },
+                { page: 'table-management', label: 'Manajemen Meja', icon: 'table' }
             ],
             kitchen: [
                 { page: 'kds', label: 'Dapur', icon: 'chef-hat', notification: true }
             ],
             customer: [
-                { page: 'table-order', label: 'Pesan di Meja', icon: 'smartphone' },
-                { page: 'order-status', label: 'Status Pesanan', icon: 'clock' }
+                { page: 'table-order', label: 'Pesan di Meja', icon: 'smartphone' }
             ]
         };
         
@@ -4209,8 +4409,6 @@
             case 'dashboard': renderDashboard(); break;
             case 'pos': renderPOS(); break;
             case 'kds': renderKDS(); break;
-            case 'order-status': renderOrderStatusPage(); break;
-            case 'table-selection': renderTableSelection(); break;
             case 'table-order': renderTableOrder(); break;
             case 'reservations': renderReservations(); break;
             case 'menu-management': renderMenuManagement(); break;
@@ -4326,6 +4524,14 @@
         const menuItem = state.menu.find(i => i.id === itemId);
         if (!menuItem || menuItem.outOfStock) return;
         
+        // Check if this is a take away order
+        const tableId = parseInt(document.getElementById('pos-table-select').value);
+        if (tableId === 0 && state.currentOrder.items.length === 0) {
+            // Show customer info modal for take away orders
+            document.getElementById('takeaway-customer-modal').style.display = 'flex';
+            return;
+        }
+        
         const existingItem = state.currentOrder.items.find(i => i.id === itemId);
         if (existingItem) {
             existingItem.quantity++;
@@ -4338,6 +4544,23 @@
             });
         }
         updatePOSCart();
+    }
+
+    function proceedWithTakeaway() {
+        const customerName = document.getElementById('takeaway-customer-name').value;
+        const customerPhone = document.getElementById('takeaway-customer-phone').value;
+        
+        if (!customerName) {
+            showNotification('Nama pelanggan harus diisi!', 'warning');
+            return;
+        }
+        
+        // Store customer info in the current order
+        state.currentOrder.customerName = customerName;
+        state.currentOrder.customerPhone = customerPhone;
+        
+        closeModal('takeaway-customer-modal');
+        showNotification('Silakan pilih menu untuk pesanan take away Anda', 'info');
     }
 
     function updatePOSCart() {
@@ -4426,6 +4649,12 @@
                 { status: 'baru', timestamp: new Date().toISOString() }
             ]
         };
+        
+        // Add customer info for take away orders
+        if (state.currentOrder.tableId === 0) {
+            newOrder.customerName = state.currentOrder.customerName;
+            newOrder.customerPhone = state.currentOrder.customerPhone;
+        }
 
         // Reduce stock from inventory
         reduceStockFromOrder(newOrder);
@@ -4475,6 +4704,12 @@
                         <span>Meja:</span>
                         <span>${state.currentOrder.tableId === 0 ? 'Take Away' : `Meja ${state.currentOrder.tableId}`}</span>
                     </div>
+                    ${state.currentOrder.customerName ? `
+                        <div class="print-receipt-row">
+                            <span>Pelanggan:</span>
+                            <span>${state.currentOrder.customerName}</span>
+                        </div>
+                    ` : ''}
                 </div>
                 <div class="print-receipt-divider"></div>
                 <div class="print-receipt-details">
@@ -4543,92 +4778,82 @@
                 ordersByTable[tableKey].push(order);
             });
             
-            kdsGrid.innerHTML = Object.entries(ordersByTable).map(([tableKey, orders]) => `
-                <div class="kds-order-card">
-                    <div class="kds-order-header">
-                        <span class="kds-order-id">${tableKey}</span>
-                        <span class="kds-order-time">${orders.length} pesanan</span>
-                    </div>
-                    ${orders.map(order => `
-                        <div style="margin-bottom: 1rem; padding: 0.5rem; background: var(--bg-tertiary); border-radius: 8px;">
-                            <div style="font-weight: 600; margin-bottom: 0.5rem;">Order #${order.id}</div>
-                            ${order.items.map(item => `
-                                <div class="kds-order-item">
-                                    <span>${item.name} x${item.quantity}</span>
-                                    <div class="kds-order-item-status">
-                                        <button class="btn-ok" onclick="updateItemStatus(${order.id}, ${item.id}, 'ok')">OK</button>
-                                        <button class="btn-cancel" onclick="updateItemStatus(${order.id}, ${item.id}, 'cancel')">Cancel</button>
-                                        <button class="btn-out" onclick="updateItemStatus(${order.id}, ${item.id}, 'out')">Habis</button>
-                                    </div>
-                                </div>
-                            `).join('')}
-                            <div class="kds-order-actions">
-                                ${order.status === 'baru' ? `<button class="btn btn-primary" onclick="updateOrderStatus(${order.id}, 'dimasak')">Mulai Masak</button>` : ''}
-                                ${order.status === 'dimasak' ? `<button class="btn btn-warning" onclick="updateOrderStatus(${order.id}, 'siap')">Selesai</button>` : ''}
-                                ${order.status === 'siap' ? `<button class="btn btn-success" onclick="updateOrderStatus(${order.id}, 'selesai')">Diantar</button>` : ''}
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `).join('');
-        }
-    }
-
-    function updateItemStatus(orderId, itemId, status) {
-        const order = state.orders.find(o => o.id === orderId);
-        if (!order) return;
-        
-        const item = order.items.find(i => i.id === itemId);
-        if (!item) return;
-        
-        item.status = status;
-        
-        if (status === 'cancel' || status === 'out') {
-            // Create notification for customer
-            const notificationTitle = status === 'cancel' ? 'Menu Dibatalkan' : 'Menu Habis';
-            const notificationMessage = `${item.name} pada pesanan #${orderId} ${status === 'cancel' ? 'dibatalkan' : 'habis'}. Silakan pilih menu lain.`;
-            
-            showNotificationToast(notificationTitle, notificationMessage, 'warning');
-            
-            // Add to notification list
-            state.notifications.push({
-                id: Date.now(),
-                orderId: orderId,
-                itemId: itemId,
-                title: notificationTitle,
-                message: notificationMessage,
-                type: 'warning',
-                timestamp: new Date().toISOString(),
-                read: false
+            // Group orders by menu items for efficiency
+            const menuItemsByTable = {};
+            Object.entries(ordersByTable).forEach(([tableKey, orders]) => {
+                menuItemsByTable[tableKey] = {};
+                
+                orders.forEach(order => {
+                    order.items.forEach(item => {
+                        if (!menuItemsByTable[tableKey][item.id]) {
+                            menuItemsByTable[tableKey][item.id] = {
+                                ...item,
+                                quantity: 0,
+                                orders: []
+                            };
+                        }
+                        menuItemsByTable[tableKey][item.id].quantity += item.quantity;
+                        menuItemsByTable[tableKey][item.id].orders.push(order.id);
+                    });
+                });
             });
+            
+            kdsGrid.innerHTML = Object.entries(menuItemsByTable).map(([tableKey, menuItems]) => {
+                const tableOrders = ordersByTable[tableKey];
+                const orderIds = [...new Set(tableOrders.map(o => o.id))];
+                
+                return `
+                    <div class="kds-order-card">
+                        <div class="kds-order-header">
+                            <span class="kds-order-id">${tableKey}</span>
+                            <span class="kds-order-time">${orderIds.length} pesanan</span>
+                        </div>
+                        <div style="margin-bottom: 1rem; padding: 0.5rem; background: var(--bg-tertiary); border-radius: 8px;">
+                            <div style="font-weight: 600; margin-bottom: 0.5rem;">Pesanan: #${orderIds.join(', #')}</div>
+                        </div>
+                        ${Object.values(menuItems).map(item => `
+                            <div class="kds-order-item">
+                                <span>${item.name} x${item.quantity}</span>
+                            </div>
+                        `).join('')}
+                        <div class="kds-order-actions">
+                            ${tableOrders.some(o => o.status === 'baru') ? 
+                                `<button class="btn btn-primary" onclick="updateTableOrderStatus('${tableKey}', 'dimasak')">Mulai Masak</button>` : ''}
+                            ${tableOrders.every(o => o.status === 'dimasak') ? 
+                                `<button class="btn btn-warning" onclick="updateTableOrderStatus('${tableKey}', 'siap')">Selesai</button>` : ''}
+                            ${tableOrders.every(o => o.status === 'siap') ? 
+                                `<button class="btn btn-success" onclick="updateTableOrderStatus('${tableKey}', 'selesai')">Diantar</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
-        
-        saveState();
-        renderKDS();
     }
 
-    function updateOrderStatus(orderId, newStatus) {
-        const order = state.orders.find(o => o.id === orderId);
-        if (order) {
+    function updateTableOrderStatus(tableKey, newStatus) {
+        const tableId = tableKey === 'Take Away' ? 0 : parseInt(tableKey.replace('Meja ', ''));
+        const tableOrders = state.orders.filter(o => o.tableId === tableId && o.status !== 'selesai');
+        
+        tableOrders.forEach(order => {
             order.status = newStatus;
             if (!order.statusHistory) order.statusHistory = [];
             order.statusHistory.push({
                 status: newStatus,
                 timestamp: new Date().toISOString()
             });
-            
-            saveState();
-            renderKDS();
-            renderDashboard();
-            renderTableOrder();
-            
-            const statusMessage = newStatus === 'dimasak' ? 'Pesanan sedang diproses' :
-                                 newStatus === 'siap' ? 'Pesanan siap diantar' :
-                                 newStatus === 'selesai' ? 'Pesanan telah selesai' : '';
-            
-            if (statusMessage) {
-                showNotification(`Order #${orderId}: ${statusMessage}`, 'info');
-            }
+        });
+        
+        saveState();
+        renderKDS();
+        renderDashboard();
+        renderTableOrder();
+        
+        const statusMessage = newStatus === 'dimasak' ? 'Pesanan sedang diproses' :
+                             newStatus === 'siap' ? 'Pesanan siap diantar' :
+                             newStatus === 'selesai' ? 'Pesanan telah selesai' : '';
+        
+        if (statusMessage) {
+            showNotification(`${tableKey}: ${statusMessage}`, 'info');
         }
     }
 
@@ -4680,6 +4905,45 @@
         renderMenuGrid('table-menu-grid', handleAddToTableOrder);
         updateTableCart();
         renderTableActiveOrders();
+        renderQueueList();
+    }
+
+    function renderQueueList() {
+        const queueList = document.getElementById('queue-list');
+        const activeOrders = state.orders.filter(o => o.status !== 'selesai');
+        
+        if (activeOrders.length === 0) {
+            queueList.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Tidak ada antrean pesanan.</p>';
+        } else {
+            // Group orders by table
+            const ordersByTable = {};
+            activeOrders.forEach(order => {
+                const tableKey = order.tableId === 0 ? 'Take Away' : `Meja ${order.tableId}`;
+                if (!ordersByTable[tableKey]) {
+                    ordersByTable[tableKey] = [];
+                }
+                ordersByTable[tableKey].push(order);
+            });
+            
+            queueList.innerHTML = Object.entries(ordersByTable).map(([tableKey, orders]) => {
+                const orderIds = orders.map(o => o.id);
+                const latestOrder = orders.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+                const statusClass = latestOrder.status === 'baru' ? 'new' : 
+                                    latestOrder.status === 'dimasak' ? 'processing' : 
+                                    latestOrder.status === 'siap' ? 'ready' : '';
+                
+                return `
+                    <div class="queue-item">
+                        <div>
+                            <div class="queue-table">${tableKey}</div>
+                            <div class="queue-order">Order #${orderIds.join(', #')}</div>
+                            <div class="queue-time">${new Date(latestOrder.timestamp).toLocaleTimeString('id-ID')}</div>
+                        </div>
+                        <div class="queue-status ${statusClass}">${getStatusLabel(latestOrder.status)}</div>
+                    </div>
+                `;
+            }).join('');
+        }
     }
 
     function renderTableActiveOrders() {
@@ -4894,16 +5158,20 @@
                         <div class="reservation-detail"><strong>Tamu:</strong> ${reservation.guests} orang</div>
                         <div class="reservation-detail"><strong>Meja:</strong> Meja ${reservation.table}</div>
                         ${reservation.notes ? `<div class="reservation-detail"><strong>Catatan:</strong> ${reservation.notes}</div>` : ''}
+                        ${reservation.dp ? `<div class="reservation-detail"><strong>DP:</strong> Rp ${reservation.dp.toLocaleString('id-ID')}</div>` : ''}
                     </div>
                     <div class="reservation-actions">
                         ${reservation.status === 'pending' ? `
-                            <button class="btn btn-success" onclick="updateReservationStatus(${reservation.id}, 'confirmed')">Konfirmasi</button>
-                            <button class="btn btn-danger" onclick="updateReservationStatus(${reservation.id}, 'cancelled')">Batalkan</button>
+                            <button class="btn btn-success" onclick="updateReservationStatus(${reservation.id}, 'confirmed')">Datang</button>
+                            <button class="btn btn-danger" onclick="updateReservationStatus(${reservation.id}, 'cancelled')">Batal</button>
                         ` : ''}
                         ${reservation.status === 'confirmed' ? `
-                            <button class="btn btn-danger" onclick="updateReservationStatus(${reservation.id}, 'cancelled')">Batalkan</button>
+                            <button class="btn btn-success" onclick="updateReservationStatus(${reservation.id}, 'completed')">Selesai</button>
                         ` : ''}
                         <button class="btn btn-secondary" onclick="editReservation(${reservation.id})">Edit</button>
+                        <button class="btn btn-secondary" onclick="printReservationReceipt(${reservation.id})">
+                            <i data-lucide="printer"></i> Cetak Nota
+                        </button>
                     </div>
                 </div>
             `).join('');
@@ -4913,8 +5181,9 @@
 
     function getReservationStatusLabel(status) {
         const statusMap = {
-            'pending': 'Menunggu Konfirmasi',
-            'confirmed': 'Dikonfirmasi',
+            'pending': 'Menunggu Kedatangan',
+            'confirmed': 'Datang',
+            'completed': 'Selesai',
             'cancelled': 'Dibatalkan'
         };
         return statusMap[status] || status;
@@ -4936,13 +5205,13 @@
                 document.getElementById('reservation-id').value = reservation.id;
                 document.getElementById('reservation-name').value = reservation.name;
                 document.getElementById('reservation-phone').value = reservation.phone;
-                document.getElementById('reservation-email').value = reservation.email || '';
                 document.getElementById('reservation-date').value = reservation.date;
                 document.getElementById('reservation-time').value = reservation.time;
                 document.getElementById('reservation-guests').value = reservation.guests;
                 tableSelect.value = reservation.table;
                 document.getElementById('reservation-notes').value = reservation.notes || '';
                 document.getElementById('reservation-status').value = reservation.status;
+                document.getElementById('reservation-dp').value = reservation.dp || '';
             }
         } else {
             title.innerText = 'Tambah Reservasi';
@@ -4961,13 +5230,13 @@
         const reservationData = {
             name: document.getElementById('reservation-name').value,
             phone: document.getElementById('reservation-phone').value,
-            email: document.getElementById('reservation-email').value,
             date: document.getElementById('reservation-date').value,
             time: document.getElementById('reservation-time').value,
             guests: parseInt(document.getElementById('reservation-guests').value),
             table: parseInt(document.getElementById('reservation-table').value),
             notes: document.getElementById('reservation-notes').value,
-            status: document.getElementById('reservation-status').value
+            status: document.getElementById('reservation-status').value,
+            dp: parseInt(document.getElementById('reservation-dp').value) || 0
         };
         
         const reservationId = document.getElementById('reservation-id').value;
@@ -4986,9 +5255,13 @@
             showNotification('Reservasi berhasil ditambahkan!', 'success');
         }
         
+        // Update table status based on reservation
+        updateTableStatusFromReservations();
+        
         saveState();
         closeModal('reservation-modal');
         renderReservations();
+        renderTableManagement();
     }
 
     function editReservation(reservationId) {
@@ -5002,7 +5275,111 @@
             saveState();
             showNotification(`Status reservasi #${reservationId} berhasil diperbarui menjadi ${getReservationStatusLabel(newStatus)}`, 'success');
             renderReservations();
+            
+            // Update table status based on reservation
+            updateTableStatusFromReservations();
+            renderTableManagement();
         }
+    }
+
+    function updateTableStatusFromReservations() {
+        // Reset all tables to available first
+        state.tables.forEach(table => {
+            if (table.status !== 'occupied') {
+                table.status = 'available';
+            }
+        });
+        
+        // Check for active reservations
+        const now = new Date();
+        state.reservations.forEach(reservation => {
+            if (reservation.status === 'pending' || reservation.status === 'confirmed') {
+                const reservationDateTime = new Date(reservation.date + ' ' + reservation.time);
+                
+                // If reservation is confirmed and time is in the future, mark table as reserved
+                if (reservation.status === 'confirmed' && reservationDateTime > now) {
+                    const table = state.tables.find(t => t.id === reservation.table);
+                    if (table && table.status !== 'occupied') {
+                        table.status = 'reserved';
+                    }
+                }
+            }
+        });
+    }
+
+    function printReservationReceipt(reservationId) {
+        const reservation = state.reservations.find(r => r.id === reservationId);
+        if (!reservation) return;
+        
+        const receiptContent = `
+            <div class="print-reservation">
+                <div class="print-reservation-header">
+                    <div class="print-reservation-title">NOTA RESERVASI</div>
+                    <div class="print-reservation-subtitle">DNT Network Cafe</div>
+                    <div class="print-reservation-subtitle">Jl. Sudirman No. 123</div>
+                    <div class="print-reservation-subtitle">Tel: 021-123456</div>
+                </div>
+                <div class="print-reservation-divider"></div>
+                <div class="print-reservation-details">
+                    <div class="print-reservation-row">
+                        <span>No. Reservasi:</span>
+                        <span>#${reservation.id}</span>
+                    </div>
+                    <div class="print-reservation-row">
+                        <span>Nama:</span>
+                        <span>${reservation.name}</span>
+                    </div>
+                    <div class="print-reservation-row">
+                        <span>Telepon:</span>
+                        <span>${reservation.phone}</span>
+                    </div>
+                    <div class="print-reservation-row">
+                        <span>Tanggal:</span>
+                        <span>${new Date(reservation.date).toLocaleDateString('id-ID')}</span>
+                    </div>
+                    <div class="print-reservation-row">
+                        <span>Waktu:</span>
+                        <span>${reservation.time}</span>
+                    </div>
+                    <div class="print-reservation-row">
+                        <span>Jumlah Tamu:</span>
+                        <span>${reservation.guests} orang</span>
+                    </div>
+                    <div class="print-reservation-row">
+                        <span>Meja:</span>
+                        <span>Meja ${reservation.table}</span>
+                    </div>
+                    ${reservation.notes ? `
+                        <div class="print-reservation-row">
+                            <span>Catatan:</span>
+                            <span>${reservation.notes}</span>
+                        </div>
+                    ` : ''}
+                    ${reservation.dp ? `
+                        <div class="print-reservation-row">
+                            <span>DP:</span>
+                            <span>Rp ${reservation.dp.toLocaleString('id-ID')}</span>
+                        </div>
+                    ` : ''}
+                    <div class="print-reservation-row">
+                        <span>Status:</span>
+                        <span>${getReservationStatusLabel(reservation.status)}</span>
+                    </div>
+                </div>
+                <div class="print-reservation-divider"></div>
+                <div class="print-reservation-footer">
+                    <div>Terima kasih atas reservasi Anda</div>
+                    <div>Silakan datang 15 menit sebelum waktu reservasi</div>
+                </div>
+            </div>
+        `;
+        
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(receiptContent);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
     }
 
     function filterReservations() {
@@ -5042,127 +5419,25 @@
                         <div class="reservation-detail"><strong>Tamu:</strong> ${reservation.guests} orang</div>
                         <div class="reservation-detail"><strong>Meja:</strong> Meja ${reservation.table}</div>
                         ${reservation.notes ? `<div class="reservation-detail"><strong>Catatan:</strong> ${reservation.notes}</div>` : ''}
+                        ${reservation.dp ? `<div class="reservation-detail"><strong>DP:</strong> Rp ${reservation.dp.toLocaleString('id-ID')}</div>` : ''}
                     </div>
                     <div class="reservation-actions">
                         ${reservation.status === 'pending' ? `
-                            <button class="btn btn-success" onclick="updateReservationStatus(${reservation.id}, 'confirmed')">Konfirmasi</button>
-                            <button class="btn btn-danger" onclick="updateReservationStatus(${reservation.id}, 'cancelled')">Batalkan</button>
+                            <button class="btn btn-success" onclick="updateReservationStatus(${reservation.id}, 'confirmed')">Datang</button>
+                            <button class="btn btn-danger" onclick="updateReservationStatus(${reservation.id}, 'cancelled')">Batal</button>
                         ` : ''}
                         ${reservation.status === 'confirmed' ? `
-                            <button class="btn btn-danger" onclick="updateReservationStatus(${reservation.id}, 'cancelled')">Batalkan</button>
+                            <button class="btn btn-success" onclick="updateReservationStatus(${reservation.id}, 'completed')">Selesai</button>
                         ` : ''}
                         <button class="btn btn-secondary" onclick="editReservation(${reservation.id})">Edit</button>
+                        <button class="btn btn-secondary" onclick="printReservationReceipt(${reservation.id})">
+                            <i data-lucide="printer"></i> Cetak Nota
+                        </button>
                     </div>
                 </div>
             `).join('');
         }
         lucide.createIcons();
-    }
-
-    // --- ORDER STATUS ---
-    function renderOrderStatusPage() {
-        // Implementation for order status page
-    }
-
-    function checkOrderStatus() {
-        const orderId = document.getElementById('order-id-input').value;
-        const order = state.orders.find(o => o.id == orderId);
-        
-        const resultContainer = document.getElementById('order-status-result');
-        
-        if (!order) {
-            resultContainer.innerHTML = `
-                <div class="card">
-                    <div class="card-header">Hasil Pencarian</div>
-                    <p style="color: var(--text-secondary);">Pesanan dengan nomor ${orderId} tidak ditemukan.</p>
-                </div>
-            `;
-            return;
-        }
-        
-        const statusSteps = [
-            { key: 'baru', label: 'Diterima' },
-            { key: 'dimasak', label: 'Diproses' },
-            { key: 'siap', label: 'Siap Diambil' },
-            { key: 'selesai', label: 'Selesai' }
-        ];
-        
-        const currentStepIndex = statusSteps.findIndex(step => step.key === order.status);
-        
-        resultContainer.innerHTML = `
-            <div class="order-status-card">
-                <div class="order-status-header">
-                    <div class="order-status-id">Order #${order.id}</div>
-                    <div class="order-status-badge status-${order.status}">${getStatusLabel(order.status)}</div>
-                </div>
-                <div class="order-status-timeline">
-                    ${statusSteps.map((step, index) => `
-                        <div class="order-status-step ${index < currentStepIndex ? 'completed' : index === currentStepIndex ? 'active' : ''}">
-                            <div class="order-status-step-circle">
-                                ${index < currentStepIndex ? '<i data-lucide="check" style="width: 16px; height: 16px;"></i>' : ''}
-                            </div>
-                            <div class="order-status-step-label">${step.label}</div>
-                        </div>
-                    `).join('')}
-                </div>
-                <div style="margin-top: 1.5rem;">
-                    <h4>Detail Pesanan:</h4>
-                    <div style="margin-top: 0.5rem;">
-                        ${order.items.map(item => `
-                            <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
-                                <span>${item.name} x${item.quantity} ${item.status === 'cancel' ? '(Dibatalkan)' : item.status === 'out' ? '(Habis)' : ''}</span>
-                                <span>Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                    <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-top: 1px solid var(--border-color); margin-top: 0.5rem; font-weight: 600;">
-                        <span>Total</span>
-                        <span style="color: var(--accent-primary);">Rp ${order.total.toLocaleString('id-ID')}</span>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        lucide.createIcons();
-    }
-
-    function getStatusLabel(status) {
-        const statusMap = {
-            'baru': 'Baru',
-            'dimasak': 'Diproses',
-            'siap': 'Siap',
-            'selesai': 'Selesai'
-        };
-        return statusMap[status] || status;
-    }
-
-    // --- TABLE SELECTION ---
-    function renderTableSelection() {
-        const tableGrid = document.getElementById('table-grid');
-        tableGrid.innerHTML = state.tables.map(table => `
-            <div class="table-card ${table.status}" onclick="selectTable(${table.id})">
-                <div class="table-icon">
-                    <i data-lucide="${table.status === 'available' ? 'square-stack' : 'users'}"></i>
-                </div>
-                <div class="table-number">Meja ${table.number}</div>
-                <div class="table-status">${table.status === 'available' ? 'Tersedia' : 'Terisi'}</div>
-                <div class="table-capacity">
-                    <i data-lucide="users"></i>
-                    <span>${table.capacity} orang</span>
-                </div>
-            </div>
-        `).join('');
-        lucide.createIcons();
-    }
-
-    function selectTable(tableId) {
-        const table = state.tables.find(t => t.id === tableId);
-        if (table.status === 'available') {
-            state.tableOrder.tableId = tableId;
-            showPage('table-order');
-        } else {
-            showNotification('Meja sudah terisi!', 'warning');
-        }
     }
 
     // --- MENU MANAGEMENT ---
@@ -5397,130 +5672,284 @@
         if (state.tables.length === 0) {
             tableGrid.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada meja.</p>';
         } else {
-            tableGrid.innerHTML = state.tables.map(table => `
-                <div class="table-management-card ${table.status}">
-                    <div class="table-number">Meja ${table.number}</div>
-                    <div class="table-status">Kapasitas: ${table.capacity} orang</div>
-                    <div class="table-status">${table.status === 'available' ? 'Tersedia' : 'Terisi'}</div>
-                    <div class="table-actions">
-                        <button class="btn btn-secondary" onclick="editTable(${table.id})"><i data-lucide="edit"></i></button>
-                        ${table.status === 'occupied' ? 
-                            `<button class="btn btn-success" onclick="freeTable(${table.id})">Bebaskan</button>` : 
-                            (state.currentUser.role === 'owner' ? 
-                                `<button class="btn btn-danger" onclick="deleteTable(${table.id})"><i data-lucide="trash-2"></i></button>` : 
-                                '')
-                        }
+            tableGrid.innerHTML = state.tables.map(table => {
+                // Check if table has active reservation
+                const hasReservation = state.reservations.some(r => 
+                    r.table === table.id && (r.status === 'pending' || r.status === 'confirmed')
+                );
+                
+                return `
+                    <div class="table-management-card ${table.status} ${hasReservation ? 'reserved' : ''}">
+                        <div class="table-number">Meja ${table.number}</div>
+                        <div class="table-status">Kapasitas: ${table.capacity} orang</div>
+                        <div class="table-status">${
+                            table.status === 'available' ? 'Tersedia' : 
+                            table.status === 'occupied' ? 'Terisi' : 
+                            table.status === 'reserved' ? 'Direservasi' : table.status
+                        }</div>
+                        <div class="table-actions">
+                            ${state.currentUser.role === 'cashier' || state.currentUser.role === 'admin' ? 
+                                `<button class="btn btn-secondary" onclick="changeTableStatus(${table.id})">Ubah Status</button>` : 
+                                ''
+                            }
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
         lucide.createIcons();
     }
 
-    function openTableModal(tableId = null) {
-        const modal = document.getElementById('table-modal');
-        const title = document.getElementById('table-modal-title');
+    function changeTableStatus(tableId) {
+        const table = state.tables.find(t => t.id === tableId);
+        if (!table) return;
         
-        if (tableId) {
-            const table = state.tables.find(t => t.id === tableId);
-            if (table) {
-                title.innerText = 'Edit Meja';
-                document.getElementById('table-id').value = table.id;
-                document.getElementById('table-capacity').value = table.capacity;
-                document.getElementById('table-status').value = table.status;
-            }
-        } else {
-            title.innerText = 'Tambah Meja';
-            document.getElementById('table-form').reset();
-            document.getElementById('table-id').value = '';
-        }
+        // Don't allow status change if table has active reservation
+        const hasReservation = state.reservations.some(r => 
+            r.table === tableId && (r.status === 'pending' || r.status === 'confirmed')
+        );
         
-        modal.style.display = 'flex';
-    }
-
-    function saveTable(event) {
-        event.preventDefault();
-        
-        if (!checkLicenseLimits('table')) return;
-        
-        const tableData = {
-            capacity: parseInt(document.getElementById('table-capacity').value),
-            status: document.getElementById('table-status').value
-        };
-        
-        const tableId = document.getElementById('table-id').value;
-        
-        if (tableId) {
-            const index = state.tables.findIndex(t => t.id == tableId);
-            if (index !== -1) {
-                state.tables[index] = { ...state.tables[index], ...tableData };
-                showNotification('Meja berhasil diperbarui!', 'success');
-            }
-        } else {
-            // Auto-increment table number
-            const maxTableNumber = Math.max(...state.tables.map(t => t.number), 0);
-            
-            state.tables.push({
-                id: Date.now(),
-                number: maxTableNumber + 1,
-                ...tableData
-            });
-            showNotification('Meja berhasil ditambahkan!', 'success');
-        }
-        
-        saveState();
-        closeModal('table-modal');
-        renderTableManagement();
-        renderTableSelection();
-        updateTableOrderSelects();
-    }
-
-    function editTable(tableId) {
-        openTableModal(tableId);
-    }
-
-    function deleteTable(tableId) {
-        if (state.currentUser.role !== 'owner') {
-            showNotification('Hanya owner yang dapat menghapus meja!', 'error');
+        if (hasReservation) {
+            showNotification('Meja ini memiliki reservasi aktif!', 'warning');
             return;
         }
         
-        if (confirm('Apakah Anda yakin ingin menghapus meja ini?')) {
-            state.tables = state.tables.filter(t => t.id !== tableId);
-            saveState();
-            showNotification('Meja berhasil dihapus!', 'success');
-            renderTableManagement();
-            renderTableSelection();
-            updateTableOrderSelects();
-        }
-    }
-
-    function freeTable(tableId) {
-        const table = state.tables.find(t => t.id === tableId);
-        if (table) {
+        // Cycle through available statuses
+        if (table.status === 'available') {
+            table.status = 'occupied';
+        } else if (table.status === 'occupied') {
             table.status = 'available';
-            saveState();
-            showNotification(`Meja ${table.number} telah dibebaskan!`, 'success');
-            renderTableManagement();
-            renderTableSelection();
+        }
+        
+        saveState();
+        showNotification(`Status Meja ${table.number} berhasil diubah menjadi ${table.status === 'available' ? 'Tersedia' : 'Terisi'}`, 'success');
+        renderTableManagement();
+    }
+
+    // --- ORDER HISTORY ---
+    function renderOrderHistory() {
+        renderSalesChart();
+        renderBestSellingItems();
+        
+        const historyTableBody = document.getElementById('history-table-body');
+        const orders = state.orders.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        
+        if (orders.length === 0) {
+            historyTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: var(--text-secondary);">Belum ada riwayat pesanan.</td></tr>';
+        } else {
+            historyTableBody.innerHTML = orders.map(order => `
+                <tr>
+                    <td>#${order.id}</td>
+                    <td>${new Date(order.timestamp).toLocaleDateString('id-ID')}</td>
+                    <td>${order.tableId === 0 ? 'Take Away' : `Meja ${order.tableId}`}</td>
+                    <td>${order.type}</td>
+                    <td>Rp ${order.total.toLocaleString('id-ID')}</td>
+                    <td>${getStatusLabel(order.status)}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteOrder(${order.id})"><i data-lucide="trash-2"></i></button>
+                    </td>
+                </tr>
+            `).join('');
         }
     }
 
-    function updateTableOrderSelects() {
-        const posSelect = document.getElementById('pos-table-select');
-        const tableSelect = document.getElementById('table-order-select');
+    function renderSalesChart() {
+        const ctx = document.getElementById('sales-chart');
+        if (!ctx) return;
         
-        if (posSelect) {
-            const currentValue = posSelect.value;
-            posSelect.innerHTML = '<option value="0">Take Away</option>' +
-                state.tables.map(table => `<option value="${table.id}">Meja ${table.number}</option>`).join('');
-            posSelect.value = currentValue;
+        // Generate data for the last 7 days
+        const labels = [];
+        const data = [];
+        
+        for (let i = 6; i >= 0; i--) {
+            const date = new Date();
+            date.setDate(date.getDate() - i);
+            const dateStr = date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+            labels.push(dateStr);
+            
+            const dayOrders = state.orders.filter(order => {
+                const orderDate = new Date(order.timestamp);
+                return orderDate.toDateString() === date.toDateString();
+            });
+            
+            const dayRevenue = dayOrders.reduce((sum, order) => sum + (order.total || 0), 0);
+            data.push(dayRevenue);
         }
         
-        if (tableSelect) {
-            const currentValue = tableSelect.value;
-            tableSelect.innerHTML = state.tables.map(table => `<option value="${table.id}">Meja ${table.number}</option>`).join('');
-            tableSelect.value = currentValue;
+        // Destroy existing chart if it exists
+        if (window.salesChart) {
+            window.salesChart.destroy();
+        }
+        
+        // Create new chart
+        window.salesChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Penjualan Harian',
+                    data: data,
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return 'Rp ' + value.toLocaleString('id-ID');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function renderBestSellingItems() {
+        const container = document.getElementById('best-selling-items');
+        
+        // Calculate best selling items
+        const itemSales = {};
+        state.orders.forEach(order => {
+            order.items.forEach(item => {
+                if (!itemSales[item.name]) {
+                    itemSales[item.name] = 0;
+                }
+                itemSales[item.name] += item.quantity;
+            });
+        });
+        
+        const bestSelling = Object.entries(itemSales)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5);
+        
+        if (bestSelling.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada data penjualan.</p>';
+        } else {
+            container.innerHTML = bestSelling.map((item, index) => `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; margin-bottom: 0.5rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <span style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);">${index + 1}</span>
+                        <div>
+                            <div style="font-weight: 600;">${item[0]}</div>
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Terjual: ${item[1]} pcs</div>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: 600; color: var(--accent-primary);">
+                            Rp ${(item[1] * (state.menu.find(m => m.name === item[0])?.price || 0)).toLocaleString('id-ID')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+    }
+
+    function filterOrderHistory() {
+        const fromDate = document.getElementById('filter-date-from').value;
+        const toDate = document.getElementById('filter-date-to').value;
+        
+        let filteredOrders = state.orders;
+        
+        if (fromDate) {
+            filteredOrders = filteredOrders.filter(order => 
+                new Date(order.timestamp) >= new Date(fromDate)
+            );
+        }
+        
+        if (toDate) {
+            filteredOrders = filteredOrders.filter(order => 
+                new Date(order.timestamp) <= new Date(toDate + 'T23:59:59')
+            );
+        }
+        
+        const historyTableBody = document.getElementById('history-table-body');
+        
+        if (filteredOrders.length === 0) {
+            historyTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: var(--text-secondary);">Tidak ada pesanan dalam rentang tanggal yang dipilih.</td></tr>';
+        } else {
+            historyTableBody.innerHTML = filteredOrders.map(order => `
+                <tr>
+                    <td>#${order.id}</td>
+                    <td>${new Date(order.timestamp).toLocaleDateString('id-ID')}</td>
+                    <td>${order.tableId === 0 ? 'Take Away' : `Meja ${order.tableId}`}</td>
+                    <td>${order.type}</td>
+                    <td>Rp ${order.total.toLocaleString('id-ID')}</td>
+                    <td>${getStatusLabel(order.status)}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deleteOrder(${order.id})"><i data-lucide="trash-2"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+    }
+
+    function exportOrderHistory() {
+        const fromDate = document.getElementById('filter-date-from').value;
+        const toDate = document.getElementById('filter-date-to').value;
+        
+        let filteredOrders = state.orders;
+        
+        if (fromDate) {
+            filteredOrders = filteredOrders.filter(order => 
+                new Date(order.timestamp) >= new Date(fromDate)
+            );
+        }
+        
+        if (toDate) {
+            filteredOrders = filteredOrders.filter(order => 
+                new Date(order.timestamp) <= new Date(toDate + 'T23:59:59')
+            );
+        }
+        
+        let csvContent = "ID Pesanan,Tanggal,Meja,Tipe,Total,Status\n";
+        
+        filteredOrders.forEach(order => {
+            const row = [
+                `#${order.id}`,
+                new Date(order.timestamp).toLocaleDateString('id-ID'),
+                order.tableId === 0 ? 'Take Away' : `Meja ${order.tableId}`,
+                order.type,
+                `Rp ${order.total.toLocaleString('id-ID')}`,
+                getStatusLabel(order.status)
+            ].join(',');
+            
+            csvContent += row + '\n';
+        });
+        
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', `order_history_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        showNotification('Data riwayat pesanan berhasil diexport!', 'success');
+    }
+
+    function deleteOrder(orderId) {
+        if (confirm('Apakah Anda yakin ingin menghapus pesanan ini?')) {
+            state.orders = state.orders.filter(o => o.id !== orderId);
+            saveState();
+            showNotification('Pesanan berhasil dihapus!', 'success');
+            renderOrderHistory();
+            renderDashboard();
         }
     }
 
@@ -5555,12 +5984,68 @@
                 </div>
             `).join('');
         }
+        
+        // Render position list
+        renderPositionList();
+        
         lucide.createIcons();
+    }
+
+    function renderPositionList() {
+        const positionList = document.getElementById('position-list');
+        positionList.innerHTML = state.positions.map(position => `
+            <div class="position-badge">
+                <span>${position.name}</span>
+                <button onclick="removePosition(${position.id})">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+        `).join('');
+    }
+
+    function addPosition() {
+        const positionName = document.getElementById('new-position').value.trim();
+        
+        if (!positionName) {
+            showNotification('Nama posisi tidak boleh kosong!', 'warning');
+            return;
+        }
+        
+        // Check if position already exists
+        if (state.positions.some(p => p.name.toLowerCase() === positionName.toLowerCase())) {
+            showNotification('Posisi ini sudah ada!', 'warning');
+            return;
+        }
+        
+        state.positions.push({
+            id: Date.now(),
+            name: positionName
+        });
+        
+        document.getElementById('new-position').value = '';
+        saveState();
+        renderPositionList();
+        showNotification('Posisi berhasil ditambahkan!', 'success');
+    }
+
+    function removePosition(positionId) {
+        if (confirm('Apakah Anda yakin ingin menghapus posisi ini?')) {
+            state.positions = state.positions.filter(p => p.id !== positionId);
+            saveState();
+            renderPositionList();
+            showNotification('Posisi berhasil dihapus!', 'success');
+        }
     }
 
     function openUserModal(userId = null) {
         const modal = document.getElementById('user-modal');
         const title = document.getElementById('user-modal-title');
+        const roleSelect = document.getElementById('user-role');
+        
+        // Populate role select with positions
+        roleSelect.innerHTML = state.positions.map(position => 
+            `<option value="${position.name.toLowerCase()}">${position.name}</option>`
+        ).join('');
         
         if (userId) {
             const user = state.users.find(u => u.id === userId);
@@ -5569,7 +6054,7 @@
                 document.getElementById('user-id').value = user.id;
                 document.getElementById('user-name-input').value = user.name;
                 document.getElementById('user-email').value = user.email;
-                document.getElementById('user-role').value = user.role;
+                roleSelect.value = user.role;
                 document.getElementById('user-password').value = user.password;
             }
         } else {
@@ -6118,233 +6603,6 @@
             saveState();
             showNotification('Aset berhasil dihapus!', 'success');
             renderAssetManagement();
-        }
-    }
-
-    // --- ORDER HISTORY ---
-    function renderOrderHistory() {
-        renderSalesChart();
-        renderBestSellingItems();
-        
-        const historyTableBody = document.getElementById('history-table-body');
-        const orders = state.orders.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        
-        if (orders.length === 0) {
-            historyTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: var(--text-secondary);">Belum ada riwayat pesanan.</td></tr>';
-        } else {
-            historyTableBody.innerHTML = orders.map(order => `
-                <tr>
-                    <td>#${order.id}</td>
-                    <td>${new Date(order.timestamp).toLocaleDateString('id-ID')}</td>
-                    <td>${order.tableId === 0 ? 'Take Away' : `Meja ${order.tableId}`}</td>
-                    <td>${order.type}</td>
-                    <td>Rp ${order.total.toLocaleString('id-ID')}</td>
-                    <td>${getStatusLabel(order.status)}</td>
-                    <td>
-                        <button class="btn btn-danger" onclick="deleteOrder(${order.id})"><i data-lucide="trash-2"></i></button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-    }
-
-    function renderSalesChart() {
-        const ctx = document.getElementById('sales-chart');
-        if (!ctx) return;
-        
-        // Generate data for the last 7 days
-        const labels = [];
-        const data = [];
-        
-        for (let i = 6; i >= 0; i--) {
-            const date = new Date();
-            date.setDate(date.getDate() - i);
-            const dateStr = date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
-            labels.push(dateStr);
-            
-            const dayOrders = state.orders.filter(order => {
-                const orderDate = new Date(order.timestamp);
-                return orderDate.toDateString() === date.toDateString();
-            });
-            
-            const dayRevenue = dayOrders.reduce((sum, order) => sum + (order.total || 0), 0);
-            data.push(dayRevenue);
-        }
-        
-        // Destroy existing chart if it exists
-        if (window.salesChart) {
-            window.salesChart.destroy();
-        }
-        
-        // Create new chart
-        window.salesChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Penjualan Harian',
-                    data: data,
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                    borderColor: 'rgba(59, 130, 246, 1)',
-                    borderWidth: 2,
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return 'Rp ' + value.toLocaleString('id-ID');
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    function renderBestSellingItems() {
-        const container = document.getElementById('best-selling-items');
-        
-        // Calculate best selling items
-        const itemSales = {};
-        state.orders.forEach(order => {
-            order.items.forEach(item => {
-                if (!itemSales[item.name]) {
-                    itemSales[item.name] = 0;
-                }
-                itemSales[item.name] += item.quantity;
-            });
-        });
-        
-        const bestSelling = Object.entries(itemSales)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 5);
-        
-        if (bestSelling.length === 0) {
-            container.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Belum ada data penjualan.</p>';
-        } else {
-            container.innerHTML = bestSelling.map((item, index) => `
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-tertiary); border-radius: 8px; margin-bottom: 0.5rem;">
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                        <span style="font-size: 1.5rem; font-weight: 700; color: var(--accent-primary);">${index + 1}</span>
-                        <div>
-                            <div style="font-weight: 600;">${item[0]}</div>
-                            <div style="font-size: 0.875rem; color: var(--text-secondary);">Terjual: ${item[1]} pcs</div>
-                        </div>
-                    </div>
-                    <div style="text-align: right;">
-                        <div style="font-weight: 600; color: var(--accent-primary);">
-                            Rp ${(item[1] * (state.menu.find(m => m.name === item[0])?.price || 0)).toLocaleString('id-ID')}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-    }
-
-    function filterOrderHistory() {
-        const fromDate = document.getElementById('filter-date-from').value;
-        const toDate = document.getElementById('filter-date-to').value;
-        
-        let filteredOrders = state.orders;
-        
-        if (fromDate) {
-            filteredOrders = filteredOrders.filter(order => 
-                new Date(order.timestamp) >= new Date(fromDate)
-            );
-        }
-        
-        if (toDate) {
-            filteredOrders = filteredOrders.filter(order => 
-                new Date(order.timestamp) <= new Date(toDate + 'T23:59:59')
-            );
-        }
-        
-        const historyTableBody = document.getElementById('history-table-body');
-        
-        if (filteredOrders.length === 0) {
-            historyTableBody.innerHTML = '<tr><td colspan="7" style="text-align:center; color: var(--text-secondary);">Tidak ada pesanan dalam rentang tanggal yang dipilih.</td></tr>';
-        } else {
-            historyTableBody.innerHTML = filteredOrders.map(order => `
-                <tr>
-                    <td>#${order.id}</td>
-                    <td>${new Date(order.timestamp).toLocaleDateString('id-ID')}</td>
-                    <td>${order.tableId === 0 ? 'Take Away' : `Meja ${order.tableId}`}</td>
-                    <td>${order.type}</td>
-                    <td>Rp ${order.total.toLocaleString('id-ID')}</td>
-                    <td>${getStatusLabel(order.status)}</td>
-                    <td>
-                        <button class="btn btn-danger" onclick="deleteOrder(${order.id})"><i data-lucide="trash-2"></i></button>
-                    </td>
-                </tr>
-            `).join('');
-        }
-    }
-
-    function exportOrderHistory() {
-        const fromDate = document.getElementById('filter-date-from').value;
-        const toDate = document.getElementById('filter-date-to').value;
-        
-        let filteredOrders = state.orders;
-        
-        if (fromDate) {
-            filteredOrders = filteredOrders.filter(order => 
-                new Date(order.timestamp) >= new Date(fromDate)
-            );
-        }
-        
-        if (toDate) {
-            filteredOrders = filteredOrders.filter(order => 
-                new Date(order.timestamp) <= new Date(toDate + 'T23:59:59')
-            );
-        }
-        
-        let csvContent = "ID Pesanan,Tanggal,Meja,Tipe,Total,Status\n";
-        
-        filteredOrders.forEach(order => {
-            const row = [
-                `#${order.id}`,
-                new Date(order.timestamp).toLocaleDateString('id-ID'),
-                order.tableId === 0 ? 'Take Away' : `Meja ${order.tableId}`,
-                order.type,
-                `Rp ${order.total.toLocaleString('id-ID')}`,
-                getStatusLabel(order.status)
-            ].join(',');
-            
-            csvContent += row + '\n';
-        });
-        
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.setAttribute('href', url);
-        link.setAttribute('download', `order_history_${new Date().toISOString().split('T')[0]}.csv`);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        showNotification('Data riwayat pesanan berhasil diexport!', 'success');
-    }
-
-    function deleteOrder(orderId) {
-        if (confirm('Apakah Anda yakin ingin menghapus pesanan ini?')) {
-            state.orders = state.orders.filter(o => o.id !== orderId);
-            saveState();
-            showNotification('Pesanan berhasil dihapus!', 'success');
-            renderOrderHistory();
-            renderDashboard();
         }
     }
 
@@ -7478,6 +7736,16 @@
             const pageId = activePage.id.replace('-page', '');
             showPage(pageId);
         }
+    }
+
+    function getStatusLabel(status) {
+        const statusMap = {
+            'baru': 'Baru',
+            'dimasak': 'Diproses',
+            'siap': 'Siap',
+            'selesai': 'Selesai'
+        };
+        return statusMap[status] || status;
     }
 
     // --- INITIALIZATION ---
