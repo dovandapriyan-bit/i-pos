@@ -2507,6 +2507,252 @@
             .kpi-grid { grid-template-columns: 1fr; }
             .content-area { padding: 1rem; }
         }
+
+        /* New styles for KDS improvements */
+        .kds-tabs {
+            display: flex;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .kds-tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+        }
+
+        .kds-tab:hover {
+            color: var(--accent-primary);
+        }
+
+        .kds-tab.active {
+            color: var(--accent-primary);
+            border-bottom-color: var(--accent-primary);
+        }
+
+        .kds-item-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: 0.5rem;
+        }
+
+        .kds-item-checkbox.checked {
+            background-color: var(--accent-success);
+            border-color: var(--accent-success);
+            color: white;
+        }
+
+        .kds-item-row {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .kds-item-row:last-child {
+            border-bottom: none;
+        }
+
+        .kds-item-name {
+            flex-grow: 1;
+            font-weight: 500;
+        }
+
+        .kds-item-quantity {
+            color: var(--text-secondary);
+            margin-right: 0.5rem;
+        }
+
+        .kds-new-order-indicator {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--accent-danger);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* New styles for POS improvements */
+        .pos-payment-section {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pos-payment-header {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .pos-payment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .pos-payment-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pos-payment-label {
+            font-weight: 500;
+        }
+
+        .pos-payment-value {
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+
+        .pos-payment-total {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            border-top: 1px solid var(--border-color);
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .pos-table-orders {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pos-table-orders-header {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pos-table-order-item {
+            background-color: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .pos-table-order-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .pos-table-order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .pos-table-order-title {
+            font-weight: 600;
+        }
+
+        .pos-table-order-time {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .pos-table-order-items {
+            margin-bottom: 0.5rem;
+        }
+
+        .pos-table-order-item-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.25rem 0;
+        }
+
+        .pos-table-order-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .receipt-preview {
+            background-color: white;
+            color: black;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: monospace;
+            margin-bottom: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .receipt-preview-header {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .receipt-preview-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .receipt-preview-subtitle {
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .receipt-preview-details {
+            margin-bottom: 1rem;
+        }
+
+        .receipt-preview-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.25rem;
+        }
+
+        .receipt-preview-divider {
+            border-top: 1px dashed black;
+            margin: 0.5rem 0;
+        }
+
+        .receipt-preview-total {
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+
+        .receipt-preview-footer {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+        }
     </style>
 </head>
 <body>
@@ -2615,33 +2861,84 @@
             <!-- POS PAGE -->
             <div class="page" id="pos-page">
                 <div class="pos-layout">
-                    <div class="pos-menu-container card">
-                        <div class="card-header">
-                            <span>Menu</span>
-                            <select id="pos-table-select" class="form-group" style="width: 150px; margin:0;">
-                                <option value="0">Take Away</option>
-                                <option value="1">Meja 1</option>
-                                <option value="2">Meja 2</option>
-                                <option value="3">Meja 3</option>
-                                <option value="4">Meja 4</option>
-                                <option value="5">Meja 5</option>
-                                <option value="6">Meja 6</option>
-                            </select>
+                    <div class="pos-menu-container">
+                        <!-- Table Orders Section -->
+                        <div class="pos-table-orders">
+                            <div class="pos-table-orders-header">
+                                <span>Pesanan Meja</span>
+                                <button class="btn btn-secondary" onclick="refreshTableOrders()">
+                                    <i data-lucide="refresh-cw"></i> Refresh
+                                </button>
+                            </div>
+                            <div id="pos-table-orders-list"></div>
                         </div>
-                        <div class="pos-categories" id="pos-categories"></div>
-                        <div class="pos-menu-grid" id="pos-menu-grid"></div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <span>Menu</span>
+                                <select id="pos-table-select" class="form-group" style="width: 150px; margin:0;">
+                                    <option value="0">Take Away</option>
+                                    <option value="1">Meja 1</option>
+                                    <option value="2">Meja 2</option>
+                                    <option value="3">Meja 3</option>
+                                    <option value="4">Meja 4</option>
+                                    <option value="5">Meja 5</option>
+                                    <option value="6">Meja 6</option>
+                                </select>
+                            </div>
+                            <div class="pos-categories" id="pos-categories"></div>
+                            <div class="pos-menu-grid" id="pos-menu-grid"></div>
+                        </div>
                     </div>
-                    <div class="pos-cart-container card">
-                        <div class="card-header">
-                            <span>Keranjang</span>
-                            <button class="btn btn-danger" onclick="clearCurrentOrder()">Batal</button>
+                    <div class="pos-cart-container">
+                        <div class="card">
+                            <div class="card-header">
+                                <span>Keranjang</span>
+                                <button class="btn btn-danger" onclick="clearCurrentOrder()">Batal</button>
+                            </div>
+                            <div class="pos-cart" id="pos-cart"></div>
                         </div>
-                        <div class="pos-cart" id="pos-cart"></div>
-                        <div class="pos-summary">
-                            <div class="pos-summary-row"><span>Subtotal</span><span id="pos-subtotal">Rp 0</span></div>
-                            <div class="pos-summary-row"><span>Pajak (10%)</span><span id="pos-tax">Rp 0</span></div>
-                            <div class="pos-summary-row total"><span>Total</span><span id="pos-total">Rp 0</span></div>
-                            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="openPaymentModal()">Bayar</button>
+                        
+                        <!-- Payment Section -->
+                        <div class="pos-payment-section">
+                            <div class="pos-payment-header">Pembayaran</div>
+                            <div class="pos-payment-form">
+                                <div class="form-group">
+                                    <label>Nama Pembeli</label>
+                                    <input type="text" id="customer-name" placeholder="Nama pembeli (opsional)">
+                                </div>
+                                <div class="form-group">
+                                    <label>Metode Pembayaran</label>
+                                    <select id="payment-method">
+                                        <option value="Tunai">Tunai</option>
+                                        <option value="QRIS">QRIS</option>
+                                        <option value="Transfer">Transfer Bank</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="cash-payment-group">
+                                    <label>Uang Dibayar</label>
+                                    <input type="number" id="payment-amount" placeholder="0">
+                                </div>
+                                <div class="pos-payment-row">
+                                    <span class="pos-payment-label">Subtotal</span>
+                                    <span class="pos-payment-value" id="pos-subtotal">Rp 0</span>
+                                </div>
+                                <div class="pos-payment-row">
+                                    <span class="pos-payment-label">Pajak (10%)</span>
+                                    <span class="pos-payment-value" id="pos-tax">Rp 0</span>
+                                </div>
+                                <div class="pos-payment-row">
+                                    <span class="pos-payment-label">Kembalian</span>
+                                    <span class="pos-payment-value" id="payment-change">Rp 0</span>
+                                </div>
+                                <div class="pos-payment-row pos-payment-total">
+                                    <span>Total</span>
+                                    <span id="pos-total">Rp 0</span>
+                                </div>
+                                <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="processPayment()">
+                                    <i data-lucide="credit-card"></i> Bayar & Cetak Struk
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2655,6 +2952,13 @@
                         <i data-lucide="alert-triangle"></i> Update Stok Menu Habis
                     </button>
                 </div>
+                
+                <!-- KDS Tabs -->
+                <div class="kds-tabs">
+                    <button class="kds-tab active" onclick="showKDSOrders('active', this)">Pesanan Aktif</button>
+                    <button class="kds-tab" onclick="showKDSOrders('completed', this)">Pesanan Selesai</button>
+                </div>
+                
                 <div class="kds-grid" id="kds-orders-grid"></div>
             </div>
 
@@ -3755,6 +4059,30 @@
     </div>
 </div>
 
+<!-- CHANGE TABLE MODAL -->
+<div class="modal" id="change-table-modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal('change-table-modal')">&times;</span>
+        <h2>Ubah Nomor Meja</h2>
+        <div class="form-group">
+            <label>Nomor Meja Saat Ini</label>
+            <input type="text" id="current-table-display" readonly style="background-color: var(--bg-tertiary);">
+        </div>
+        <div class="form-group">
+            <label>Pilih Nomor Meja Baru</label>
+            <select id="new-table-select" required>
+                <option value="1">Meja 1</option>
+                <option value="2">Meja 2</option>
+                <option value="3">Meja 3</option>
+                <option value="4">Meja 4</option>
+                <option value="5">Meja 5</option>
+                <option value="6">Meja 6</option>
+            </select>
+        </div>
+        <button class="btn btn-primary" style="width: 100%;" onclick="changeTableNumber()">Ubah Meja</button>
+    </div>
+</div>
+
 <!-- PRINT RECEIPT (HIDDEN) -->
 <div id="print-receipt" style="display: none;"></div>
 
@@ -4464,6 +4792,128 @@
         renderCategories('pos-categories');
         renderMenuGrid('pos-menu-grid', handleAddToOrder);
         updatePOSCart();
+        renderTableOrders();
+        
+        // Update payment section based on payment method
+        document.getElementById('payment-method').addEventListener('change', function() {
+            const cashPaymentGroup = document.getElementById('cash-payment-group');
+            if (this.value === 'Tunai') {
+                cashPaymentGroup.style.display = 'block';
+            } else {
+                cashPaymentGroup.style.display = 'none';
+            }
+        });
+        
+        // Update change amount when payment amount changes
+        document.getElementById('payment-amount').addEventListener('input', function() {
+            const total = parseInt(document.getElementById('pos-total').textContent.replace(/\D/g,'')) || 0;
+            const paidAmount = parseInt(this.value) || 0;
+            const change = paidAmount - total;
+            document.getElementById('payment-change').textContent = `Rp ${Math.max(0, change).toLocaleString('id-ID')}`;
+        });
+    }
+
+    function renderTableOrders() {
+        const container = document.getElementById('pos-table-orders-list');
+        const tableOrders = state.orders.filter(order => 
+            order.type === 'dine-in' && order.status === 'baru'
+        );
+        
+        if (tableOrders.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color: var(--text-secondary);">Tidak ada pesanan meja yang menunggu pembayaran.</p>';
+        } else {
+            container.innerHTML = tableOrders.map(order => {
+                const table = state.tables.find(t => t.id === order.tableId);
+                return `
+                    <div class="pos-table-order-item">
+                        <div class="pos-table-order-header">
+                            <div class="pos-table-order-title">Meja ${table ? table.number : order.tableId}</div>
+                            <div class="pos-table-order-time">${new Date(order.timestamp).toLocaleTimeString('id-ID')}</div>
+                        </div>
+                        <div class="pos-table-order-items">
+                            ${order.items.map(item => `
+                                <div class="pos-table-order-item-row">
+                                    <span>${item.name} x${item.quantity}</span>
+                                    <span>Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="pos-table-order-actions">
+                            <button class="btn btn-primary" onclick="processTableOrderPayment(${order.id})">
+                                <i data-lucide="credit-card"></i> Proses Pembayaran
+                            </button>
+                            <button class="btn btn-secondary" onclick="changeTableForOrder(${order.id})">
+                                <i data-lucide="edit"></i> Ubah Meja
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        lucide.createIcons();
+    }
+
+    function processTableOrderPayment(orderId) {
+        const order = state.orders.find(o => o.id === orderId);
+        if (!order) return;
+        
+        // Load order into current order
+        state.currentOrder = {
+            items: [...order.items],
+            tableId: order.tableId,
+            customerName: `Meja ${order.tableId}`,
+            orderId: order.id
+        };
+        
+        // Update UI
+        document.getElementById('pos-table-select').value = order.tableId;
+        updatePOSCart();
+        
+        // Show notification
+        showNotification(`Pesanan dari Meja ${order.tableId} telah dimuat ke keranjang`, 'info');
+    }
+
+    function changeTableForOrder(orderId) {
+        const order = state.orders.find(o => o.id === orderId);
+        if (!order) return;
+        
+        // Store order ID for later use
+        state.currentOrderId = orderId;
+        
+        // Show modal to change table
+        document.getElementById('current-table-display').value = `Meja ${order.tableId}`;
+        document.getElementById('new-table-select').value = order.tableId;
+        document.getElementById('change-table-modal').style.display = 'flex';
+    }
+
+    function changeTableNumber() {
+        const newTableId = parseInt(document.getElementById('new-table-select').value);
+        const orderId = state.currentOrderId;
+        
+        if (!orderId) return;
+        
+        const order = state.orders.find(o => o.id === orderId);
+        if (!order) return;
+        
+        // Update order table
+        order.tableId = newTableId;
+        
+        // Save state
+        saveState();
+        
+        // Close modal
+        closeModal('change-table-modal');
+        
+        // Refresh UI
+        renderTableOrders();
+        
+        // Show notification
+        showNotification(`Nomor meja untuk pesanan #${orderId} telah diubah ke Meja ${newTableId}`, 'success');
+    }
+
+    function refreshTableOrders() {
+        renderTableOrders();
+        showNotification('Daftar pesanan meja telah diperbarui', 'info');
     }
 
     function renderCategories(containerId) {
@@ -4524,14 +4974,6 @@
         const menuItem = state.menu.find(i => i.id === itemId);
         if (!menuItem || menuItem.outOfStock) return;
         
-        // Check if this is a take away order
-        const tableId = parseInt(document.getElementById('pos-table-select').value);
-        if (tableId === 0 && state.currentOrder.items.length === 0) {
-            // Show customer info modal for take away orders
-            document.getElementById('takeaway-customer-modal').style.display = 'flex';
-            return;
-        }
-        
         const existingItem = state.currentOrder.items.find(i => i.id === itemId);
         if (existingItem) {
             existingItem.quantity++;
@@ -4544,23 +4986,6 @@
             });
         }
         updatePOSCart();
-    }
-
-    function proceedWithTakeaway() {
-        const customerName = document.getElementById('takeaway-customer-name').value;
-        const customerPhone = document.getElementById('takeaway-customer-phone').value;
-        
-        if (!customerName) {
-            showNotification('Nama pelanggan harus diisi!', 'warning');
-            return;
-        }
-        
-        // Store customer info in the current order
-        state.currentOrder.customerName = customerName;
-        state.currentOrder.customerPhone = customerPhone;
-        
-        closeModal('takeaway-customer-modal');
-        showNotification('Silakan pilih menu untuk pesanan take away Anda', 'info');
     }
 
     function updatePOSCart() {
@@ -4605,29 +5030,32 @@
         document.getElementById('pos-subtotal').textContent = `Rp ${subtotal.toLocaleString('id-ID')}`;
         document.getElementById('pos-tax').textContent = `Rp ${tax.toLocaleString('id-ID')}`;
         document.getElementById('pos-total').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+        
+        // Update change amount if cash payment
+        const paymentMethod = document.getElementById('payment-method').value;
+        if (paymentMethod === 'Tunai') {
+            const paidAmount = parseInt(document.getElementById('payment-amount').value) || 0;
+            const change = paidAmount - total;
+            document.getElementById('payment-change').textContent = `Rp ${Math.max(0, change).toLocaleString('id-ID')}`;
+        }
     }
 
     function clearCurrentOrder() {
         if (confirm('Apakah Anda yakin ingin membatalkan pesanan ini?')) {
-            state.currentOrder = { items: [], tableId: parseInt(document.getElementById('pos-table-select').value) };
+            state.currentOrder = { items: [], tableId: 0 };
             updatePOSCart();
         }
     }
 
-    function openPaymentModal() {
+    function processPayment() {
         if (state.currentOrder.items.length === 0) {
             showNotification('Keranjang masih kosong!', 'warning');
             return;
         }
-        document.getElementById('modal-subtotal').textContent = document.getElementById('pos-subtotal').textContent;
-        document.getElementById('modal-tax').textContent = document.getElementById('pos-tax').textContent;
-        document.getElementById('modal-total').textContent = document.getElementById('pos-total').textContent;
-        document.getElementById('payment-modal').style.display = 'flex';
-    }
-
-    function processPayment() {
-        const total = parseInt(document.getElementById('modal-total').textContent.replace(/\D/g,''));
+        
+        const total = parseInt(document.getElementById('pos-total').textContent.replace(/\D/g,''));
         const method = document.getElementById('payment-method').value;
+        const customerName = document.getElementById('customer-name').value;
         const paidAmount = parseInt(document.getElementById('payment-amount').value) || 0;
         
         if (method === 'Tunai' && paidAmount < total) {
@@ -4635,56 +5063,41 @@
             return;
         }
 
-        const newOrder = {
-            id: Date.now(),
-            tableId: parseInt(document.getElementById('pos-table-select').value),
-            items: [...state.currentOrder.items],
-            status: 'baru',
-            total: total,
-            type: state.currentOrder.tableId === 0 ? 'takeaway' : 'dine-in',
-            paymentMethod: method,
-            timestamp: new Date().toISOString(),
-            cashier: state.currentUser.name,
-            statusHistory: [
-                { status: 'baru', timestamp: new Date().toISOString() }
-            ]
-        };
+        // Create receipt preview
+        const receiptContent = generateReceiptContent(total, method, customerName, paidAmount);
         
-        // Add customer info for take away orders
-        if (state.currentOrder.tableId === 0) {
-            newOrder.customerName = state.currentOrder.customerName;
-            newOrder.customerPhone = state.currentOrder.customerPhone;
-        }
-
-        // Reduce stock from inventory
-        reduceStockFromOrder(newOrder);
-
-        state.orders.push(newOrder);
-        state.currentOrder = { items: [], tableId: 0 };
-        saveState();
-        
-        closeModal('payment-modal');
-        showNotification(`Pembayaran ${method} sebesar Rp ${total.toLocaleString('id-ID')} berhasil!`, 'success');
-        
-        // Show print button for cash payments
-        if (method === 'Tunai') {
-            document.getElementById('print-receipt-btn').style.display = 'flex';
-        } else {
-            document.getElementById('print-receipt-btn').style.display = 'none';
-        }
-        
-        renderPOS();
-        renderDashboard();
-        renderKDS();
+        // Show receipt preview modal
+        const receiptModal = document.createElement('div');
+        receiptModal.className = 'modal';
+        receiptModal.style.display = 'flex';
+        receiptModal.innerHTML = `
+            <div class="modal-content" style="max-width: 400px;">
+                <span class="modal-close" onclick="this.parentElement.parentElement.remove()">&times;</span>
+                <h2>Preview Struk</h2>
+                <div class="receipt-preview">
+                    ${receiptContent}
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button class="btn btn-secondary" style="flex-grow: 1;" onclick="this.parentElement.parentElement.parentElement.remove()">
+                        Batal
+                    </button>
+                    <button class="btn btn-primary" style="flex-grow: 1;" onclick="confirmPayment(${total}, '${method}', '${customerName}', ${paidAmount})">
+                        <i data-lucide="printer"></i> Cetak Struk
+                    </button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(receiptModal);
+        lucide.createIcons();
     }
 
-    function printReceipt() {
-        const total = parseInt(document.getElementById('modal-total').textContent.replace(/\D/g,''));
-        const method = document.getElementById('payment-method').value;
-        const paidAmount = parseInt(document.getElementById('payment-amount').value) || 0;
+    function generateReceiptContent(total, method, customerName, paidAmount) {
+        const now = new Date();
+        const tableId = parseInt(document.getElementById('pos-table-select').value);
+        const tableLabel = tableId === 0 ? 'Take Away' : `Meja ${tableId}`;
         const change = paidAmount - total;
         
-        const receiptContent = `
+        return `
             <div class="print-receipt">
                 <div class="print-receipt-header">
                     <div class="print-receipt-title">DNT Network Cafe</div>
@@ -4694,7 +5107,11 @@
                 <div class="print-receipt-details">
                     <div class="print-receipt-row">
                         <span>Tanggal:</span>
-                        <span>${new Date().toLocaleDateString('id-ID')}</span>
+                        <span>${now.toLocaleDateString('id-ID')}</span>
+                    </div>
+                    <div class="print-receipt-row">
+                        <span>Waktu:</span>
+                        <span>${now.toLocaleTimeString('id-ID')}</span>
                     </div>
                     <div class="print-receipt-row">
                         <span>Kasir:</span>
@@ -4702,12 +5119,12 @@
                     </div>
                     <div class="print-receipt-row">
                         <span>Meja:</span>
-                        <span>${state.currentOrder.tableId === 0 ? 'Take Away' : `Meja ${state.currentOrder.tableId}`}</span>
+                        <span>${tableLabel}</span>
                     </div>
-                    ${state.currentOrder.customerName ? `
+                    ${customerName ? `
                         <div class="print-receipt-row">
                             <span>Pelanggan:</span>
-                            <span>${state.currentOrder.customerName}</span>
+                            <span>${customerName}</span>
                         </div>
                     ` : ''}
                 </div>
@@ -4724,15 +5141,15 @@
                 <div class="print-receipt-details">
                     <div class="print-receipt-row">
                         <span>Subtotal:</span>
-                        <span>${document.getElementById('modal-subtotal').textContent}</span>
+                        <span>${document.getElementById('pos-subtotal').textContent}</span>
                     </div>
                     <div class="print-receipt-row">
                         <span>Pajak (10%):</span>
-                        <span>${document.getElementById('modal-tax').textContent}</span>
+                        <span>${document.getElementById('pos-tax').textContent}</span>
                     </div>
                     <div class="print-receipt-row print-receipt-total">
                         <span>Total:</span>
-                        <span>${document.getElementById('modal-total').textContent}</span>
+                        <span>${document.getElementById('pos-total').textContent}</span>
                     </div>
                     ${method === 'Tunai' ? `
                         <div class="print-receipt-row">
@@ -4741,19 +5158,101 @@
                         </div>
                         <div class="print-receipt-row">
                             <span>Kembalian:</span>
-                            <span>Rp ${change.toLocaleString('id-ID')}</span>
+                            <span>Rp ${Math.max(0, change).toLocaleString('id-ID')}</span>
                         </div>
                     ` : ''}
                 </div>
+                <div class="print-receipt-divider"></div>
                 <div class="print-receipt-footer">
                     <div>Terima kasih atas kunjungan Anda</div>
                     <div>Barang yang sudah dibeli tidak dapat dikembalikan</div>
                 </div>
             </div>
         `;
+    }
+
+    function confirmPayment(total, method, customerName, paidAmount) {
+        const tableId = parseInt(document.getElementById('pos-table-select').value);
+        const change = paidAmount - total;
         
+        // Create new order
+        const newOrder = {
+            id: Date.now(),
+            tableId: tableId,
+            items: [...state.currentOrder.items],
+            status: 'proses',
+            total: total,
+            type: tableId === 0 ? 'takeaway' : 'dine-in',
+            paymentMethod: method,
+            timestamp: new Date().toISOString(),
+            cashier: state.currentUser.name,
+            statusHistory: [
+                { status: 'proses', timestamp: new Date().toISOString() }
+            ]
+        };
+        
+        // Add customer info for take away orders
+        if (tableId === 0 && customerName) {
+            newOrder.customerName = customerName;
+        }
+        
+        // If this is a table order payment, update the existing order
+        if (state.currentOrder.orderId) {
+            const existingOrder = state.orders.find(o => o.id === state.currentOrder.orderId);
+            if (existingOrder) {
+                existingOrder.status = 'proses';
+                existingOrder.paymentMethod = method;
+                existingOrder.total = total;
+                existingOrder.cashier = state.currentUser.name;
+                existingOrder.timestamp = new Date().toISOString();
+                existingOrder.statusHistory = [
+                    { status: 'proses', timestamp: new Date().toISOString() }
+                ];
+                
+                // Add customer info if provided
+                if (customerName) {
+                    existingOrder.customerName = customerName;
+                }
+            }
+        } else {
+            // Add new order to state
+            state.orders.push(newOrder);
+        }
+        
+        // Reduce stock from inventory
+        reduceStockFromOrder(newOrder);
+        
+        // Update table status
+        if (tableId !== 0) {
+            const table = state.tables.find(t => t.id === tableId);
+            if (table) table.status = 'occupied';
+        }
+        
+        // Reset current order
+        state.currentOrder = { items: [], tableId: 0 };
+        
+        // Save state
+        saveState();
+        
+        // Close receipt preview modal
+        document.querySelector('.modal').remove();
+        
+        // Print receipt
+        printReceiptContent(generateReceiptContent(total, method, customerName, paidAmount));
+        
+        // Show notification
+        showNotification(`Pembayaran ${method} sebesar Rp ${total.toLocaleString('id-ID')} berhasil!`, 'success');
+        
+        // Update UI
+        renderPOS();
+        renderDashboard();
+        renderKDS();
+        renderTableOrders();
+    }
+
+    function printReceiptContent(content) {
         const printWindow = window.open('', '_blank');
-        printWindow.document.write(receiptContent);
+        printWindow.document.write(content);
         printWindow.document.close();
         printWindow.focus();
         printWindow.print();
@@ -4762,15 +5261,29 @@
 
     // --- KDS SYSTEM ---
     function renderKDS() {
-        const kdsGrid = document.getElementById('kds-orders-grid');
-        const activeOrders = state.orders.filter(o => o.status !== 'selesai');
+        showKDSOrders('active', document.querySelector('.kds-tab.active'));
+    }
+
+    function showKDSOrders(status, tabElement) {
+        // Update active tab
+        document.querySelectorAll('.kds-tab').forEach(tab => tab.classList.remove('active'));
+        tabElement.classList.add('active');
         
-        if (activeOrders.length === 0) {
-            kdsGrid.innerHTML = '<p style="text-align:center; color: var(--text-secondary); grid-column: 1/-1;">Tidak ada pesanan aktif.</p>';
+        const kdsGrid = document.getElementById('kds-orders-grid');
+        let ordersToShow = [];
+        
+        if (status === 'active') {
+            ordersToShow = state.orders.filter(o => o.status !== 'selesai');
+        } else if (status === 'completed') {
+            ordersToShow = state.orders.filter(o => o.status === 'selesai');
+        }
+        
+        if (ordersToShow.length === 0) {
+            kdsGrid.innerHTML = `<p style="text-align:center; color: var(--text-secondary); grid-column: 1/-1;">Tidak ada pesanan ${status === 'active' ? 'aktif' : 'selesai'}.</p>`;
         } else {
             // Group orders by table
             const ordersByTable = {};
-            activeOrders.forEach(order => {
+            ordersToShow.forEach(order => {
                 const tableKey = order.tableId === 0 ? 'Take Away' : `Meja ${order.tableId}`;
                 if (!ordersByTable[tableKey]) {
                     ordersByTable[tableKey] = [];
@@ -4789,11 +5302,17 @@
                             menuItemsByTable[tableKey][item.id] = {
                                 ...item,
                                 quantity: 0,
-                                orders: []
+                                orders: [],
+                                completed: false
                             };
                         }
                         menuItemsByTable[tableKey][item.id].quantity += item.quantity;
                         menuItemsByTable[tableKey][item.id].orders.push(order.id);
+                        
+                        // Check if all orders for this item are completed
+                        if (order.status === 'selesai') {
+                            menuItemsByTable[tableKey][item.id].completed = true;
+                        }
                     });
                 });
             });
@@ -4801,33 +5320,69 @@
             kdsGrid.innerHTML = Object.entries(menuItemsByTable).map(([tableKey, menuItems]) => {
                 const tableOrders = ordersByTable[tableKey];
                 const orderIds = [...new Set(tableOrders.map(o => o.id))];
+                const latestOrder = tableOrders.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
+                
+                // Check if there are new orders for the same table
+                const hasNewOrders = tableOrders.some(order => {
+                    const orderTime = new Date(order.timestamp);
+                    const now = new Date();
+                    const diffMinutes = (now - orderTime) / (1000 * 60);
+                    return diffMinutes < 5 && order.status === 'proses';
+                });
+                
+                // Check if all items are completed
+                const allItemsCompleted = Object.values(menuItems).every(item => item.completed);
                 
                 return `
-                    <div class="kds-order-card">
+                    <div class="kds-order-card ${latestOrder.status === 'proses' ? 'status-cooking' : latestOrder.status === 'siap' ? 'status-ready' : 'status-new'}">
                         <div class="kds-order-header">
                             <span class="kds-order-id">${tableKey}</span>
                             <span class="kds-order-time">${orderIds.length} pesanan</span>
+                            ${hasNewOrders ? '<div class="kds-new-order-indicator">!</div>' : ''}
                         </div>
                         <div style="margin-bottom: 1rem; padding: 0.5rem; background: var(--bg-tertiary); border-radius: 8px;">
                             <div style="font-weight: 600; margin-bottom: 0.5rem;">Pesanan: #${orderIds.join(', #')}</div>
                         </div>
                         ${Object.values(menuItems).map(item => `
-                            <div class="kds-order-item">
-                                <span>${item.name} x${item.quantity}</span>
+                            <div class="kds-item-row">
+                                <div class="kds-item-checkbox ${item.completed ? 'checked' : ''}" onclick="toggleItemComplete(${item.id}, '${tableKey}')">
+                                    ${item.completed ? '<i data-lucide="check"></i>' : ''}
+                                </div>
+                                <div class="kds-item-name">${item.name} x${item.quantity}</div>
                             </div>
                         `).join('')}
                         <div class="kds-order-actions">
-                            ${tableOrders.some(o => o.status === 'baru') ? 
-                                `<button class="btn btn-primary" onclick="updateTableOrderStatus('${tableKey}', 'dimasak')">Mulai Masak</button>` : ''}
-                            ${tableOrders.every(o => o.status === 'dimasak') ? 
-                                `<button class="btn btn-warning" onclick="updateTableOrderStatus('${tableKey}', 'siap')">Selesai</button>` : ''}
-                            ${tableOrders.every(o => o.status === 'siap') ? 
-                                `<button class="btn btn-success" onclick="updateTableOrderStatus('${tableKey}', 'selesai')">Diantar</button>` : ''}
+                            ${latestOrder.status === 'proses' ? 
+                                `<button class="btn btn-warning" onclick="updateTableOrderStatus('${tableKey}', 'siap')">Siap</button>` : ''}
+                            ${latestOrder.status === 'siap' && allItemsCompleted ? 
+                                `<button class="btn btn-primary" onclick="updateTableOrderStatus('${tableKey}', 'di-antar')">Di Antar</button>` : ''}
+                            ${latestOrder.status === 'di-antar' ? 
+                                `<button class="btn btn-success" onclick="updateTableOrderStatus('${tableKey}', 'selesai')">Selesai</button>` : ''}
                         </div>
                     </div>
                 `;
             }).join('');
         }
+        lucide.createIcons();
+    }
+
+    function toggleItemComplete(itemId, tableKey) {
+        // Find the item in the current display
+        const tableOrders = state.orders.filter(o => {
+            const key = o.tableId === 0 ? 'Take Away' : `Meja ${o.tableId}`;
+            return key === tableKey && o.status !== 'selesai';
+        });
+        
+        // Update the completed status for this item in all orders
+        tableOrders.forEach(order => {
+            const item = order.items.find(i => i.id === itemId);
+            if (item) {
+                item.completed = !item.completed;
+            }
+        });
+        
+        // Re-render KDS
+        renderKDS();
     }
 
     function updateTableOrderStatus(tableKey, newStatus) {
@@ -4848,8 +5403,8 @@
         renderDashboard();
         renderTableOrder();
         
-        const statusMessage = newStatus === 'dimasak' ? 'Pesanan sedang diproses' :
-                             newStatus === 'siap' ? 'Pesanan siap diantar' :
+        const statusMessage = newStatus === 'siap' ? 'Pesanan siap diantar' :
+                             newStatus === 'di-antar' ? 'Pesanan sedang diantar' :
                              newStatus === 'selesai' ? 'Pesanan telah selesai' : '';
         
         if (statusMessage) {
@@ -4928,7 +5483,7 @@
             queueList.innerHTML = Object.entries(ordersByTable).map(([tableKey, orders]) => {
                 const orderIds = orders.map(o => o.id);
                 const latestOrder = orders.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))[0];
-                const statusClass = latestOrder.status === 'baru' ? 'new' : 
+                const statusClass = latestOrder.status === 'proses' ? 'new' : 
                                     latestOrder.status === 'dimasak' ? 'processing' : 
                                     latestOrder.status === 'siap' ? 'ready' : '';
                 
@@ -4960,19 +5515,19 @@
                 <div class="card" style="margin-bottom: 1rem;">
                     <div class="card-header" style="padding: 1rem; margin-bottom: 0;">
                         <span>Order #${order.id}</span>
-                        <span class="subscription-status status-${order.status === 'baru' ? 'active' : order.status === 'dimasak' ? 'warning' : 'success'}">
+                        <span class="subscription-status status-${order.status === 'proses' ? 'active' : order.status === 'dimasak' ? 'warning' : 'success'}">
                             ${getStatusLabel(order.status)}
                         </span>
                     </div>
                     <div style="padding: 1rem;">
                         <div class="order-status-timeline">
-                            <div class="order-status-step ${order.status === 'baru' || order.status === 'dimasak' || order.status === 'siap' || order.status === 'selesai' ? 'completed' : ''}">
+                            <div class="order-status-step ${order.status === 'proses' || order.status === 'dimasak' || order.status === 'siap' || order.status === 'selesai' ? 'completed' : ''}">
                                 <div class="order-status-step-circle">
-                                    ${order.status === 'baru' || order.status === 'dimasak' || order.status === 'siap' || order.status === 'selesai' ? '<i data-lucide="check"></i>' : '1'}
+                                    ${order.status === 'proses' || order.status === 'dimasak' || order.status === 'siap' || order.status === 'selesai' ? '<i data-lucide="check"></i>' : '1'}
                                 </div>
                                 <div class="order-status-step-label">Diterima</div>
                             </div>
-                            <div class="order-status-step ${order.status === 'dimasak' || order.status === 'siap' || order.status === 'selesai' ? 'completed' : order.status === 'baru' ? 'active' : ''}">
+                            <div class="order-status-step ${order.status === 'dimasak' || order.status === 'siap' || order.status === 'selesai' ? 'completed' : order.status === 'proses' ? 'active' : ''}">
                                 <div class="order-status-step-circle">
                                     ${order.status === 'dimasak' || order.status === 'siap' || order.status === 'selesai' ? '<i data-lucide="check"></i>' : '2'}
                                 </div>
@@ -7743,7 +8298,8 @@
             'baru': 'Baru',
             'dimasak': 'Diproses',
             'siap': 'Siap',
-            'selesai': 'Selesai'
+            'selesai': 'Selesai',
+            'proses': 'Proses'
         };
         return statusMap[status] || status;
     }
@@ -7764,13 +8320,6 @@
             if (!e.target.closest('.user-dropdown')) {
                 document.getElementById('userDropdownMenu').classList.remove('show');
             }
-        });
-
-        document.getElementById('payment-amount').addEventListener('input', function() {
-            const total = parseInt(document.getElementById('modal-total').textContent.replace(/\D/g,''));
-            const paidAmount = parseInt(this.value) || 0;
-            const change = paidAmount - total;
-            document.getElementById('payment-change').textContent = `Rp ${Math.max(0, change).toLocaleString('id-ID')}`;
         });
 
         // Auto-calculate payroll total
