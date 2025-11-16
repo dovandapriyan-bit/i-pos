@@ -28,15 +28,17 @@
 
         /* Fix menu di mobile */
 @media (max-width: 768px) {
-    .pos-menu-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 0.5rem;
-    }
-    
-    .pos-menu-item {
-        padding: 0.5rem;
-        min-height: 70px;
-    }
+   /* Fix untuk WebView Kodular */
+.pos-menu-grid {
+    display: grid !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.pos-menu-item {
+    display: block !important;
+    visibility: visible !important;
+}
     
     .pos-menu-item h4 {
         font-size: 0.8rem;
@@ -4359,24 +4361,36 @@
 
     function renderMenuGrid(containerId, clickHandler) {
     const grid = document.getElementById(containerId);
+    console.log('Render menu grid:', containerId, grid);
     
-    // Auto adjust untuk mobile
-    if (window.innerWidth <= 768) {
-        grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+    if (!grid) {
+        console.error('Grid container tidak ditemukan:', containerId);
+        return;
     }
     
-    grid.innerHTML = state.menu.map(item => {
+    // Force grid layout
+    grid.style.display = 'grid';
+    grid.style.visibility = 'visible';
+    grid.style.opacity = '1';
+    grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+    grid.style.gap = '0.5rem';
+    
+    const menuHTML = state.menu.map(item => {
         const isBestSeller = item.isBestSeller;
         const isOutOfStock = item.outOfStock;
         
         return `
-            <div class="pos-menu-item ${isBestSeller ? 'best-seller' : ''} ${isOutOfStock ? 'out-of-stock' : ''}" 
-                 onclick="${!isOutOfStock ? clickHandler.name + '(' + item.id + ')' : ''}">
+            <div class="pos-menu-item" 
+                 onclick="handleAddToOrder(${item.id})"
+                 style="display: block; visibility: visible;">
                 <h4>${item.name}</h4>
                 <p>Rp ${item.price.toLocaleString('id-ID')}</p>
             </div>
         `;
     }).join('');
+    
+    grid.innerHTML = menuHTML;
+    console.log('Menu berhasil di-render, items:', state.menu.length);
 }
 
     // Load state from localStorage
