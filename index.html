@@ -5047,49 +5047,119 @@
         }
     }
 
-    function processPayment() {
-        if (state.currentOrder.items.length === 0) {
-            showNotification('Keranjang masih kosong!', 'warning');
-            return;
-        }
-        
-        const total = parseInt(document.getElementById('pos-total').textContent.replace(/\D/g,''));
-        const method = document.getElementById('payment-method').value;
-        const customerName = document.getElementById('customer-name').value;
-        const paidAmount = parseInt(document.getElementById('payment-amount').value) || 0;
-        
-        if (method === 'Tunai' && paidAmount < total) {
-            showNotification('Uang yang dibayar kurang!', 'error');
-            return;
-        }
+   function processPayment() {
+    if (state.currentOrder.items.length === 0) {
+        alert('Keranjang kosong!');
+        return;
+    }
+    
+    const total = parseInt(document.getElementById('pos-total').textContent.replace(/\D/g,''));
+    const method = document.getElementById('payment-method').value;
+    const customerName = document.getElementById('customer-name').value || '';
+    const paidAmount = parseInt(document.getElementById('payment-amount').value) || 0;
+    const tableId = parseInt(document.getElementById('pos-table-select').value);
+    
+    if (method === 'Tunai' && paidAmount < total) {
+        alert('Uang kurang!');
+        return;
+    }
 
-        // Create receipt preview
-        const receiptContent = generateReceiptContent(total, method, customerName, paidAmount);
-        
-        // Show receipt preview modal
-        const receiptModal = document.createElement('div');
-        receiptModal.className = 'modal';
-        receiptModal.style.display = 'flex';
-        receiptModal.innerHTML = `
-            <div class="modal-content" style="max-width: 400px;">
-                <span class="modal-close" onclick="this.parentElement.parentElement.remove()">&times;</span>
-                <h2>Preview Struk</h2>
-                <div class="receipt-preview">
-                    ${receiptContent}
-                </div>
-                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-                    <button class="btn btn-secondary" style="flex-grow: 1;" onclick="this.parentElement.parentElement.parentElement.remove()">
-                        Batal
-                    </button>
-                    <button class="btn btn-primary" style="flex-grow: 1;" onclick="confirmPayment(${total}, '${method}', '${customerName}', ${paidAmount})">
-                        <i data-lucide="printer"></i> Cetak Struk
-                    </button>
-                </div>
+    // CEK APAKAH DI KODULAR ATAU BROWSER BIASA
+    if (isKodularApp()) {
+        // PRINT VIA BLUETOOTH - KODULAR
+        const receiptData = generateESC_POS_Data(total, method, customerName, paidAmount, tableId);
+        kodularPrint(receiptData);
+    } else {
+        // PRINT VIA BROWSER - FALLBACK
+        printSimpleReceipt(total, method, customerName, paidAmount, tableId);
+    }
+    
+    // SIMPAN DATA
+    saveOrderData(total, method, customerName, paidAmount, tableId);
+}
+
+function printSimpleReceipt(total, method, customerName, paidAmount, tableId) {
+    const subtotal = total / 1.1;
+    const tax = total - subtotal;
+    const change = Math.max(0, paidAmount - total);
+    
+    let receiptHTML = `
+        <div style="width:280px;font-family:'Courier New';font-size:12px;padding:10px;">
+            <div style="text-align:center;font-weight:bold;">
+                DNT NETWORK CAFE<br>
+                Jl. Sudirman No. 123<br>
+                Tel: 021-123456
+            </div>
+            <hr>
+            <div>Tanggal: ${new Date().toLocaleDateString('id-ID')}</div>
+            <div>Waktu: ${new Date().toLocaleTimeString('id-ID')}</div>
+            <div>Kasir: ${state.currentUser.name}</div>
+            <div>Meja: ${tableId === 0 ? 'Take Away' : 'Meja ' + tableId}</div>
+            ${customerName ? `<div>Customer: ${customerName}</div>` : ''}
+            <hr>
+    `;
+    
+    state.currentOrder.items.forEach(item => {
+        receiptHTML += `
+            <div>${item.name}</div>
+            <div style="display:flex;justify-content:space-between;">
+                <span>${item.quantity} x Rp ${item.price.toLocaleString()}</span>
+                <span>Rp ${(item.price * item.quantity).toLocaleString()}</span>
             </div>
         `;
-        document.body.appendChild(receiptModal);
-        lucide.createIcons();
+    });
+    
+    receiptHTML += `
+            <hr>
+            <div style="display:flex;justify-content:space-between;">
+                <span>Subtotal:</span>
+                <span>Rp ${subtotal.toLocaleString()}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;">
+                <span>Pajak (10%):</span>
+                <span>Rp ${tax.toLocaleString()}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-weight:bold;">
+                <span>TOTAL:</span>
+                <span>Rp ${total.toLocaleString()}</span>
+            </div>
+    `;
+    
+    if (method === 'Tunai') {
+        receiptHTML += `
+            <div style="display:flex;justify-content:space-between;">
+                <span>Tunai:</span>
+                <span>Rp ${paidAmount.toLocaleString()}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;">
+                <span>Kembalian:</span>
+                <span>Rp ${change.toLocaleString()}</span>
+            </div>
+        `;
+    } else {
+        receiptHTML += `
+            <div style="display:flex;justify-content:space-between;">
+                <span>Metode:</span>
+                <span>${method}</span>
+            </div>
+        `;
     }
+    
+    receiptHTML += `
+            <hr>
+            <div style="text-align:center;">Terima kasih</div>
+        </div>
+    `;
+    
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`<html><head><title>Print Struk</title></head><body>${receiptHTML}</body></html>`);
+    printWindow.document.close();
+    
+    setTimeout(() => {
+        printWindow.print();
+        setTimeout(() => printWindow.close(), 1000);
+    }, 500);
+}
 
     function generateReceiptContent(total, method, customerName, paidAmount) {
         const now = new Date();
@@ -8343,6 +8413,131 @@
         const total = base + allowance - deduction;
         document.getElementById('payroll-total').value = total;
     }
+
+    // ==================== KODULAR BLUETOOTH PRINT FUNCTIONS ====================
+
+// Deteksi apakah di aplikasi Kodular
+function isKodularApp() {
+    return window.android && window.android.printReceipt;
+}
+
+// Panggil native print di Kodular
+function kodularPrint(receiptData) {
+    if (window.android && window.android.printReceipt) {
+        window.android.printReceipt(receiptData);
+        alert('Struk sedang dicetak via Bluetooth...');
+    } else {
+        alert('Print Bluetooth tidak tersedia. Fallback ke browser print.');
+        printSimpleReceipt(
+            parseInt(document.getElementById('pos-total').textContent.replace(/\D/g,'')),
+            document.getElementById('payment-method').value,
+            document.getElementById('customer-name').value || '',
+            parseInt(document.getElementById('payment-amount').value) || 0,
+            parseInt(document.getElementById('pos-table-select').value)
+        );
+    }
+}
+
+// Generate ESC/POS commands untuk printer thermal
+function generateESC_POS_Data(total, method, customerName, paidAmount, tableId) {
+    const subtotal = total / 1.1;
+    const tax = total - subtotal;
+    const change = Math.max(0, paidAmount - total);
+    
+    let escPos = '';
+    
+    // ESC/POS Commands
+    escPos += '\x1B\x40'; // Initialize printer
+    escPos += '\x1B\x61\x01'; // Center alignment
+    escPos += '\x1B\x21\x30'; // Double height & width
+    escPos += 'DNT NETWORK CAFE\n';
+    escPos += '\x1B\x21\x00'; // Normal text
+    escPos += 'Jl. Sudirman No. 123\n';
+    escPos += 'Tel: 021-123456\n';
+    escPos += '\x1B\x61\x00'; // Left alignment
+    
+    escPos += '========================\n';
+    escPos += `Tanggal: ${new Date().toLocaleDateString('id-ID')}\n`;
+    escPos += `Waktu: ${new Date().toLocaleTimeString('id-ID')}\n`;
+    escPos += `Kasir: ${state.currentUser.name}\n`;
+    escPos += `Meja: ${tableId === 0 ? 'Take Away' : 'Meja ' + tableId}\n`;
+    if (customerName) escPos += `Customer: ${customerName}\n`;
+    escPos += '========================\n';
+    
+    // Items
+    state.currentOrder.items.forEach(item => {
+        escPos += `${item.name}\n`;
+        escPos += `${item.quantity}x ${formatCurrency(item.price)}   ${formatCurrency(item.price * item.quantity)}\n`;
+    });
+    
+    escPos += '------------------------\n';
+    escPos += `Subtotal:    ${formatCurrency(subtotal)}\n`;
+    escPos += `Pajak (10%): ${formatCurrency(tax)}\n`;
+    escPos += '\x1B\x21\x30'; // Double size
+    escPos += `TOTAL: ${formatCurrency(total)}\n`;
+    escPos += '\x1B\x21\x00'; // Normal size
+    escPos += '------------------------\n';
+    
+    // Payment
+    if (method === 'Tunai') {
+        escPos += `Tunai:      ${formatCurrency(paidAmount)}\n`;
+        escPos += `Kembalian:  ${formatCurrency(change)}\n`;
+    } else {
+        escPos += `Metode: ${method}\n`;
+    }
+    
+    escPos += '========================\n';
+    escPos += '\x1B\x61\x01'; // Center alignment
+    escPos += 'Terima kasih\n';
+    escPos += 'atas kunjungan Anda\n';
+    escPos += '\x1B\x61\x00'; // Left alignment
+    
+    // Paper cut (jika printer support)
+    escPos += '\n\n\n\n\x1B\x69';
+    
+    return escPos;
+}
+
+// Format currency untuk ESC/POS
+function formatCurrency(amount) {
+    return 'Rp ' + parseInt(amount).toLocaleString('id-ID');
+}
+
+// Simpan data order (dari fungsi sebelumnya)
+function saveOrderData(total, method, customerName, paidAmount, tableId) {
+    const newOrder = {
+        id: Date.now(),
+        tableId: tableId,
+        items: [...state.currentOrder.items],
+        status: 'proses',
+        total: total,
+        type: tableId === 0 ? 'takeaway' : 'dine-in',
+        paymentMethod: method,
+        timestamp: new Date().toISOString(),
+        cashier: state.currentUser.name
+    };
+    
+    state.orders.push(newOrder);
+    state.currentOrder = { items: [], tableId: 0 };
+    
+    if (tableId !== 0) {
+        const table = state.tables.find(t => t.id === tableId);
+        if (table) table.status = 'occupied';
+    }
+    
+    saveState();
+    renderPOS();
+}
+
+// Test printer connection
+function testBluetoothPrinter() {
+    if (window.android && window.android.testPrinter) {
+        window.android.testPrinter();
+        alert('Test print dikirim ke printer Bluetooth');
+    } else {
+        alert('Test print hanya tersedia di aplikasi Kodular');
+    }
+}
 </script>
 
 </body>
