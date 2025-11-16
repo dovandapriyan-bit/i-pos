@@ -26,6 +26,27 @@
             --header-height: 70px;
         }
 
+        /* Fix menu di mobile */
+@media (max-width: 768px) {
+    .pos-menu-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.5rem;
+    }
+    
+    .pos-menu-item {
+        padding: 0.5rem;
+        min-height: 70px;
+    }
+    
+    .pos-menu-item h4 {
+        font-size: 0.8rem;
+    }
+    
+    .pos-menu-item p {
+        font-size: 0.7rem;
+    }
+}
+
         * {
             margin: 0;
             padding: 0;
@@ -4335,6 +4356,28 @@
             { id: 6, name: 'Supervisor' }
         ]
     };
+
+    function renderMenuGrid(containerId, clickHandler) {
+    const grid = document.getElementById(containerId);
+    
+    // Auto adjust untuk mobile
+    if (window.innerWidth <= 768) {
+        grid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+    }
+    
+    grid.innerHTML = state.menu.map(item => {
+        const isBestSeller = item.isBestSeller;
+        const isOutOfStock = item.outOfStock;
+        
+        return `
+            <div class="pos-menu-item ${isBestSeller ? 'best-seller' : ''} ${isOutOfStock ? 'out-of-stock' : ''}" 
+                 onclick="${!isOutOfStock ? clickHandler.name + '(' + item.id + ')' : ''}">
+                <h4>${item.name}</h4>
+                <p>Rp ${item.price.toLocaleString('id-ID')}</p>
+            </div>
+        `;
+    }).join('');
+}
 
     // Load state from localStorage
     function loadState() {
